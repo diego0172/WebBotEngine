@@ -316,7 +316,7 @@
 
     <div style="display:flex;gap:12px;flex-wrap:wrap">
       <button class="btn" type="submit">Enviar</button>
-      <a id="btnWhats" class="btn secondary">Escribir por WhatsApp</a>
+      <button id="btnWhats" type="button" class="btn secondary">Escribir por WhatsApp</button>
     </div>
 
     <p id="demoMsg" style="margin:6px 0 0 0;color:#2d7c80;display:none">Gracias, recibimos tu solicitud.</p>
@@ -335,13 +335,13 @@
   });
 
   // WhatsApp prellenado
-   document.addEventListener('DOMContentLoaded',()=>{
+ document.addEventListener('DOMContentLoaded',()=>{
   const btnWhats=document.getElementById('btnWhats');
   if(btnWhats){
     btnWhats.addEventListener('click',e=>{
       e.preventDefault();
       const nombre=document.getElementById('nombre').value||'';
-      const base='https://wa.me/50231239807'; // reemplaza por tu número con código de país
+      const base='https://wa.me/50231239807'; // tu número con código de país
       const txt=encodeURIComponent(`Hola, quiero una demo de BotEngine. Mi nombre: ${nombre}`);
       window.open(`${base}?text=${txt}`,'_blank');
     });
