@@ -335,6 +335,7 @@
   });
 
   // WhatsApp prellenado
+   document.addEventListener('DOMContentLoaded',()=>{
   const btnWhats=document.getElementById('btnWhats');
   if(btnWhats){
     btnWhats.addEventListener('click',e=>{
@@ -345,6 +346,7 @@
       window.open(`${base}?text=${txt}`,'_blank');
     });
   }
+});
 
   // Envío del formulario a /api/demo
   const form=document.getElementById('demoForm');
