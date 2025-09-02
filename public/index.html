@@ -94,7 +94,7 @@
       </div>
 
       <div>
-        <img class="bot" src="/img/robot.png" alt="Mascota BotEngine con laptop">
+        <img class="bot" src="img/robot.png" alt="Mascota BotEngine con laptop">
       </div>
     </div>
   </section>
@@ -243,6 +243,128 @@
   </div>
 </section>
 
+<!-- ======= NUEVO: PRECIOS ======= -->
+<section id="precios" class="container" style="padding:60px 20px">
+  <h2 style="margin:0 0 16px 0">Planes y precios</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px">
+    <div style="border:1px solid #e2e8f0;border-radius:12px;padding:20px;background:#fff">
+      <h3 style="margin:0 0 6px 0">Básico</h3>
+      <p style="color:#475569;margin:0 0 12px 0">Página informativa y 1 formulario.</p>
+      <div style="font-size:28px;font-weight:800;margin:6px 0">Q699</div>
+      <ul style="margin:10px 0 16px 16px;color:#475569">
+        <li>Hosting 1 mes</li>
+        <li>1 sección de servicios</li>
+        <li>SSL incluido</li>
+      </ul>
+      <a href="#demo" class="btn" style="display:inline-block">Solicitar</a>
+    </div>
+
+    <div style="border:2px solid #3aa0a5;border-radius:12px;padding:20px;background:#e6f6f7">
+      <div style="font-size:12px;color:#2d7c80;margin-bottom:6px">Recomendado</div>
+      <h3 style="margin:0 0 6px 0">Estándar</h3>
+      <p style="color:#475569;margin:0 0 12px 0">Sitio completo y chatbot base.</p>
+      <div style="font-size:28px;font-weight:800;margin:6px 0">Q1,499</div>
+      <ul style="margin:10px 0 16px 16px;color:#475569">
+        <li>Hasta 5 secciones</li>
+        <li>Chatbot 24/7</li>
+        <li>SEO básico</li>
+      </ul>
+      <a href="#demo" class="btn" style="display:inline-block">Solicitar</a>
+    </div>
+
+    <div style="border:1px solid #e2e8f0;border-radius:12px;padding:20px;background:#fff">
+      <h3 style="margin:0 0 6px 0">Premium</h3>
+      <p style="color:#475569;margin:0 0 12px 0">Automatización y agenda.</p>
+      <div style="font-size:28px;font-weight:800;margin:6px 0">Q2,499</div>
+      <ul style="margin:10px 0 16px 16px;color:#475569">
+        <li>Integración WhatsApp</li>
+        <li>Agenda con recordatorios</li>
+        <li>Soporte 30 días</li>
+      </ul>
+      <a href="#demo" class="btn" style="display:inline-block">Solicitar</a>
+    </div>
+  </div>
+</section>
+
+<!-- ======= NUEVO: DEMO ======= -->
+<section id="demo" class="container" style="padding:60px 20px">
+  <h2 style="margin:0 0 8px 0">Agenda una demo</h2>
+  <p class="lead">Déjanos tus datos y te contactamos.</p>
+
+  <form id="demoForm" style="max-width:640px;display:grid;gap:12px;margin-top:12px">
+    <div>
+      <label for="nombre">Nombre</label>
+      <input id="nombre" name="nombre" required placeholder="Tu nombre" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px">
+    </div>
+    <div>
+      <label for="email">Correo</label>
+      <input id="email" name="email" type="email" required placeholder="tunombre@correo.com" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px">
+    </div>
+    <div>
+      <label for="telefono">Teléfono</label>
+      <input id="telefono" name="telefono" placeholder="+502 5xx xx xx" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px">
+    </div>
+    <div>
+      <label for="mensaje">Mensaje</label>
+      <textarea id="mensaje" name="mensaje" rows="4" placeholder="Cuéntanos de tu proyecto" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px"></textarea>
+    </div>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap">
+      <button class="btn" type="submit">Enviar</button>
+      <a id="btnWhats" class="btn secondary" href="#" rel="nofollow">Escribir por WhatsApp</a>
+    </div>
+
+    <p id="demoMsg" style="margin:6px 0 0 0;color:#2d7c80;display:none">Gracias, recibimos tu solicitud.</p>
+  </form>
+</section>
+
+<!-- ======= NUEVO: Script ======= -->
+<script>
+  // Scroll suave para enlaces internos
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',e=>{
+      const id=a.getAttribute('href').slice(1);
+      const el=document.getElementById(id);
+      if(el){e.preventDefault();el.scrollIntoView({behavior:'smooth',block:'start'})}
+    });
+  });
+
+  // WhatsApp prellenado
+  const btnWhats=document.getElementById('btnWhats');
+  if(btnWhats){
+    btnWhats.addEventListener('click',e=>{
+      e.preventDefault();
+      const nombre=document.getElementById('nombre').value||'';
+      const base='https://wa.me/50200000000'; // reemplaza por tu número con código de país
+      const txt=encodeURIComponent(`Hola, quiero una demo de BotEngine. Mi nombre: ${nombre}`);
+      window.open(`${base}?text=${txt}`,'_blank');
+    });
+  }
+
+  // Envío del formulario a /api/demo
+  const form=document.getElementById('demoForm');
+  if(form){
+    form.addEventListener('submit',async e=>{
+      e.preventDefault();
+      const data=Object.fromEntries(new FormData(form).entries());
+      try{
+        const r=await fetch('/api/demo',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify(data)
+        });
+        if(r.ok){
+          document.getElementById('demoMsg').style.display='block';
+          form.reset();
+        }else{
+          alert('No se pudo enviar. Intenta de nuevo.');
+        }
+      }catch(err){
+        alert('Error de red. Intenta de nuevo.');
+      }
+    });
+  }
+</script>
 
 </body>
 </html>
