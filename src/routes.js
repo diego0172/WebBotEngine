@@ -1,28 +1,50 @@
 import { Router } from "express";
+import nodemailer from "nodemailer";
 
 const router = Router();
 
-router.get("/api/health", (req, res) => {
-res.json({ ok: true, service: "botenginecorp", time: new Date().toISOString() });
-});
-
-router.get("/api/info", (req, res) => {
-res.json({
-name: process.env.APP_NAME || "BotEngineCorp",
-env: process.env.APP_ENV || "development",
-version: "1.0.0"
-});
-});
-
-router.post("/api/demo", (req, res) => {
+router.post("/api/demo", async (req, res) => {
   const { nombre, email, telefono, mensaje } = req.body || {};
+
   if (!nombre || !email) {
     return res.status(400).json({ ok: false, error: "Faltan campos obligatorios" });
   }
 
-  
-  console.log("[DEMO] Nueva solicitud:", { nombre, email, telefono, mensaje, fecha: new Date().toISOString() });
-  return res.json({ ok: true });
+  try {
+    const transporter = nodemailer.createTransport({
+      host: process.env.MAIL_HOST || "smtp.gmail.com",
+      port: Number(process.env.MAIL_PORT || 465),
+      secure: true,
+      auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS
+      }
+    });
+
+    await transporter.sendMail({
+      from: `"BotEngine Web" <${process.env.MAIL_USER}>`,  // tu buzón real
+      to: process.env.MAIL_TO,                            // a dónde quieres recibirlo
+      replyTo: `${nombre} <${email}>`,                    // aquí pones el correo del usuario
+      subject: "Nueva solicitud de demo",
+      text: `Nombre: ${nombre}
+Email: ${email}
+Teléfono: ${telefono || ""}
+Mensaje:
+${mensaje || ""}`,
+      html: `
+        <h2>Nueva solicitud de demo</h2>
+        <p><b>Nombre:</b> ${nombre}</p>
+        <p><b>Email:</b> ${email}</p>
+        <p><b>Teléfono:</b> ${telefono || ""}</p>
+        <p><b>Mensaje:</b><br>${(mensaje || "").replace(/\n/g, "<br>")}</p>
+      `
+    });
+
+    return res.json({ ok: true });
+  } catch (err) {
+    console.error("Error al enviar correo:", err);
+    return res.status(500).json({ ok: false, error: "No se pudo enviar el correo" });
+  }
 });
 
 export default router;
