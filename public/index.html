@@ -32,7 +32,7 @@
     .checks li{display:flex;align-items:flex-start;gap:10px;color:#0f172a}
     .checks svg{flex:0 0 22px;margin-top:2px}
     .actions{display:flex;gap:14px;flex-wrap:wrap}
-    .btn{display:inline-block;padding:12px 16px;border-radius:10px;border:1px solid var(--brand);background:var(--brand);color:#fff;font-weight:600}
+    .btn{display:inline-block;padding:12px 16px;border-radius:10px;border:1px solid var(--brand);background:var(--brand);color:#fff;font-weight:600;cursor: pointer}
     .btn.secondary{background:#fff;color:var(--brand);border-color:var(--brand)}
     .btn:hover{filter:brightness(.95)}
     .bot{width:100%;max-width:380px;justify-self:end}
@@ -42,6 +42,11 @@
       h1{font-size:32px}
       .bot{justify-self:center;max-width:300px}
       .menu{display:none}
+      details{margin-top:8px}
+      summary{cursor:pointer;font-weight:600;color:var(--brand-700);list-style:none}
+      summary::-webkit-details-marker{display:none}
+      details[open] summary{color:var(--text)}
+
     }
   </style>
 </head>
@@ -141,7 +146,7 @@
   .step p{margin:0;color:#475569;font-size:14px;line-height:1.45}
 
   .proceso-actions{display:flex;gap:12px;margin-top:14px}
-  .btn{display:inline-block;padding:10px 14px;border-radius:8px;border:1px solid #3aa0a5;background:#3aa0a5;color:#fff;font-weight:600}
+  .btn{display:inline-block;padding:10px 14px;border-radius:8px;border:1px solid #3aa0a5;background:#3aa0a5;color:#fff;font-weight:600;cursor: pointer}
   .btn.secondary{background:#fff;color:#3aa0a5}
 
   /* Panel derecho 2x2 con íconos y texto */
@@ -158,6 +163,56 @@
   @media (max-width:620px){
     .cards{grid-template-columns:1fr}
   }
+ :root {
+      --bg:#ffffff;
+      --text:#0f172a;
+      --muted:#475569;
+      --brand:#3aa0a5;
+      --brand-700:#2d7c80;
+      --badge:#e6f6f7;
+      --border:#e2e8f0;
+      --hero-grad: linear-gradient(135deg, #e6f6f7, #ffffff);
+    }
+    
+    /* === Estilos para los desplegables === */
+    details {
+      margin-top: 8px;
+      margin-bottom: 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 12px;
+      background: #f9fafb;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--brand-700);
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary::before {
+      content: "▶";
+      font-size: 12px;
+      color: var(--brand-700);
+      transition: transform 0.2s;
+    }
+
+    details[open] summary::before {
+      transform: rotate(90deg);
+    }
+
+    details[open] summary {
+      color: var(--text);
+    }
+
 </style>
 
 <section id="proceso">
@@ -251,12 +306,15 @@
       <h3 style="margin:0 0 6px 0">Paquete Básico – Presencia en línea</h3>
       <p style="color:#475569;margin:0 0 12px 0">Ideal para negocios que quieren presencia en línea pero sin manejar ventas directas en la web.</p>
       <div style="font-size:28px;font-weight:800;margin:6px 0">Q2,500 – Q3,000</div>
+      <details>
+        <summary>¿Que incluye?</summary>
       <ul style="margin:10px 0 16px 16px;color:#475569">
         <li>Página web informativa de 3 a 4 secciones (Inicio, Quiénes somos, Productos destacados, Contacto).</li>
         <li>Sección de productos con imágenes y precios (sin carrito de compras).</li>
         <li>Botones de contacto directo a WhatsApp y redes sociales.</li>
         <li>Optimización para celular y tablet.</li>
       </ul>
+      </details>
       <a href="#demo" class="btn" style="display:inline-block">Solicitar</a>
     </div>
 
@@ -265,6 +323,8 @@
       <h3 style="margin:0 0 6px 0">Paquete Intermedio – Catálogo dinámico</h3>
       <p style="color:#475569;margin:0 0 12px 0">Ideal para tiendas que quieren mostrar variedad de productos y educar a sus clientes.</p>
       <div style="font-size:28px;font-weight:800;margin:6px 0">Q3,500 – Q5,000</div>
+      <details>
+      <summary>¿Que incluye?</summary>
       <ul style="margin:10px 0 16px 16px;color:#475569">
         <li>Catálogo con hasta 20 productos iniciales.</li>
         <li>Filtros simples (ejemplo: articulos, accesorios, colores).</li>
@@ -272,6 +332,7 @@
         <li>Blog o sección de consejos tipo “¿Sabías qué?”.</li>
         <li>Optimización SEO básico (palabras clave, títulos, meta descripciones).</li>
       </ul>
+      </details>
       <a href="#demo" class="btn" style="display:inline-block">Solicitar</a>
     </div>
 
@@ -279,6 +340,9 @@
       <h3 style="margin:0 0 6px 0">Paquete Avanzado – Tienda en línea completa</h3>
       <p style="color:#475569;margin:0 0 12px 0">Ideal para negocios que quieren vender directamente desde su web sin depender solo de redes sociales.</p>
       <div style="font-size:28px;font-weight:800;margin:6px 0">Q6,000 – Q8,000+</div>
+
+      <details>
+        <summary>¿Que incluye?</summary>
       <ul style="margin:10px 0 16px 16px;color:#475569">
         <li>Carrito de compras funcional.</li>
         <li>Integración con pagos en línea (tarjeta, transferencias, PayPal o similar).</li>
@@ -286,6 +350,7 @@
         <li>Sección de testimonios de clientes y reseñas.</li>
         <li>Soporte post-lanzamiento (1 mes incluido para ajustes menores).</li>
       </ul>
+      </details>
       <a href="#demo" class="btn" style="display:inline-block">Solicitar</a>
     </div>
   </div>
