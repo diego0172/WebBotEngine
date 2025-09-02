@@ -47,6 +47,10 @@
       summary::-webkit-details-marker{display:none}
       details[open] summary{color:var(--text)}
 
+      .fondo-degradado {
+      background: linear-gradient(to right, #e6f4f1, #ffffff);
+    }
+
     }
   </style>
 </head>
@@ -135,7 +139,18 @@
 <style>
   .proceso-wrap{max-width:1120px;margin:0 auto;padding:60px 20px}
   .proceso-title{font-size:32px;margin:0 0 8px 0}
-  .proceso-bar{width:140px;height:6px;background:#3aa0a5;margin:0 0 24px 0;border-radius:2px}
+  #demo {
+  background: var(--hero-grad); /* mismo fondo que el hero */
+  padding: 60px 20px;
+  border-bottom: 8px solid rgba(58,160,165,.35);
+}
+  .proceso-bar{
+    width:300px;
+    height:6px;
+    background:var(--brand);
+    opacity: .35;
+    margin:0 0 24px 0;
+    border-radius:2px}
 
   .proceso-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
   /* Panel izquierdo con lista */
@@ -148,6 +163,11 @@
   .proceso-actions{display:flex;gap:12px;margin-top:14px}
   .btn{display:inline-block;padding:10px 14px;border-radius:8px;border:1px solid #3aa0a5;background:#3aa0a5;color:#fff;font-weight:600;cursor: pointer}
   .btn.secondary{background:#fff;color:#3aa0a5}
+  #proceso {
+    background: var(--hero-grad);
+    padding: 60px 20px; /* un poco de aire alrededor */
+    border-bottom: 8px solid rgba(58, 160, 165, .35); /* línea decorativa abajo */
+}
 
   /* Panel derecho 2x2 con íconos y texto */
   .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
@@ -357,7 +377,7 @@
 </section>
 
 <!-- ======= NUEVO: DEMO ======= -->
-<section id="demo" class="container" style="padding:60px 20px">
+<section id="demo" class="container">
   <h2 style="margin:0 0 8px 0">Agenda una demo</h2>
   <p class="lead">Déjanos tus datos y te contactamos.</p>
 
