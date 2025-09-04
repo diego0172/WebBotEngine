@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es" class="onload">
+<html lang="es">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -40,39 +40,7 @@
     .bot{width:100%;max-width:380px;justify-self:end}
     .strip{height:12px;background:var(--brand);opacity:.35}
 
-    /* Animaciones hero */
-    .hero-text,
-    .hero-bot {
-      opacity: 0;
-      will-change: transform, opacity;
-    }
-    .hero-text { transform: translateX(-60px); }
-    .hero-bot  { transform: translateX(60px); }
-
-    .onload .hero-text { animation: slideInLeft 1500ms ease-out forwards; }
-    .onload .hero-bot  { animation: slideInRight 1500ms ease-out forwards; animation-delay:400ms; }
-
-    /* Título cae desde arriba */
-    .hero-text h1 { opacity:0; transform:translateY(-60px); }
-    .onload .hero-text h1 { animation: dropFromTop 700ms ease-out forwards; animation-delay: 600ms; }
-
-    @keyframes slideInLeft {
-      0% { transform: translateX(-60px); opacity: 0; }
-      60% { transform: translateX(8px); opacity: 1; }
-      100% { transform: translateX(0); opacity: 1; }
-    }
-    @keyframes slideInRight {
-      0% { transform: translateX(60px); opacity: 0; }
-      60% { transform: translateX(-8px); opacity: 1; }
-      100% { transform: translateX(0); opacity: 1; }
-    }
-    @keyframes dropFromTop {
-      0% { transform: translateY(-60px); opacity: 0; }
-      60% { transform: translateY(8px); opacity: 1; }
-      100% { transform: translateY(0); opacity: 1; }
-    }
-
-    /* Proceso: asegura tamaño correcto de íconos */
+    /* Proceso */
     .proceso-wrap{max-width:1120px;margin:0 auto;padding:60px 20px}
     .proceso-title{font-size:32px;margin:0 0 8px 0}
     .proceso-bar{width:300px;height:6px;background:var(--brand);opacity:.35;margin:0 0 24px 0;border-radius:2px}
@@ -82,9 +50,30 @@
     .card p{margin:0;color:#475569;font-size:14px;line-height:1.45}
     .ico{width:56px;height:56px}
 
+    /* Animaciones por scroll, unificadas y lentas */
+    .reveal{
+      opacity:0;
+      transform:translateY(24px);
+      transition:transform 1500ms ease, opacity 1500ms ease;
+      will-change:transform,opacity;
+    }
+    .reveal[data-from="left"]{ transform:translateX(-60px); }
+    .reveal[data-from="right"]{ transform:translateX(60px); }
+    .reveal[data-from="top"]{ transform:translateY(-60px); }
+    .reveal[data-from="bottom"]{ transform:translateY(60px); }
+    .reveal.visible{
+      opacity:1;
+      transform:translate(0,0);
+    }
+
     /* Accesibilidad */
     @media (prefers-reduced-motion: reduce){
-      .hero-text,.hero-bot,.hero-text h1{animation:none;transform:none;opacity:1}
+      .reveal,
+      .reveal.visible{
+        opacity:1;
+        transform:none;
+        transition:none;
+      }
     }
 
     /* Responsive */
@@ -100,41 +89,6 @@
       .fondo-degradado{background:linear-gradient(to right,#e6f4f1,#ffffff)}
       .cards{grid-template-columns:1fr}
     }
-    /* =========== ANIMACIONES AL HACER SCROLL =========== */
-/* Estado inicial */
-.reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: transform 900ms ease, opacity 900ms ease;
-  will-change: transform, opacity;
-}
-
-/* Variantes por dirección */
-.reveal[data-from="left"]  { transform: translateX(-60px); }
-.reveal[data-from="right"] { transform: translateX(60px); }
-.reveal[data-from="top"]   { transform: translateY(-60px); }
-.reveal[data-from="bottom"]{ transform: translateY(60px); }
-
-/* Al volverse visible */
-.reveal.visible {
-  opacity: 1;
-  transform: translate(0, 0);
-}
-
-/* Soporte de retardo opcional con data-delay="ms" */
-.reveal.visible {
-  transition-delay: var(--delay, 0ms);
-}
-
-/* Accesibilidad */
-@media (prefers-reduced-motion: reduce) {
-  .reveal,
-  .reveal.visible {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-}
   </style>
 </head>
 <body>
@@ -151,52 +105,49 @@
   </header>
 
   <!-- Hero -->
- <section class="hero">
-  <div class="container hero-wrap">
-    <div class="hero-text reveal" data-from="left" style="--delay: 150ms">
-      <h1 class="reveal" data-from="top" style="--delay: 300ms">
-        Diseño y automatización para tu negocio
-      </h1>
+  <section class="hero">
+    <div class="container hero-wrap">
+      <div class="hero-text reveal" data-from="left" style="--delay: 300ms">
+        <h1 class="reveal" data-from="top" style="--delay: 500ms">
+          Diseño y automatización para tu negocio
+        </h1>
 
-      <p class="lead reveal" data-from="bottom" style="--delay: 450ms">
-        Impulsamos tu negocio con chatbots, sitios rápidos y presencia digital efectiva.
-      </p>
+        <p class="lead reveal" data-from="bottom" style="--delay: 700ms">
+          Impulsamos tu negocio con chatbots, sitios rápidos y presencia digital efectiva.
+        </p>
 
-      <ul class="checks">
-        <li class="reveal" data-from="bottom" style="--delay: 550ms">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20 6L9 17l-5-5"></path>
-          </svg>
-          Respuestas automáticas 24/7.
-        </li>
+        <ul class="checks">
+          <li class="reveal" data-from="bottom" style="--delay: 900ms">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 6L9 17l-5-5"></path>
+            </svg>
+            Respuestas automáticas 24/7.
+          </li>
+          <li class="reveal" data-from="bottom" style="--delay: 1100ms">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 6L9 17l-5-5"></path>
+            </svg>
+            Sitios rápidos y seguros.
+          </li>
+          <li class="reveal" data-from="bottom" style="--delay: 1300ms">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 6L9 17l-5-5"></path>
+            </svg>
+            Optimización SEO básica.
+          </li>
+        </ul>
 
-        <li class="reveal" data-from="bottom" style="--delay: 650ms">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20 6L9 17l-5-5"></path>
-          </svg>
-          Sitios rápidos y seguros.
-        </li>
+        <div class="actions">
+          <a class="btn reveal" data-from="bottom" style="--delay: 1500ms" href="#precios">Ver precios</a>
+          <a class="btn secondary reveal" data-from="bottom" style="--delay: 1700ms" href="#demo">Agenda demo</a>
+        </div>
+      </div>
 
-        <li class="reveal" data-from="bottom" style="--delay: 750ms">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20 6L9 17l-5-5"></path>
-          </svg>
-          Optimización SEO básica.
-        </li>
-      </ul>
-
-      <div class="actions">
-        <a class="btn reveal" data-from="bottom" style="--delay: 850ms" href="#precios">Ver precios</a>
-        <a class="btn secondary reveal" data-from="bottom" style="--delay: 950ms" href="#demo">Agenda demo</a>
+      <div class="hero-bot reveal" data-from="right" style="--delay: 1600ms">
+        <img class="bot" src="img/robot.png" alt="Mascota BotEngine con laptop">
       </div>
     </div>
-
-    <div class="hero-bot reveal" data-from="right" style="--delay: 400ms">
-      <img class="bot" src="img/robot.png" alt="Mascota BotEngine con laptop">
-    </div>
-  </div>
-</section>
-
+  </section>
 
   <div class="strip"></div>
 
@@ -230,7 +181,7 @@
       <h2 class="proceso-title">Nuestro proceso</h2>
       <div class="proceso-bar"></div>
       <div class="cards">
-        <div class="card">
+        <div class="card reveal" data-from="bottom" style="--delay: 200ms">
           <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="1.75">
             <circle cx="8" cy="10" r="3"></circle>
             <rect x="13" y="7" width="6" height="6" rx="1.5"></rect>
@@ -240,7 +191,7 @@
           <p>Escuchamos tus necesidades y definimos objetivos.</p>
         </div>
 
-        <div class="card">
+        <div class="card reveal" data-from="bottom" style="--delay: 400ms">
           <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="1.75">
             <rect x="3" y="4" width="18" height="14" rx="2"></rect>
             <path d="M7 8h5M7 12h8"></path>
@@ -250,7 +201,7 @@
           <p>Preparamos la propuesta visual y validamos contigo.</p>
         </div>
 
-        <div class="card">
+        <div class="card reveal" data-from="bottom" style="--delay: 600ms">
           <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="1.75">
             <circle cx="8.5" cy="15.5" r="2.5"></circle>
             <circle cx="15.5" cy="8.5" r="2.5"></circle>
@@ -260,7 +211,7 @@
           <p>Construimos el sitio o chatbot y lo probamos en escenarios reales.</p>
         </div>
 
-        <div class="card">
+        <div class="card reveal" data-from="bottom" style="--delay: 800ms">
           <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="1.75">
             <path d="M5 16h14v3H5z"></path>
             <path d="M12 5l3 3-6 6-3 1 1-3 6-6z"></path>
@@ -363,31 +314,19 @@
   </section>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      document.documentElement.classList.add('onload');
-    });
+    const io = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const delay = el.style.getPropertyValue('--delay') || '0ms';
+          el.style.transitionDelay = delay;
+          el.classList.add('visible');
+          obs.unobserve(el);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -10% 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
   </script>
-  <script>
-  // IntersectionObserver para revelar al hacer scroll
-  const io = new IntersectionObserver((entries, obs) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const el = entry.target;
-        el.classList.add('visible');
-        // Soporte de retardo desde atributo data-delay en ms
-        const delay = el.getAttribute('data-delay');
-        if (delay) el.style.setProperty('--delay', `${parseInt(delay, 10)}ms`);
-        obs.unobserve(el); // ejecuta una sola vez
-      }
-    });
-  }, {
-    root: null,
-    threshold: 0.15,
-    rootMargin: '0px 0px -10% 0px'
-  });
-
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-</script>
-
 </body>
-</html>
+  </html>
