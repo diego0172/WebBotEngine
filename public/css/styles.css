@@ -44,6 +44,10 @@ h1{font-size:44px;line-height:1.1;margin:0 0 12px 0}
 .card h5{margin:0;font-size:16px}
 .card p{margin:0;color:#475569;font-size:14px;line-height:1.45}
 .ico{width:56px;height:56px}
+.proceso {
+  background-color: var(--brand);
+}
+
 
 /* Animaciones por scroll */
 /* Visible por defecto. Si JS presente, se ocultan y animan */
