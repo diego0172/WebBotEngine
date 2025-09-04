@@ -86,3 +86,14 @@ h1{font-size:44px;line-height:1.1;margin:0 0 12px 0}
   .fondo-degradado{background:linear-gradient(to right,#e6f4f1,#ffffff)}
   .cards{grid-template-columns:1fr}
 }
+/* fade al hacer scroll, compatible con .reveal existente */
+.hero .hero-text,
+.hero .hero-bot{
+  will-change: transform, opacity;
+  transition: opacity 180ms linear, transform 180ms linear;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .hero .hero-text,
+  .hero .hero-bot{ transition: none }
+}

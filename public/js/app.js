@@ -121,3 +121,57 @@ if (form) {
     window.history.scrollRestoration = "manual";
   }
 })();
+
+(function(){
+  function clamp01(x){ return x < 0 ? 0 : x > 1 ? 1 : x }
+  function lerp(a,b,t){ return a + (b - a) * t }
+
+  function setupScrollFadeSections(){
+    var sections = [].slice.call(document.querySelectorAll('[data-scroll-fade]'))
+    if(!sections.length) return
+
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    var ticking = false
+
+    function compute(){
+      ticking = false
+      var vh = window.innerHeight || 1
+
+      sections.forEach(function(sec){
+        var rect = sec.getBoundingClientRect()
+        var y = -rect.top
+        var start = 0
+        var end = vh * 0.6
+        var t = clamp01((y - start) / (end - start))
+        var op = 1 - t
+
+        var text = sec.querySelector('.hero-text')
+        var bot  = sec.querySelector('.hero-bot')
+        if(!text || !bot) return
+
+        var tyText = reduce ? 0 : lerp(0, -24, t)
+        var tyBot  = reduce ? 0 : lerp(0, 24, t)
+
+        text.style.opacity = op.toFixed(3)
+        bot.style.opacity  = op.toFixed(3)
+
+        text.style.transform = 'translateY(' + tyText + 'px)'
+        bot.style.transform  = 'translateY(' + tyBot + 'px)'
+      })
+    }
+
+    function onScroll(){
+      if(ticking) return
+      ticking = true
+      requestAnimationFrame(compute)
+    }
+
+    window.addEventListener('scroll', onScroll, {passive:true})
+    window.addEventListener('resize', onScroll)
+    compute()
+  }
+
+  document.addEventListener('DOMContentLoaded', setupScrollFadeSections)
+  window.addEventListener('pageshow', setupScrollFadeSections)
+})()
+
