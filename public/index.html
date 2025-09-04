@@ -139,61 +139,81 @@
   </section>
 
   <!-- Precios -->
-  <section id="precios" class="container" style="padding:60px 20px">
-    <h2 style="margin:0 0 16px 0">Planes y precios</h2>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px">
-      <div style="border:1px solid #e2e8f0;border-radius:12px;padding:20px;background:#fff">
-        <h3 style="margin:0 0 6px 0">Paquete Básico – Presencia en línea</h3>
-        <p style="color:#475569;margin:0 0 12px 0">Ideal para negocios que quieren presencia en línea pero sin manejar ventas directas en la web.</p>
-        <div style="font-size:28px;font-weight:800;margin:6px 0">Q2,500 – Q3,000</div>
-        <details>
-          <summary>¿Que incluye?</summary>
-          <ul style="margin:10px 0 16px 16px;color:#475569">
-            <li>Página web informativa de 3 a 4 secciones</li>
-            <li>Sección de productos con imágenes y precios</li>
-            <li>Botones de contacto directo a WhatsApp y redes sociales</li>
-            <li>Optimización para celular y tablet</li>
-          </ul>
-        </details>
-        <a href="#demo" class="btn" style="display:inline-block">Solicitar</a>
-      </div>
+<!-- Estilos locales solo para #precios -->
+<style>
+  #precios details { margin: 12px 0 0 0; }
+  #precios details summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border: 1px solid currentColor;
+    border-radius: 8px;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+  #precios details summary::-webkit-details-marker { display: none; }
+  #precios details[open] summary { border-width: 2px; }
+  #precios details ul { margin: 12px 0 16px 18px; padding: 0; }
+</style>
 
-      <div style="border:2px solid #3aa0a5;border-radius:12px;padding:20px;background:#e6f6f7">
-        <div style="font-size:12px;color:#2d7c80;margin-bottom:6px">Recomendado</div>
-        <h3 style="margin:0 0 6px 0">Paquete Intermedio – Catálogo dinámico</h3>
-        <p style="color:#475569;margin:0 0 12px 0">Ideal para tiendas que quieren mostrar variedad de productos.</p>
-        <div style="font-size:28px;font-weight:800;margin:6px 0">Q3,500 – Q5,000</div>
-        <details>
-          <summary>¿Que incluye?</summary>
-          <ul style="margin:10px 0 16px 16px;color:#475569">
-            <li>Catálogo con hasta 20 productos iniciales</li>
-            <li>Filtros simples</li>
-            <li>Integración con redes sociales</li>
-            <li>Blog o sección de consejos</li>
-            <li>Optimización SEO básico</li>
-          </ul>
-        </details>
-        <a href="#demo" class="btn" style="display:inline-block">Solicitar</a>
-      </div>
-
-      <div style="border:1px solid #e2e8f0;border-radius:12px;padding:20px;background:#fff">
-        <h3 style="margin:0 0 6px 0">Paquete Avanzado – Tienda en línea completa</h3>
-        <p style="color:#475569;margin:0 0 12px 0">Ideal para vender directamente desde tu web.</p>
-        <div style="font-size:28px;font-weight:800;margin:6px 0">Q6,000 – Q8,000+</div>
-        <details>
-          <summary>¿Que incluye?</summary>
-          <ul style="margin:10px 0 16px 16px;color:#475569">
-            <li>Carrito de compras funcional</li>
-            <li>Integración con pagos en línea</li>
-            <li>Gestión de inventario básico</li>
-            <li>Testimonios y reseñas</li>
-            <li>Soporte post-lanzamiento 1 mes</li>
-          </ul>
-        </details>
-        <a href="#demo" class="btn" style="display:inline-block">Solicitar</a>
-      </div>
+<section id="precios" class="container" style="padding:60px 20px">
+  <h2 style="margin:0 0 16px 0">Planes y precios</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px">
+    <div style="border:1px solid #e2e8f0;border-radius:12px;padding:20px;background:#fff;display:flex;flex-direction:column">
+      <h3 style="margin:0 0 6px 0">Paquete Básico – Presencia en línea</h3>
+      <p style="color:#475569;margin:0 0 12px 0">Ideal para negocios que quieren presencia en línea pero sin manejar ventas directas en la web.</p>
+      <div style="font-size:28px;font-weight:800;margin:6px 0">Q2,500 – Q3,000</div>
+      <details>
+        <summary>¿Que incluye?</summary>
+        <ul style="margin:10px 0 16px 16px;color:#475569">
+          <li>Página web informativa de 3 a 4 secciones</li>
+          <li>Sección de productos con imágenes y precios</li>
+          <li>Botones de contacto directo a WhatsApp y redes sociales</li>
+          <li>Optimización para celular y tablet</li>
+        </ul>
+      </details>
+      <a href="#demo" class="btn" style="display:inline-block;margin-top:16px">Solicitar</a>
     </div>
-  </section>
+
+    <div style="border:2px solid #3aa0a5;border-radius:12px;padding:20px;background:#e6f6f7;display:flex;flex-direction:column">
+      <div style="font-size:12px;color:#2d7c80;margin-bottom:6px">Recomendado</div>
+      <h3 style="margin:0 0 6px 0">Paquete Intermedio – Catálogo dinámico</h3>
+      <p style="color:#475569;margin:0 0 12px 0">Ideal para tiendas que quieren mostrar variedad de productos.</p>
+      <div style="font-size:28px;font-weight:800;margin:6px 0">Q3,500 – Q5,000</div>
+      <details>
+        <summary>¿Que incluye?</summary>
+        <ul style="margin:10px 0 16px 16px;color:#475569">
+          <li>Catálogo con hasta 20 productos iniciales</li>
+          <li>Filtros simples</li>
+          <li>Integración con redes sociales</li>
+          <li>Blog o sección de consejos</li>
+          <li>Optimización SEO básico</li>
+        </ul>
+      </details>
+      <a href="#demo" class="btn" style="display:inline-block;margin-top:16px">Solicitar</a>
+    </div>
+
+    <div style="border:1px solid #e2e8f0;border-radius:12px;padding:20px;background:#fff;display:flex;flex-direction:column">
+      <h3 style="margin:0 0 6px 0">Paquete Avanzado – Tienda en línea completa</h3>
+      <p style="color:#475569;margin:0 0 12px 0">Ideal para vender directamente desde tu web.</p>
+      <div style="font-size:28px;font-weight:800;margin:6px 0">Q6,000 – Q8,000+</div>
+      <details>
+        <summary>¿Que incluye?</summary>
+        <ul style="margin:10px 0 16px 16px;color:#475569">
+          <li>Carrito de compras funcional</li>
+          <li>Integración con pagos en línea</li>
+          <li>Gestión de inventario básico</li>
+          <li>Testimonios y reseñas</li>
+          <li>Soporte post-lanzamiento 1 mes</li>
+        </ul>
+      </details>
+      <a href="#demo" class="btn" style="display:inline-block;margin-top:16px">Solicitar</a>
+    </div>
+  </div>
+</section>
+
 
   <!-- Demo -->
   <section id="demo" class="container">
