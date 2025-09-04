@@ -47,3 +47,77 @@ if (form) {
     }
   });
 }
+(function () {
+  function nukeState() {
+    try {
+      document.cookie.split(";").forEach(function (c) {
+        var name = c.trim().split("=")[0];
+        if (name) {
+          document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+        }
+      });
+    } catch (e) {}
+    try { localStorage.clear(); } catch (e) {}
+    try { sessionStorage.clear(); } catch (e) {}
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.getRegistrations()
+        .then(function (regs) { regs.forEach(function (r) { r.unregister(); }); })
+        .catch(function () {});
+    }
+  }
+
+  function setupReveals() {
+    var items = Array.prototype.slice.call(document.querySelectorAll(".reveal"));
+    items.forEach(function (el) {
+      el.classList.remove("visible");
+      void el.offsetWidth;
+    });
+
+    var obs = new IntersectionObserver(function (entries, observer) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { root: null, rootMargin: "0px 0px -10% 0px", threshold: 0.08 });
+
+    items.forEach(function (el) { obs.observe(el); });
+  }
+
+  function setupForm() {
+    var f = document.getElementById("demoForm");
+    var msg = document.getElementById("demoMsg");
+    var btnW = document.getElementById("btnWhats");
+    if (f) {
+      f.addEventListener("submit", function (e) {
+        e.preventDefault();
+        if (msg) { msg.style.display = "block"; }
+        try { f.reset(); } catch (e) {}
+      });
+    }
+    if (btnW) {
+      btnW.addEventListener("click", function () {
+        var nombre = document.getElementById("nombre") ? document.getElementById("nombre").value.trim() : "";
+        var t = "Hola, quiero una demo. " + (nombre ? "Soy " + nombre + "." : "");
+        var url = "https://wa.me/50200000000?text=" + encodeURIComponent(t);
+        window.open(url, "_blank", "noopener,noreferrer");
+      });
+    }
+  }
+
+  window.addEventListener("pageshow", function () {
+    nukeState();
+    setupReveals();
+  });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    nukeState();
+    setupReveals();
+    setupForm();
+  });
+
+  if ("scrollRestoration" in window.history) {
+    window.history.scrollRestoration = "manual";
+  }
+})();
