@@ -90,7 +90,7 @@ h1{font-size:44px;line-height:1.1;margin:0 0 12px 0}
 .hero .hero-text,
 .hero .hero-bot{
   will-change: transform, opacity;
-  transition: opacity 180ms linear, transform 180ms linear;
+  transition: transform 180ms linear;
 }
 
 @media (prefers-reduced-motion: reduce){

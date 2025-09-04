@@ -126,7 +126,7 @@ if (form) {
   function clamp01(x){ return x < 0 ? 0 : x > 1 ? 1 : x }
   function lerp(a,b,t){ return a + (b - a) * t }
 
-  function setupScrollFadeSections(){
+  function setupScrollSplitSections(){
     var sections = [].slice.call(document.querySelectorAll('[data-scroll-fade]'))
     if(!sections.length) return
 
@@ -136,27 +136,28 @@ if (form) {
     function compute(){
       ticking = false
       var vh = window.innerHeight || 1
+      var isMobile = window.matchMedia && window.matchMedia('(max-width: 900px)').matches
+      var maxShift = isMobile ? 60 : 140   // desplazamiento horizontal máximo
+      var maxY     = isMobile ? 6  : 10    // desplazamiento vertical máximo
 
       sections.forEach(function(sec){
         var rect = sec.getBoundingClientRect()
         var y = -rect.top
         var start = 0
-        var end = vh * 0.6
+        var end = vh * 0.4                  // termina antes: al 40% del viewport
         var t = clamp01((y - start) / (end - start))
-        var op = 1 - t
 
         var text = sec.querySelector('.hero-text')
         var bot  = sec.querySelector('.hero-bot')
         if(!text || !bot) return
 
-        var tyText = reduce ? 0 : lerp(0, -24, t)
-        var tyBot  = reduce ? 0 : lerp(0, 24, t)
+        var txText = reduce ? 0 : lerp(0, -maxShift, t)
+        var txBot  = reduce ? 0 : lerp(0,  maxShift, t)
+        var tyText = reduce ? 0 : lerp(0, -maxY, t)
+        var tyBot  = reduce ? 0 : lerp(0,  maxY, t)
 
-        text.style.opacity = op.toFixed(3)
-        bot.style.opacity  = op.toFixed(3)
-
-        text.style.transform = 'translateY(' + tyText + 'px)'
-        bot.style.transform  = 'translateY(' + tyBot + 'px)'
+        text.style.transform = 'translate(' + txText + 'px,' + tyText + 'px)'
+        bot.style.transform  = 'translate(' + txBot  + 'px,' + tyBot  + 'px)'
       })
     }
 
@@ -171,7 +172,8 @@ if (form) {
     compute()
   }
 
-  document.addEventListener('DOMContentLoaded', setupScrollFadeSections)
-  window.addEventListener('pageshow', setupScrollFadeSections)
-})()
+  document.addEventListener('DOMContentLoaded', setupScrollSplitSections)
+  window.addEventListener('pageshow', setupScrollSplitSections)
+})();
+
 
