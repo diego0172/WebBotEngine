@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>BotEngine</title>
   <link rel="icon" href="img/favicon.png" type="image/png">
+
+  <!-- Marca html con .js para que las animaciones solo oculten si hay JS -->
+  <script>document.documentElement.classList.add('js');</script>
+
   <style>
     :root{
       --bg:#ffffff;
@@ -19,7 +23,9 @@
     *{box-sizing:border-box}
     html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
     a{color:inherit;text-decoration:none}
+
     .container{max-width:1120px;margin:0 auto;padding:16px 20px}
+
     .header{position:sticky;top:0;background:rgba(255,255,255,.9);backdrop-filter:saturate(180%) blur(6px);border-bottom:1px solid var(--border);z-index:10}
     .nav{display:flex;align-items:center;justify-content:space-between;gap:16px}
     .brand{font-weight:800;font-size:20px}
@@ -40,7 +46,6 @@
     .bot{width:100%;max-width:380px;justify-self:end}
     .strip{height:12px;background:var(--brand);opacity:.35}
 
-    /* Proceso */
     .proceso-wrap{max-width:1120px;margin:0 auto;padding:60px 20px}
     .proceso-title{font-size:32px;margin:0 0 8px 0}
     .proceso-bar{width:300px;height:6px;background:var(--brand);opacity:.35;margin:0 0 24px 0;border-radius:2px}
@@ -50,33 +55,34 @@
     .card p{margin:0;color:#475569;font-size:14px;line-height:1.45}
     .ico{width:56px;height:56px}
 
-    /* Animaciones por scroll, unificadas y lentas */
-    .reveal{
+    /* Estado por defecto visible. Si JS falla, nada se queda oculto */
+    .reveal{opacity:1;transform:none}
+
+    /* Solo si hay JS, arrancan ocultos y con transición */
+    .js .reveal{
       opacity:0;
       transform:translateY(24px);
       transition:transform 1500ms ease, opacity 1500ms ease;
       will-change:transform,opacity;
     }
-    .reveal[data-from="left"]{ transform:translateX(-60px); }
-    .reveal[data-from="right"]{ transform:translateX(60px); }
-    .reveal[data-from="top"]{ transform:translateY(-60px); }
-    .reveal[data-from="bottom"]{ transform:translateY(60px); }
-    .reveal.visible{
+    .js .reveal[data-from="left"]{ transform:translateX(-60px); }
+    .js .reveal[data-from="right"]{ transform:translateX(60px); }
+    .js .reveal[data-from="top"]{ transform:translateY(-60px); }
+    .js .reveal[data-from="bottom"]{ transform:translateY(60px); }
+    .js .reveal.visible{
       opacity:1;
       transform:translate(0,0);
     }
 
-    /* Accesibilidad */
     @media (prefers-reduced-motion: reduce){
-      .reveal,
-      .reveal.visible{
+      .js .reveal,
+      .js .reveal.visible{
         opacity:1;
         transform:none;
         transition:none;
       }
     }
 
-    /* Responsive */
     @media (max-width:900px){
       .hero-wrap{grid-template-columns:1fr;gap:28px}
       h1{font-size:32px}
@@ -104,7 +110,6 @@
     </div>
   </header>
 
-  <!-- Hero -->
   <section class="hero">
     <div class="container hero-wrap">
       <div class="hero-text reveal" data-from="left" style="--delay: 300ms">
@@ -151,7 +156,6 @@
 
   <div class="strip"></div>
 
-  <!-- Nuestros servicios -->
   <section class="container" id="servicios" style="padding:60px 20px">
     <h2 style="margin-bottom:24px">Nuestros servicios</h2>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:32px">
@@ -175,7 +179,6 @@
     </div>
   </section>
 
-  <!-- Proceso -->
   <section id="proceso">
     <div class="proceso-wrap">
       <h2 class="proceso-title">Nuestro proceso</h2>
@@ -224,7 +227,6 @@
     </div>
   </section>
 
-  <!-- Precios -->
   <section id="precios" class="container" style="padding:60px 20px">
     <h2 style="margin:0 0 16px 0">Planes y precios</h2>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px">
@@ -281,7 +283,6 @@
     </div>
   </section>
 
-  <!-- Demo -->
   <section id="demo" class="container">
     <h2 style="margin:0 0 8px 0">Agenda una demo</h2>
     <p class="lead">Déjanos tus datos y te contactamos.</p>
@@ -314,19 +315,19 @@
   </section>
 
   <script>
+    // Revela elementos al entrar en viewport
     const io = new IntersectionObserver((entries, obs) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const el = entry.target;
-          const delay = el.style.getPropertyValue('--delay') || '0ms';
-          el.style.transitionDelay = delay;
-          el.classList.add('visible');
-          obs.unobserve(el);
-        }
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const delay = el.style.getPropertyValue('--delay') || '0ms';
+        el.style.transitionDelay = delay;
+        el.classList.add('visible');
+        obs.unobserve(el);
       });
     }, { threshold: 0.12, rootMargin: '0px 0px -10% 0px' });
 
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
   </script>
 </body>
-  </html>
+</html>
