@@ -1,4 +1,4 @@
-/* public/css/styles.css */
+/* ===== Variables y base ===== */
 :root{
   --bg:#ffffff;
   --text:#0f172a;
@@ -12,15 +12,16 @@
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
 a{color:inherit;text-decoration:none}
-
 .container{max-width:1120px;margin:0 auto;padding:16px 20px}
 
+/* ===== Header ===== */
 .header{position:sticky;top:0;background:rgba(255,255,255,.9);backdrop-filter:saturate(180%) blur(6px);border-bottom:1px solid var(--border);z-index:10}
 .nav{display:flex;align-items:center;justify-content:space-between;gap:16px}
 .brand{font-weight:800;font-size:20px}
 .brand-badge{padding:6px 10px;background:var(--badge);border-radius:10px;border:1px solid #cfecee}
 .menu{display:flex;gap:24px;align-items:center}
 
+/* ===== Hero ===== */
 .hero{background:var(--hero-grad)}
 .hero-wrap{display:grid;grid-template-columns:1.15fr .85fr;align-items:center;gap:24px;padding:56px 20px}
 h1{font-size:44px;line-height:1.1;margin:0 0 12px 0}
@@ -35,8 +36,24 @@ h1{font-size:44px;line-height:1.1;margin:0 0 12px 0}
 .bot{width:100%;max-width:380px;justify-self:end}
 .strip{height:12px;background:var(--brand);opacity:.35}
 
-/* Proceso */
-.proceso-wrap{max-width:1120px;margin:0 auto;padding:60px 20px;background-color: var(--hero-grad);}
+/* Hero split por scroll */
+.hero .hero-text,
+.hero .hero-bot{
+  will-change: transform;
+  transition: transform 180ms linear;
+}
+@media (prefers-reduced-motion: reduce){
+  .hero .hero-text,
+  .hero .hero-bot{ transition:none }
+}
+
+/* ===== Proceso ===== */
+.proceso-wrap{
+  max-width:1120px;
+  margin:0 auto;
+  padding:60px 20px;
+  background: var(--hero-grad);
+}
 .proceso-title{font-size:32px;margin:0 0 8px 0}
 .proceso-bar{width:300px;height:6px;background:var(--brand);opacity:.35;margin:0 0 24px 0;border-radius:2px}
 .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
@@ -45,10 +62,7 @@ h1{font-size:44px;line-height:1.1;margin:0 0 12px 0}
 .card p{margin:0;color:#475569;font-size:14px;line-height:1.45}
 .ico{width:56px;height:56px}
 
-
-
-/* Animaciones por scroll */
-/* Visible por defecto. Si JS presente, se ocultan y animan */
+/* ===== Animaciones reveal ===== */
 .reveal{opacity:1;transform:none}
 .js .reveal{
   opacity:0;
@@ -56,49 +70,19 @@ h1{font-size:44px;line-height:1.1;margin:0 0 12px 0}
   transition:transform 1500ms ease, opacity 1500ms ease;
   will-change:transform,opacity;
 }
-.js .reveal[data-from="left"]{ transform:translateX(-60px); }
-.js .reveal[data-from="right"]{ transform:translateX(60px); }
-.js .reveal[data-from="top"]{ transform:translateY(-60px); }
-.js .reveal[data-from="bottom"]{ transform:translateY(60px); }
-.js .reveal.visible{
-  opacity:1;
-  transform:translate(0,0);
-}
+.js .reveal[data-from="left"]{ transform:translateX(-60px) }
+.js .reveal[data-from="right"]{ transform:translateX(60px) }
+.js .reveal[data-from="top"]{ transform:translateY(-60px) }
+.js .reveal[data-from="bottom"]{ transform:translateY(60px) }
+.js .reveal.visible{ opacity:1; transform:translate(0,0) }
 
-/* Accesibilidad */
+/* Accesibilidad reveal */
 @media (prefers-reduced-motion: reduce){
   .js .reveal,
-  .js .reveal.visible{
-    opacity:1;
-    transform:none;
-    transition:none;
-  }
+  .js .reveal.visible{ opacity:1; transform:none; transition:none }
 }
 
-/* Responsive */
-@media (max-width:900px){
-  .hero-wrap{grid-template-columns:1fr;gap:28px}
-  h1{font-size:32px}
-  .bot{justify-self:center;max-width:300px}
-  .menu{display:none}
-  details{margin-top:8px}
-  summary{cursor:pointer;font-weight:600;color:var(--brand-700);list-style:none}
-  summary::-webkit-details-marker{display:none}
-
-  .fondo-degradado{background:linear-gradient(to right,#e6f4f1,#ffffff)}
-  .cards{grid-template-columns:1fr}
-}
-/* fade al hacer scroll, compatible con .reveal existente */
-.hero .hero-text,
-.hero .hero-bot{
-  will-change: transform, opacity;
-  transition: transform 180ms linear;
-}
-
-@media (prefers-reduced-motion: reduce){
-  .hero .hero-text,
-  .hero .hero-bot{ transition: none }
-}
+/* ===== Servicios ===== */
 .services{padding:64px 0}
 .services-grid{
   display:grid;
@@ -107,7 +91,6 @@ h1{font-size:44px;line-height:1.1;margin:0 0 12px 0}
   align-items:start;
   text-align:center;
 }
-
 .service{
   transform:translateY(24px);
   opacity:0;
@@ -123,126 +106,68 @@ h1{font-size:44px;line-height:1.1;margin:0 0 12px 0}
   transition:transform 500ms ease;
   will-change: transform;
 }
-.service.in-view{
-  transform:translateY(0);
-  opacity:1;
+.service.in-view{ transform:translateY(0); opacity:1 }
+.service.in-view .service-icon{ transform:translateY(0) scale(1) }
+
+/* ===== Precios ===== */
+#precios{ padding:60px 20px }
+#precios h2{ margin:0 0 16px 0 }
+
+/* Grid con crecimiento independiente */
+#precios .precios-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:20px;
+  align-items:start;
 }
-.service.in-view .service-icon{
-  transform:translateY(0) scale(1);
+/* Respaldo si no usas .precios-grid en el HTML */
+#precios > div{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:20px;
+  align-items:start;
 }
 
-/* responsive */
-@media (max-width: 900px){
-  .services-grid{grid-template-columns:1fr; gap:24px}
+/* Tarjeta */
+#precios .plan-card{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  border-radius:12px;
+  padding:20px;
 }
+#precios .plan-card h3{ margin:0 0 6px 0 }
+#precios .plan-card p{ margin:0 0 12px 0; color:#475569 }
+#precios .plan-card .price{ font-size:28px; font-weight:800; margin:6px 0 0 0 }
+#precios .plan-card .btn{ margin-top:auto; display:inline-block }
 
-/* accesibilidad */
-@media (prefers-reduced-motion: reduce){
-  .service,
-  .service-icon{transition:none}
+/* “¿Que incluye?” oculto hasta tap */
+#precios details > *:not(summary){ display:none }
+#precios details[open] > *:not(summary){ display:block }
+
+/* summary tipo botón */
+#precios details{ margin-top:8px }
+#precios details summary{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 12px;
+  border:1px solid currentColor;
+  border-radius:8px;
+  cursor:pointer;
+  list-style:none;
+  user-select:none;
+  background:#fff;
 }
+#precios details summary::-webkit-details-marker{ display:none }
+#precios details ul{ margin:12px 0 0 18px; padding:0; color:#475569 }
 
-
-/* summary con estilo de botón */
-.plan-details summary {
-  display: inline-block;
-  cursor: pointer;
-  padding: 8px 12px;
-  border: 1px solid var(--brand);
-  border-radius: 6px;
-  background-color: #fff;
-  color: var(--brand);
-  font-weight: 600;
-  transition: background-color 0.2s, color 0.2s;
-  list-style: none; /* quita el triangulito por defecto */
-}
-.plan-details[open] summary {
-  background-color: var(--brand);
-  color: #fff;
-}
-.plan-details summary::marker { display: none; } /* Safari/Firefox */
-.plan-details ul {
-  margin: 12px 0 0 16px;
-  padding: 0;
-}
-
-/* botón Solicitar separado */
-.plan-card .solicitar {
-  margin-top: auto; /* se queda abajo si usas flex */
-  align-self: flex-start;
-  padding: 10px 16px;
-  background: var(--brand);
-  color: #fff;
-  font-weight: 600;
-  border-radius: 6px;
-  text-decoration: none;
-  transition: background-color 0.2s;
-}
-.plan-card .solicitar:hover {
-  background-color: #1f7c9e;
-}
-/* Antes: align-items: stretch; */
-#precios > div {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 20px;
-  align-items: start;
-}
-
-
-#precios .plan-card { display:flex; flex-direction:column; }
-#precios .plan-card .btn { margin-top:auto; }
-/* Planes y precios */
-#precios { padding: 60px 20px; }
-#precios h2 { margin: 0 0 16px 0; }
-
-.precios-grid{
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 20px;
-  align-items: stretch; /* todas con la misma altura por fila */
-}
-
-/* Tarjeta base */
-.plan-card{
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  background: #fff;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;            /* espacio uniforme entre bloques */
-}
-
-/* Tarjeta destacada: mantiene los colores que ya usas */
-.plan-card--featured{
-  border: 2px solid #3aa0a5;
-  background: #e6f6f7;
-}
-
-/* Tipografía y precios */
-#precios .plan-card h3 { margin:0 0 6px 0; }
-#precios .plan-card p  { margin:0 0 12px 0; }
-#precios .plan-card .price { margin:6px 0 0 0; }
-#precios .plan-card details { margin-top:8px; }
-#precios .plan-card details ul { margin:12px 0 0 18px; padding:0;color: #475569;  }
-.plan-card details summary{
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  border: 1px solid currentColor;
-  border-radius: 8px;
-  cursor: pointer;
-  list-style: none;
-  user-select: none;
-  background: #fff;
-}
-.plan-card details summary::-webkit-details-marker{ display: none; }
-
-
-/* Botón al fondo de cada tarjeta, sin pegarse a los detalles */
-.plan-card .btn{
-  margin-top: auto;
-  display: inline-block;
+/* ===== Responsive ===== */
+@media (max-width:900px){
+  .hero-wrap{grid-template-columns:1fr;gap:28px}
+  h1{font-size:32px}
+  .bot{justify-self:center;max-width:300px}
+  .menu{display:none}
+  .cards{grid-template-columns:1fr}
+  .services-grid{grid-template-columns:1fr;gap:24px}
 }

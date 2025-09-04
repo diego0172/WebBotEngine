@@ -1,183 +1,109 @@
-// Scroll suave para enlaces internos
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    const id = a.getAttribute('href').slice(1);
-    const el = document.getElementById(id);
-    if (el) {
+// ===== Scroll suave en anclas =====
+document.querySelectorAll('a[href^="#"]').forEach(function(a){
+  a.addEventListener('click', function(e){
+    var id = a.getAttribute('href').slice(1);
+    var el = document.getElementById(id);
+    if(el){
       e.preventDefault();
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      el.scrollIntoView({ behavior:'smooth', block:'start' });
     }
   });
 });
 
-// WhatsApp prellenado
-document.addEventListener('DOMContentLoaded', () => {
-  const btnWhats = document.getElementById('btnWhats');
-  if (btnWhats) {
-    btnWhats.addEventListener('click', e => {
-      e.preventDefault();
-      const nombre = document.getElementById('nombre').value || '';
-      const base = 'https://wa.me/50231239807'; // tu número con código de país
-      const txt = encodeURIComponent(`Hola, quiero una demo de BotEngine. Mi nombre: ${nombre}`);
-      window.open(`${base}?text=${txt}`, '_blank');
+// ===== WhatsApp (opcional) =====
+document.addEventListener('DOMContentLoaded', function(){
+  var btnWhats = document.getElementById('btnWhats');
+  if(btnWhats){
+    btnWhats.addEventListener('click', function(){
+      var nombre = document.getElementById('nombre') ? document.getElementById('nombre').value.trim() : '';
+      var t = 'Hola, quiero una demo.' + (nombre ? ' Soy ' + nombre + '.' : '');
+      var url = 'https://wa.me/50200000000?text=' + encodeURIComponent(t);
+      window.open(url, '_blank', 'noopener,noreferrer');
     });
   }
 });
 
-// Envío del formulario a /api/demo
-const form = document.getElementById('demoForm');
-if (form) {
-  form.addEventListener('submit', async e => {
-    e.preventDefault();
-    const data = Object.fromEntries(new FormData(form).entries());
-    try {
-      const r = await fetch('/api/demo', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-      if (r.ok) {
-        document.getElementById('demoMsg').style.display = 'block';
-        form.reset();
-      } else {
-        alert('No se pudo enviar. Intenta de nuevo.');
-      }
-    } catch (err) {
-      alert('Error de red. Intenta de nuevo.');
-    }
-  });
-}
-(function () {
-  function nukeState() {
-    try {
-      document.cookie.split(";").forEach(function (c) {
-        var name = c.trim().split("=")[0];
-        if (name) {
-          document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
-        }
-      });
-    } catch (e) {}
-    try { localStorage.clear(); } catch (e) {}
-    try { sessionStorage.clear(); } catch (e) {}
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.getRegistrations()
-        .then(function (regs) { regs.forEach(function (r) { r.unregister(); }); })
-        .catch(function () {});
-    }
-  }
+// ===== Reveal por scroll (.reveal) =====
+(function(){
+  function setupReveals(){
+    var items = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+    if(!items.length) return;
 
-  function setupReveals() {
-    var items = Array.prototype.slice.call(document.querySelectorAll(".reveal"));
-    items.forEach(function (el) {
-      el.classList.remove("visible");
+    // reinicia estado
+    items.forEach(function(el){
+      el.classList.remove('visible');
       void el.offsetWidth;
     });
 
-    var obs = new IntersectionObserver(function (entries, observer) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("visible");
+    var obs = new IntersectionObserver(function(entries, observer){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('visible');
           observer.unobserve(entry.target);
         }
       });
-    }, { root: null, rootMargin: "0px 0px -10% 0px", threshold: 0.08 });
+    }, { threshold:0.08, rootMargin:'0px 0px -10% 0px' });
 
-    items.forEach(function (el) { obs.observe(el); });
+    items.forEach(function(el){ obs.observe(el); });
   }
-
-  function setupForm() {
-    var f = document.getElementById("demoForm");
-    var msg = document.getElementById("demoMsg");
-    var btnW = document.getElementById("btnWhats");
-    if (f) {
-      f.addEventListener("submit", function (e) {
-        e.preventDefault();
-        if (msg) { msg.style.display = "block"; }
-        try { f.reset(); } catch (e) {}
-      });
-    }
-    if (btnW) {
-      btnW.addEventListener("click", function () {
-        var nombre = document.getElementById("nombre") ? document.getElementById("nombre").value.trim() : "";
-        var t = "Hola, quiero una demo. " + (nombre ? "Soy " + nombre + "." : "");
-        var url = "https://wa.me/50200000000?text=" + encodeURIComponent(t);
-        window.open(url, "_blank", "noopener,noreferrer");
-      });
-    }
-  }
-
-  window.addEventListener("pageshow", function () {
-    nukeState();
-    setupReveals();
-  });
-
-  document.addEventListener("DOMContentLoaded", function () {
-    nukeState();
-    setupReveals();
-    setupForm();
-  });
-
-  if ("scrollRestoration" in window.history) {
-    window.history.scrollRestoration = "manual";
-  }
+  document.addEventListener('DOMContentLoaded', setupReveals);
+  window.addEventListener('pageshow', setupReveals);
 })();
 
+// ===== Hero: separación al hacer scroll (data-scroll-fade) =====
 (function(){
-  function clamp01(x){ return x < 0 ? 0 : x > 1 ? 1 : x }
-  function lerp(a,b,t){ return a + (b - a) * t }
+  function clamp01(x){ return x<0?0:x>1?1:x }
+  function lerp(a,b,t){ return a + (b-a)*t }
 
   function setupScrollSplitSections(){
-    var sections = [].slice.call(document.querySelectorAll('[data-scroll-fade]'))
-    if(!sections.length) return
+    var sections = [].slice.call(document.querySelectorAll('[data-scroll-fade]'));
+    if(!sections.length) return;
 
-    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    var ticking = false
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var ticking = false;
 
     function compute(){
-      ticking = false
-      var vh = window.innerHeight || 1
-      var isMobile = window.matchMedia && window.matchMedia('(max-width: 900px)').matches
-      var maxShift = isMobile ? 60 : 140   // desplazamiento horizontal máximo
-      var maxY     = isMobile ? 6  : 10    // desplazamiento vertical máximo
+      ticking = false;
+      var vh = window.innerHeight || 1;
+      var isMobile = window.matchMedia && window.matchMedia('(max-width: 900px)').matches;
+      var maxShift = isMobile ? 60 : 140;
+      var maxY = isMobile ? 6 : 10;
+      var end = vh * 0.4;
 
       sections.forEach(function(sec){
-        var rect = sec.getBoundingClientRect()
-        var y = -rect.top
-        var start = 0
-        var end = vh * 0.4                  // termina antes: al 40% del viewport
-        var t = clamp01((y - start) / (end - start))
+        var rect = sec.getBoundingClientRect();
+        var y = -rect.top;
+        var t = clamp01(y / end);
 
-        var text = sec.querySelector('.hero-text')
-        var bot  = sec.querySelector('.hero-bot')
-        if(!text || !bot) return
+        var text = sec.querySelector('.hero-text');
+        var bot  = sec.querySelector('.hero-bot');
+        if(!text || !bot) return;
 
-        var txText = reduce ? 0 : lerp(0, -maxShift, t)
-        var txBot  = reduce ? 0 : lerp(0,  maxShift, t)
-        var tyText = reduce ? 0 : lerp(0, -maxY, t)
-        var tyBot  = reduce ? 0 : lerp(0,  maxY, t)
+        var txText = reduce ? 0 : lerp(0, -maxShift, t);
+        var txBot  = reduce ? 0 : lerp(0,  maxShift, t);
+        var tyText = reduce ? 0 : lerp(0, -maxY, t);
+        var tyBot  = reduce ? 0 : lerp(0,  maxY, t);
 
-        text.style.transform = 'translate(' + txText + 'px,' + tyText + 'px)'
-        bot.style.transform  = 'translate(' + txBot  + 'px,' + tyBot  + 'px)'
-      })
+        text.style.transform = 'translate(' + txText + 'px,' + tyText + 'px)';
+        bot.style.transform  = 'translate(' + txBot  + 'px,' + tyBot  + 'px)';
+      });
     }
-
     function onScroll(){
-      if(ticking) return
-      ticking = true
-      requestAnimationFrame(compute)
+      if(ticking) return;
+      ticking = true;
+      requestAnimationFrame(compute);
     }
 
-    window.addEventListener('scroll', onScroll, {passive:true})
-    window.addEventListener('resize', onScroll)
-    compute()
+    window.addEventListener('scroll', onScroll, {passive:true});
+    window.addEventListener('resize', onScroll);
+    compute();
   }
 
-  document.addEventListener('DOMContentLoaded', setupScrollSplitSections)
-  window.addEventListener('pageshow', setupScrollSplitSections)
+  document.addEventListener('DOMContentLoaded', setupScrollSplitSections);
+  window.addEventListener('pageshow', setupScrollSplitSections);
 })();
 
-
-
+// ===== Servicios: entrada al hacer scroll (data-services) =====
 (function(){
   function setupServicesScroll(){
     var section = document.querySelector('[data-services]');
@@ -185,74 +111,85 @@ if (form) {
     var cards = [].slice.call(section.querySelectorAll('.service'));
     if(!cards.length) return;
 
-    var obs = new IntersectionObserver(function(entries){
+    var observer = new IntersectionObserver(function(entries, obs){
       entries.forEach(function(en){
         if(!en.isIntersecting) return;
         var el = en.target;
         var idx = cards.indexOf(el);
-        var delay = Math.min(idx * 100, 300); // 0 ms, 100 ms, 200 ms
+        var delay = Math.min(idx*100, 300);
         el.style.transitionDelay = delay + 'ms';
         var icon = el.querySelector('.service-icon');
         if(icon) icon.style.transitionDelay = delay + 'ms';
         el.classList.add('in-view');
-        observer.unobserve(el);
+        obs.unobserve(el);
       });
-    }, { root: null, threshold: 0.15 });
+    }, { threshold:0.15 });
 
-    var observer = obs;
     cards.forEach(function(c){ observer.observe(c); });
   }
-
   document.addEventListener('DOMContentLoaded', setupServicesScroll);
   window.addEventListener('pageshow', setupServicesScroll);
 })();
 
-
-document.addEventListener("DOMContentLoaded", function () {
-  const allDetails = document.querySelectorAll("#precios details");
-
-  allDetails.forEach((det) => {
-    det.addEventListener("toggle", function () {
-      if (this.open) {
-        allDetails.forEach((other) => {
-          if (other !== this) other.open = false;
-        });
-      }
-    });
-  });
-});
-// Igualar altura mínima inicial de las tarjetas sin forzar que todas crezcan al abrir <details>
+// ===== Precios: acordeón y alturas base iguales =====
 (function(){
-  function equalizePlanHeights(){
-    const grid = document.querySelector('#precios > div');
-    if(!grid) return;
-    const cards = grid.querySelectorAll('.plan-card');
-    if(!cards.length) return;
-
-    // Cierra temporalmente cualquier <details> para medir altura base
-    const details = grid.querySelectorAll('details');
-    const openStates = [];
-    details.forEach(d => { openStates.push(d.open); d.open = false; });
-
-    // Limpia min-height previo
-    cards.forEach(c => c.style.minHeight = '');
-
-    // Mide altura máxima base
-    let maxH = 0;
-    cards.forEach(c => { maxH = Math.max(maxH, c.getBoundingClientRect().height); });
-
-    // Aplica altura mínima igual para todas
-    cards.forEach(c => c.style.minHeight = Math.ceil(maxH) + 'px');
-
-    // Restaura estados abiertos
-    details.forEach((d,i) => { d.open = openStates[i]; });
+  function getGrid(){
+    return document.querySelector('#precios .precios-grid') || document.querySelector('#precios > div');
   }
 
-  // Recalcula al cargar y al redimensionar
-  document.addEventListener('DOMContentLoaded', equalizePlanHeights);
-  window.addEventListener('pageshow', equalizePlanHeights);
-  window.addEventListener('resize', (() => {
-    let tid;
-    return function(){ clearTimeout(tid); tid = setTimeout(equalizePlanHeights, 150); };
+  function equalizePlanHeights(){
+    var grid = getGrid();
+    if(!grid) return;
+    var cards = grid.querySelectorAll('.plan-card');
+    if(!cards.length) return;
+
+    // cierra temporalmente <details> para medir altura base
+    var details = grid.querySelectorAll('details');
+    var openStates = [];
+    details.forEach(function(d){ openStates.push(d.open); d.open = false; });
+
+    // limpia min-height
+    cards.forEach(function(c){ c.style.minHeight = ''; });
+
+    // mide y fija mínima común
+    var maxH = 0;
+    cards.forEach(function(c){ maxH = Math.max(maxH, c.getBoundingClientRect().height); });
+    var h = Math.ceil(maxH) + 'px';
+    cards.forEach(function(c){ c.style.minHeight = h; });
+
+    // restaura estados
+    details.forEach(function(d,i){ d.open = openStates[i]; });
+  }
+
+  function setupPreciosAccordion(){
+    var cont = document.getElementById('precios');
+    if(!cont) return;
+    var items = cont.querySelectorAll('details');
+    if(!items.length) return;
+
+    // cerrar todos al cargar
+    items.forEach(function(d){ d.open = false; });
+
+    // al abrir uno, cerrar los demás
+    items.forEach(function(d){
+      d.addEventListener('toggle', function(){
+        if(this.open){
+          items.forEach(function(o){ if(o !== d) o.open = false; });
+        }
+        requestAnimationFrame(equalizePlanHeights);
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    setupPreciosAccordion();
+    equalizePlanHeights();
+  });
+  window.addEventListener('pageshow', function(){
+    setupPreciosAccordion();
+    equalizePlanHeights();
+  });
+  window.addEventListener('resize', (function(){
+    var t; return function(){ clearTimeout(t); t = setTimeout(equalizePlanHeights, 150); };
   })());
 })();
