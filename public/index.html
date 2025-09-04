@@ -49,12 +49,12 @@
     .hero-text { transform: translateX(-60px); }
     .hero-bot  { transform: translateX(60px); }
 
-    .onload .hero-text { animation: slideInLeft 600ms ease-out forwards; }
-    .onload .hero-bot  { animation: slideInRight 700ms ease-out forwards; animation-delay:120ms; }
+    .onload .hero-text { animation: slideInLeft 1500ms ease-out forwards; }
+    .onload .hero-bot  { animation: slideInRight 1500ms ease-out forwards; animation-delay:400ms; }
 
     /* Título cae desde arriba */
     .hero-text h1 { opacity:0; transform:translateY(-60px); }
-    .onload .hero-text h1 { animation: dropFromTop 700ms ease-out forwards; animation-delay:200ms; }
+    .onload .hero-text h1 { animation: dropFromTop 700ms ease-out forwards; animation-delay: 600ms; }
 
     @keyframes slideInLeft {
       0% { transform: translateX(-60px); opacity: 0; }
