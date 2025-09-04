@@ -84,7 +84,7 @@ h1{font-size:44px;line-height:1.1;margin:0 0 12px 0}
   details{margin-top:8px}
   summary{cursor:pointer;font-weight:600;color:var(--brand-700);list-style:none}
   summary::-webkit-details-marker{display:none}
-  details[open] summary{color:var(--text)}
+
   .fondo-degradado{background:linear-gradient(to right,#e6f4f1,#ffffff)}
   .cards{grid-template-columns:1fr}
 }
@@ -141,14 +141,7 @@ h1{font-size:44px;line-height:1.1;margin:0 0 12px 0}
   .service,
   .service-icon{transition:none}
 }
-.plan-card {
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px; /* espacio entre bloques internos */
-}
+
 
 /* summary con estilo de botón */
 .plan-details summary {
@@ -187,4 +180,69 @@ h1{font-size:44px;line-height:1.1;margin:0 0 12px 0}
 }
 .plan-card .solicitar:hover {
   background-color: #1f7c9e;
+}
+/* Antes: align-items: stretch; */
+#precios > div {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  align-items: start;
+}
+
+
+#precios .plan-card { display:flex; flex-direction:column; }
+#precios .plan-card .btn { margin-top:auto; }
+/* Planes y precios */
+#precios { padding: 60px 20px; }
+#precios h2 { margin: 0 0 16px 0; }
+
+.precios-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  align-items: stretch; /* todas con la misma altura por fila */
+}
+
+/* Tarjeta base */
+.plan-card{
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;            /* espacio uniforme entre bloques */
+}
+
+/* Tarjeta destacada: mantiene los colores que ya usas */
+.plan-card--featured{
+  border: 2px solid #3aa0a5;
+  background: #e6f6f7;
+}
+
+/* Tipografía y precios */
+#precios .plan-card h3 { margin:0 0 6px 0; }
+#precios .plan-card p  { margin:0 0 12px 0; }
+#precios .plan-card .price { margin:6px 0 0 0; }
+#precios .plan-card details { margin-top:8px; }
+#precios .plan-card details ul { margin:12px 0 0 18px; padding:0;color: #475569;  }
+.plan-card details summary{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid currentColor;
+  border-radius: 8px;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  background: #fff;
+}
+.plan-card details summary::-webkit-details-marker{ display: none; }
+
+
+/* Botón al fondo de cada tarjeta, sin pegarse a los detalles */
+.plan-card .btn{
+  margin-top: auto;
+  display: inline-block;
 }

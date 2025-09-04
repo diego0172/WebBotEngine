@@ -206,3 +206,53 @@ if (form) {
   document.addEventListener('DOMContentLoaded', setupServicesScroll);
   window.addEventListener('pageshow', setupServicesScroll);
 })();
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  const allDetails = document.querySelectorAll("#precios details");
+
+  allDetails.forEach((det) => {
+    det.addEventListener("toggle", function () {
+      if (this.open) {
+        allDetails.forEach((other) => {
+          if (other !== this) other.open = false;
+        });
+      }
+    });
+  });
+});
+// Igualar altura mínima inicial de las tarjetas sin forzar que todas crezcan al abrir <details>
+(function(){
+  function equalizePlanHeights(){
+    const grid = document.querySelector('#precios > div');
+    if(!grid) return;
+    const cards = grid.querySelectorAll('.plan-card');
+    if(!cards.length) return;
+
+    // Cierra temporalmente cualquier <details> para medir altura base
+    const details = grid.querySelectorAll('details');
+    const openStates = [];
+    details.forEach(d => { openStates.push(d.open); d.open = false; });
+
+    // Limpia min-height previo
+    cards.forEach(c => c.style.minHeight = '');
+
+    // Mide altura máxima base
+    let maxH = 0;
+    cards.forEach(c => { maxH = Math.max(maxH, c.getBoundingClientRect().height); });
+
+    // Aplica altura mínima igual para todas
+    cards.forEach(c => c.style.minHeight = Math.ceil(maxH) + 'px');
+
+    // Restaura estados abiertos
+    details.forEach((d,i) => { d.open = openStates[i]; });
+  }
+
+  // Recalcula al cargar y al redimensionar
+  document.addEventListener('DOMContentLoaded', equalizePlanHeights);
+  window.addEventListener('pageshow', equalizePlanHeights);
+  window.addEventListener('resize', (() => {
+    let tid;
+    return function(){ clearTimeout(tid); tid = setTimeout(equalizePlanHeights, 150); };
+  })());
+})();
