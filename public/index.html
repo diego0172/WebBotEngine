@@ -51,6 +51,51 @@
       .fondo-degradado {
       background: linear-gradient(to right, #e6f4f1, #ffffff);
     }
+/* Animaciones hero */
+.hero-text, .hero-bot {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.hero-text { transform: translateX(-60px); }
+.hero-bot { transform: translateX(60px); }
+
+.onload .hero-text {
+  animation: slideInLeft 600ms ease-out forwards;
+}
+
+.onload .hero-bot {
+  animation: slideInRight 700ms ease-out forwards;
+  animation-delay: 120ms;
+}
+
+@keyframes slideInLeft {
+  0% { transform: translateX(-60px); opacity: 0; }
+  60% { transform: translateX(8px); opacity: 1; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInRight {
+  0% { transform: translateX(60px); opacity: 0; }
+  60% { transform: translateX(-8px); opacity: 1; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+.hero-text h1 {
+  opacity: 0;
+  transform: translateY(-60px);
+}
+
+.onload .hero-text h1 {
+  animation: dropFromTop 700ms ease-out forwards;
+  animation-delay: 200ms; /* entra un poco después de iniciar el resto */
+}
+
+@keyframes dropFromTop {
+  0% { transform: translateY(-60px); opacity: 0; }
+  60% { transform: translateY(8px); opacity: 1; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
 
     }
   </style>
@@ -72,7 +117,7 @@
   <!-- Hero -->
   <section class="hero">
     <div class="container hero-wrap">
-      <div>
+      <div class="hero-text">
         <h1>Diseño y automatización para tu negocio</h1>
         <p class="lead">Impulsamos tu negocio con chatbots, sitios rápidos y presencia digital efectiva.</p>
 
@@ -103,7 +148,7 @@
         </div>
       </div>
 
-      <div>
+      <div class="hero-bot">
         <img class="bot" src="img/robot.png" alt="Mascota BotEngine con laptop">
       </div>
     </div>
@@ -409,5 +454,11 @@
   </form>
 </section>
 <script src="/js/app.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.documentElement.classList.add('onload');
+  });
+</script>
+
 </body>
 </html>
