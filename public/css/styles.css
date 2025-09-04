@@ -141,3 +141,50 @@ h1{font-size:44px;line-height:1.1;margin:0 0 12px 0}
   .service,
   .service-icon{transition:none}
 }
+.plan-card {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px; /* espacio entre bloques internos */
+}
+
+/* summary con estilo de botón */
+.plan-details summary {
+  display: inline-block;
+  cursor: pointer;
+  padding: 8px 12px;
+  border: 1px solid var(--brand);
+  border-radius: 6px;
+  background-color: #fff;
+  color: var(--brand);
+  font-weight: 600;
+  transition: background-color 0.2s, color 0.2s;
+  list-style: none; /* quita el triangulito por defecto */
+}
+.plan-details[open] summary {
+  background-color: var(--brand);
+  color: #fff;
+}
+.plan-details summary::marker { display: none; } /* Safari/Firefox */
+.plan-details ul {
+  margin: 12px 0 0 16px;
+  padding: 0;
+}
+
+/* botón Solicitar separado */
+.plan-card .solicitar {
+  margin-top: auto; /* se queda abajo si usas flex */
+  align-self: flex-start;
+  padding: 10px 16px;
+  background: var(--brand);
+  color: #fff;
+  font-weight: 600;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+.plan-card .solicitar:hover {
+  background-color: #1f7c9e;
+}
