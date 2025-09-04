@@ -36,7 +36,7 @@ h1{font-size:44px;line-height:1.1;margin:0 0 12px 0}
 .strip{height:12px;background:var(--brand);opacity:.35}
 
 /* Proceso */
-.proceso-wrap{max-width:1120px;margin:0 auto;padding:60px 20px;background-color: var(--brand);}
+.proceso-wrap{max-width:1120px;margin:0 auto;padding:60px 20px;background-color: var(--hero-grad);}
 .proceso-title{font-size:32px;margin:0 0 8px 0}
 .proceso-bar{width:300px;height:6px;background:var(--brand);opacity:.35;margin:0 0 24px 0;border-radius:2px}
 .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
