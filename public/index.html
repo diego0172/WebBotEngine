@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" class="onload">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -25,6 +25,7 @@
     .brand{font-weight:800;font-size:20px}
     .brand-badge{padding:6px 10px;background:var(--badge);border-radius:10px;border:1px solid #cfecee}
     .menu{display:flex;gap:24px;align-items:center}
+
     .hero{background:var(--hero-grad)}
     .hero-wrap{display:grid;grid-template-columns:1.15fr .85fr;align-items:center;gap:24px;padding:56px 20px}
     h1{font-size:44px;line-height:1.1;margin:0 0 12px 0}
@@ -33,11 +34,60 @@
     .checks li{display:flex;align-items:flex-start;gap:10px;color:#0f172a}
     .checks svg{flex:0 0 22px;margin-top:2px}
     .actions{display:flex;gap:14px;flex-wrap:wrap}
-    .btn{display:inline-block;padding:12px 16px;border-radius:10px;border:1px solid var(--brand);background:var(--brand);color:#fff;font-weight:600;cursor: pointer}
+    .btn{display:inline-block;padding:12px 16px;border-radius:10px;border:1px solid var(--brand);background:var(--brand);color:#fff;font-weight:600;cursor:pointer}
     .btn.secondary{background:#fff;color:var(--brand);border-color:var(--brand)}
     .btn:hover{filter:brightness(.95)}
     .bot{width:100%;max-width:380px;justify-self:end}
     .strip{height:12px;background:var(--brand);opacity:.35}
+
+    /* Animaciones hero */
+    .hero-text,
+    .hero-bot {
+      opacity: 0;
+      will-change: transform, opacity;
+    }
+    .hero-text { transform: translateX(-60px); }
+    .hero-bot  { transform: translateX(60px); }
+
+    .onload .hero-text { animation: slideInLeft 600ms ease-out forwards; }
+    .onload .hero-bot  { animation: slideInRight 700ms ease-out forwards; animation-delay:120ms; }
+
+    /* Título cae desde arriba */
+    .hero-text h1 { opacity:0; transform:translateY(-60px); }
+    .onload .hero-text h1 { animation: dropFromTop 700ms ease-out forwards; animation-delay:200ms; }
+
+    @keyframes slideInLeft {
+      0% { transform: translateX(-60px); opacity: 0; }
+      60% { transform: translateX(8px); opacity: 1; }
+      100% { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideInRight {
+      0% { transform: translateX(60px); opacity: 0; }
+      60% { transform: translateX(-8px); opacity: 1; }
+      100% { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes dropFromTop {
+      0% { transform: translateY(-60px); opacity: 0; }
+      60% { transform: translateY(8px); opacity: 1; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Proceso: asegura tamaño correcto de íconos */
+    .proceso-wrap{max-width:1120px;margin:0 auto;padding:60px 20px}
+    .proceso-title{font-size:32px;margin:0 0 8px 0}
+    .proceso-bar{width:300px;height:6px;background:var(--brand);opacity:.35;margin:0 0 24px 0;border-radius:2px}
+    .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+    .card{display:flex;flex-direction:column;gap:6px}
+    .card h5{margin:0;font-size:16px}
+    .card p{margin:0;color:#475569;font-size:14px;line-height:1.45}
+    .ico{width:56px;height:56px}
+
+    /* Accesibilidad */
+    @media (prefers-reduced-motion: reduce){
+      .hero-text,.hero-bot,.hero-text h1{animation:none;transform:none;opacity:1}
+    }
+
+    /* Responsive */
     @media (max-width:900px){
       .hero-wrap{grid-template-columns:1fr;gap:28px}
       h1{font-size:32px}
@@ -47,69 +97,12 @@
       summary{cursor:pointer;font-weight:600;color:var(--brand-700);list-style:none}
       summary::-webkit-details-marker{display:none}
       details[open] summary{color:var(--text)}
-
-      .fondo-degradado {
-      background: linear-gradient(to right, #e6f4f1, #ffffff);
-    }
-/* Animaciones hero */
-.hero-text,
-.hero-bot {
-  opacity: 0;
-  will-change: transform, opacity;
-}
-
-.hero-text { transform: translateX(-60px); }
-.hero-bot  { transform: translateX(60px); }
-
-.onload .hero-text {
-  animation: slideInLeft 600ms ease-out forwards;
-}
-
-.onload .hero-bot {
-  animation: slideInRight 700ms ease-out forwards;
-  animation-delay: 120ms;
-}
-
-/* Título cae desde arriba */
-.hero-text h1 {
-  opacity: 0;
-  transform: translateY(-60px);
-}
-
-.onload .hero-text h1 {
-  animation: dropFromTop 700ms ease-out forwards;
-  animation-delay: 200ms;
-}
-
-/* Keyframes */
-@keyframes slideInLeft {
-  0% { transform: translateX(-60px); opacity: 0; }
-  60% { transform: translateX(8px); opacity: 1; }
-  100% { transform: translateX(0); opacity: 1; }
-}
-
-@keyframes slideInRight {
-  0% { transform: translateX(60px); opacity: 0; }
-  60% { transform: translateX(-8px); opacity: 1; }
-  100% { transform: translateX(0); opacity: 1; }
-}
-
-@keyframes dropFromTop {
-  0% { transform: translateY(-60px); opacity: 0; }
-  60% { transform: translateY(8px); opacity: 1; }
-  100% { transform: translateY(0); opacity: 1; }
-}
-
-/* Accesibilidad, sin movimiento si el usuario lo pidió */
-@media (prefers-reduced-motion: reduce) {
-  .hero-text, .hero-bot, .hero-text h1 { animation: none; transform: none; opacity: 1; }
-}
-
+      .fondo-degradado{background:linear-gradient(to right,#e6f4f1,#ffffff)}
+      .cards{grid-template-columns:1fr}
     }
   </style>
 </head>
 <body>
-  <!-- Header -->
   <header class="header">
     <div class="container nav">
       <span class="brand">BotEngine</span>
@@ -123,208 +116,78 @@
   </header>
 
   <!-- Hero -->
-<section class="hero">
-  <div class="container hero-wrap">
-    <div class="hero-text">
-      <h1>Diseño y automatización para tu negocio</h1>
-      <p class="lead">Impulsamos tu negocio con chatbots, sitios rápidos y presencia digital efectiva.</p>
+  <section class="hero">
+    <div class="container hero-wrap">
+      <div class="hero-text">
+        <h1>Diseño y automatización para tu negocio</h1>
+        <p class="lead">Impulsamos tu negocio con chatbots, sitios rápidos y presencia digital efectiva.</p>
 
-      <ul class="checks">
-        <li>
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20 6L9 17l-5-5"></path>
-          </svg>
-          Respuestas automáticas 24/7.
-        </li>
-        <li>
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20 6L9 17l-5-5"></path>
-          </svg>
-          Sitios rápidos y seguros.
-        </li>
-        <li>
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20 6L9 17l-5-5"></path>
-          </svg>
-          Optimización SEO básica.
-        </li>
-      </ul>
+        <ul class="checks">
+          <li>
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 6L9 17l-5-5"></path>
+            </svg>
+            Respuestas automáticas 24/7.
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 6L9 17l-5-5"></path>
+            </svg>
+            Sitios rápidos y seguros.
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 6L9 17l-5-5"></path>
+            </svg>
+            Optimización SEO básica.
+          </li>
+        </ul>
 
-      <div class="actions">
-        <a class="btn" href="#precios">Ver precios</a>
-        <a class="btn secondary" href="#demo">Agenda demo</a>
+        <div class="actions">
+          <a class="btn" href="#precios">Ver precios</a>
+          <a class="btn secondary" href="#demo">Agenda demo</a>
+        </div>
+      </div>
+
+      <div class="hero-bot">
+        <img class="bot" src="img/robot.png" alt="Mascota BotEngine con laptop">
       </div>
     </div>
-
-    <div class="hero-bot">
-      <img class="bot" src="img/robot.png" alt="Mascota BotEngine con laptop">
-    </div>
-  </div>
-</section>
-
+  </section>
 
   <div class="strip"></div>
 
-<!-- Nuestros servicios -->
-<section class="container" id="servicios" style="padding:60px 20px">
-  <h2 style="margin-bottom:24px">Nuestros servicios</h2>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:32px">
-    
-    <div style="text-align:center">
-      <img src="img/chatbot.png" alt="Chatbots inteligentes" style="width:80px;height:80px;object-fit:contain;margin-bottom:12px">
-      <h3>Chatbots inteligentes</h3>
-      <p style="color:#475569">Automatiza respuestas en WhatsApp, Instagram y web para atender a tus clientes 24/7.</p>
+  <!-- Nuestros servicios -->
+  <section class="container" id="servicios" style="padding:60px 20px">
+    <h2 style="margin-bottom:24px">Nuestros servicios</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:32px">
+      <div style="text-align:center">
+        <img src="img/chatbot.png" alt="Chatbots inteligentes" style="width:80px;height:80px;object-fit:contain;margin-bottom:12px">
+        <h3>Chatbots inteligentes</h3>
+        <p style="color:#475569">Automatiza respuestas en WhatsApp, Instagram y web para atender a tus clientes 24/7.</p>
+      </div>
+
+      <div style="text-align:center">
+        <img src="img/web.png" alt="Diseño web moderno" style="width:80px;height:80px;object-fit:contain;margin-bottom:12px">
+        <h3>Diseño web moderno</h3>
+        <p style="color:#475569">Creamos sitios rápidos, seguros y optimizados para tu presencia digital.</p>
+      </div>
+
+      <div style="text-align:center">
+        <img src="img/automatizacion.png" alt="Automatización de procesos" style="width:80px;height:80px;object-fit:contain;margin-bottom:12px">
+        <h3>Automatización de procesos</h3>
+        <p style="color:#475569">Integramos herramientas para ahorrar tiempo en agendamiento, recordatorios y seguimiento.</p>
+      </div>
     </div>
+  </section>
 
-    <div style="text-align:center">
-      <img src="img/web.png" alt="Diseño web moderno" style="width:80px;height:80px;object-fit:contain;margin-bottom:12px">
-      <h3>Diseño web moderno</h3>
-      <p style="color:#475569">Creamos sitios rápidos, seguros y optimizados para tu presencia digital.</p>
-    </div>
-
-    <div style="text-align:center">
-      <img src="img/automatizacion.png" alt="Automatización de procesos" style="width:80px;height:80px;object-fit:contain;margin-bottom:12px">
-      <h3>Automatización de procesos</h3>
-      <p style="color:#475569">Integramos herramientas para ahorrar tiempo en agendamiento, recordatorios y seguimiento.</p>
-    </div>
-  </div>
-</section>
-
-<style>
-  :root{
-    --bg:#ffffff;
-    --text:#0f172a;
-    --muted:#475569;
-    --brand:#3aa0a5;
-    --brand-700:#2d7c80;
-    --badge:#e6f6f7;
-    --border:#e2e8f0;
-    --hero-grad: linear-gradient(135deg, #e6f6f7, #ffffff);
-  }
-  *{box-sizing:border-box}
-  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-  a{color:inherit;text-decoration:none}
-  .container{max-width:1120px;margin:0 auto;padding:16px 20px}
-  .header{position:sticky;top:0;background:rgba(255,255,255,.9);backdrop-filter:saturate(180%) blur(6px);border-bottom:1px solid var(--border);z-index:10}
-  .nav{display:flex;align-items:center;justify-content:space-between;gap:16px}
-  .brand{font-weight:800;font-size:20px}
-  .brand-badge{padding:6px 10px;background:var(--badge);border-radius:10px;border:1px solid #cfecee}
-  .menu{display:flex;gap:24px;align-items:center}
-  .hero{background:var(--hero-grad)}
-  .hero-wrap{display:grid;grid-template-columns:1.15fr .85fr;align-items:center;gap:24px;padding:56px 20px}
-  h1{font-size:44px;line-height:1.1;margin:0 0 12px 0}
-  .lead{margin:0 0 14px 0;color:var(--muted);max-width:54ch}
-  .checks{list-style:none;margin:16px 0 22px 0;padding:0;display:grid;gap:10px}
-  .checks li{display:flex;align-items:flex-start;gap:10px;color:#0f172a}
-  .checks svg{flex:0 0 22px;margin-top:2px}
-  .actions{display:flex;gap:14px;flex-wrap:wrap}
-  .btn{display:inline-block;padding:12px 16px;border-radius:10px;border:1px solid var(--brand);background:var(--brand);color:#fff;font-weight:600;cursor:pointer}
-  .btn.secondary{background:#fff;color:var(--brand);border-color:var(--brand)}
-  .btn:hover{filter:brightness(.95)}
-  .bot{width:100%;max-width:380px;justify-self:end}
-  .strip{height:12px;background:var(--brand);opacity:.35}
-
-  /* Animaciones hero, fuera del @media para que funcionen en desktop y móvil */
-  .hero-text,
-  .hero-bot {
-    opacity: 0;
-    will-change: transform, opacity;
-  }
-  .hero-text { transform: translateX(-60px); }
-  .hero-bot  { transform: translateX(60px); }
-
-  .onload .hero-text {
-    animation: slideInLeft 600ms ease-out forwards;
-  }
-  .onload .hero-bot {
-    animation: slideInRight 700ms ease-out forwards;
-    animation-delay: 120ms;
-  }
-
-  /* Título cae desde arriba */
-  .hero-text h1 {
-    opacity: 0;
-    transform: translateY(-60px);
-  }
-  .onload .hero-text h1 {
-    animation: dropFromTop 700ms ease-out forwards;
-    animation-delay: 200ms;
-  }
-
-  /* Keyframes */
-  @keyframes slideInLeft {
-    0% { transform: translateX(-60px); opacity: 0; }
-    60% { transform: translateX(8px); opacity: 1; }
-    100% { transform: translateX(0); opacity: 1; }
-  }
-  @keyframes slideInRight {
-    0% { transform: translateX(60px); opacity: 0; }
-    60% { transform: translateX(-8px); opacity: 1; }
-    100% { transform: translateX(0); opacity: 1; }
-  }
-  @keyframes dropFromTop {
-    0% { transform: translateY(-60px); opacity: 0; }
-    60% { transform: translateY(8px); opacity: 1; }
-    100% { transform: translateY(0); opacity: 1; }
-  }
-
-  /* Accesibilidad */
-  @media (prefers-reduced-motion: reduce) {
-    .hero-text, .hero-bot, .hero-text h1 { animation:none; transform:none; opacity:1; }
-  }
-
-  /* Responsive */
-  @media (max-width:900px){
-    .hero-wrap{grid-template-columns:1fr;gap:28px}
-    h1{font-size:32px}
-    .bot{justify-self:center;max-width:300px}
-    .menu{display:none}
-    details{margin-top:8px}
-    summary{cursor:pointer;font-weight:600;color:var(--brand-700);list-style:none}
-    summary::-webkit-details-marker{display:none}
-    details[open] summary{color:var(--text)}
-    .fondo-degradado{background:linear-gradient(to right,#e6f4f1,#ffffff)}
-  }
-</style>
-
-
-<section id="proceso">
-  <div class="proceso-wrap">
-    <h2 class="proceso-title">Nuestro proceso</h2>
-    <div class="proceso-bar"></div>
-
-    <!-- div class="proceso-grid">
-      < Izquierda: lista con borde y separadores punteados >
-      <div>
-        <div class="steps">
-          <div class="step">
-            <h4>Briefing inicial</h4>
-            <p>Escuchamos tus necesidades y definimos objetivos.</p>
-          </div>
-          <div class="step">
-            <h4>Diseño y prototipo</h4>
-            <p>Preparamos la propuesta visual y validamos contigo.</p>
-          </div>
-          <div class="step">
-            <h4>Desarrollo y pruebas</h4>
-            <p>Construimos el sitio o chatbot y lo probamos en escenarios reales.</p>
-          </div>
-          <div class="step">
-            <h4>Lanzamiento y soporte</h4>
-            <p>Publicamos tu proyecto y damos soporte post-lanzamiento.</p>
-          </div>
-        </div>
-
-        <div class="proceso-actions">
-          <a class="btn" href="#precios">Botón</a>
-          <a class="btn secondary" href="#contacto">Botón secundario</a>
-        </div>
-      </div-->
-
-      <!-- Derecha: cuadrícula 2x2 con íconos y textos -->
+  <!-- Proceso -->
+  <section id="proceso">
+    <div class="proceso-wrap">
+      <h2 class="proceso-title">Nuestro proceso</h2>
+      <div class="proceso-bar"></div>
       <div class="cards">
         <div class="card">
-          <!-- Ícono 1 -->
           <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="1.75">
             <circle cx="8" cy="10" r="3"></circle>
             <rect x="13" y="7" width="6" height="6" rx="1.5"></rect>
@@ -335,7 +198,6 @@
         </div>
 
         <div class="card">
-          <!-- Ícono 2 -->
           <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="1.75">
             <rect x="3" y="4" width="18" height="14" rx="2"></rect>
             <path d="M7 8h5M7 12h8"></path>
@@ -346,7 +208,6 @@
         </div>
 
         <div class="card">
-          <!-- Ícono 3 -->
           <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="1.75">
             <circle cx="8.5" cy="15.5" r="2.5"></circle>
             <circle cx="15.5" cy="8.5" r="2.5"></circle>
@@ -357,7 +218,6 @@
         </div>
 
         <div class="card">
-          <!-- Ícono 4 -->
           <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="1.75">
             <path d="M5 16h14v3H5z"></path>
             <path d="M12 5l3 3-6 6-3 1 1-3 6-6z"></path>
@@ -368,104 +228,101 @@
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ======= NUEVO: PRECIOS ======= -->
-<section id="precios" class="container" style="padding:60px 20px">
-  <h2 style="margin:0 0 16px 0">Planes y precios</h2>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px">
-    <div style="border:1px solid #e2e8f0;border-radius:12px;padding:20px;background:#fff">
-      <h3 style="margin:0 0 6px 0">Paquete Básico – Presencia en línea</h3>
-      <p style="color:#475569;margin:0 0 12px 0">Ideal para negocios que quieren presencia en línea pero sin manejar ventas directas en la web.</p>
-      <div style="font-size:28px;font-weight:800;margin:6px 0">Q2,500 – Q3,000</div>
-      <details>
-        <summary>¿Que incluye?</summary>
-      <ul style="margin:10px 0 16px 16px;color:#475569">
-        <li>Página web informativa de 3 a 4 secciones (Inicio, Quiénes somos, Productos destacados, Contacto).</li>
-        <li>Sección de productos con imágenes y precios (sin carrito de compras).</li>
-        <li>Botones de contacto directo a WhatsApp y redes sociales.</li>
-        <li>Optimización para celular y tablet.</li>
-      </ul>
-      </details>
-      <a href="#demo" class="btn" style="display:inline-block">Solicitar</a>
+  <!-- Precios -->
+  <section id="precios" class="container" style="padding:60px 20px">
+    <h2 style="margin:0 0 16px 0">Planes y precios</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px">
+      <div style="border:1px solid #e2e8f0;border-radius:12px;padding:20px;background:#fff">
+        <h3 style="margin:0 0 6px 0">Paquete Básico – Presencia en línea</h3>
+        <p style="color:#475569;margin:0 0 12px 0">Ideal para negocios que quieren presencia en línea pero sin manejar ventas directas en la web.</p>
+        <div style="font-size:28px;font-weight:800;margin:6px 0">Q2,500 – Q3,000</div>
+        <details>
+          <summary>¿Que incluye?</summary>
+          <ul style="margin:10px 0 16px 16px;color:#475569">
+            <li>Página web informativa de 3 a 4 secciones</li>
+            <li>Sección de productos con imágenes y precios</li>
+            <li>Botones de contacto directo a WhatsApp y redes sociales</li>
+            <li>Optimización para celular y tablet</li>
+          </ul>
+        </details>
+        <a href="#demo" class="btn" style="display:inline-block">Solicitar</a>
+      </div>
+
+      <div style="border:2px solid #3aa0a5;border-radius:12px;padding:20px;background:#e6f6f7">
+        <div style="font-size:12px;color:#2d7c80;margin-bottom:6px">Recomendado</div>
+        <h3 style="margin:0 0 6px 0">Paquete Intermedio – Catálogo dinámico</h3>
+        <p style="color:#475569;margin:0 0 12px 0">Ideal para tiendas que quieren mostrar variedad de productos.</p>
+        <div style="font-size:28px;font-weight:800;margin:6px 0">Q3,500 – Q5,000</div>
+        <details>
+          <summary>¿Que incluye?</summary>
+          <ul style="margin:10px 0 16px 16px;color:#475569">
+            <li>Catálogo con hasta 20 productos iniciales</li>
+            <li>Filtros simples</li>
+            <li>Integración con redes sociales</li>
+            <li>Blog o sección de consejos</li>
+            <li>Optimización SEO básico</li>
+          </ul>
+        </details>
+        <a href="#demo" class="btn" style="display:inline-block">Solicitar</a>
+      </div>
+
+      <div style="border:1px solid #e2e8f0;border-radius:12px;padding:20px;background:#fff">
+        <h3 style="margin:0 0 6px 0">Paquete Avanzado – Tienda en línea completa</h3>
+        <p style="color:#475569;margin:0 0 12px 0">Ideal para vender directamente desde tu web.</p>
+        <div style="font-size:28px;font-weight:800;margin:6px 0">Q6,000 – Q8,000+</div>
+        <details>
+          <summary>¿Que incluye?</summary>
+          <ul style="margin:10px 0 16px 16px;color:#475569">
+            <li>Carrito de compras funcional</li>
+            <li>Integración con pagos en línea</li>
+            <li>Gestión de inventario básico</li>
+            <li>Testimonios y reseñas</li>
+            <li>Soporte post-lanzamiento 1 mes</li>
+          </ul>
+        </details>
+        <a href="#demo" class="btn" style="display:inline-block">Solicitar</a>
+      </div>
     </div>
+  </section>
 
-    <div style="border:2px solid #3aa0a5;border-radius:12px;padding:20px;background:#e6f6f7">
-      <div style="font-size:12px;color:#2d7c80;margin-bottom:6px">Recomendado</div>
-      <h3 style="margin:0 0 6px 0">Paquete Intermedio – Catálogo dinámico</h3>
-      <p style="color:#475569;margin:0 0 12px 0">Ideal para tiendas que quieren mostrar variedad de productos y educar a sus clientes.</p>
-      <div style="font-size:28px;font-weight:800;margin:6px 0">Q3,500 – Q5,000</div>
-      <details>
-      <summary>¿Que incluye?</summary>
-      <ul style="margin:10px 0 16px 16px;color:#475569">
-        <li>Catálogo con hasta 20 productos iniciales.</li>
-        <li>Filtros simples (ejemplo: articulos, accesorios, colores).</li>
-        <li>Integración con redes sociales (Instagram/TikTok).</li>
-        <li>Blog o sección de consejos tipo “¿Sabías qué?”.</li>
-        <li>Optimización SEO básico (palabras clave, títulos, meta descripciones).</li>
-      </ul>
-      </details>
-      <a href="#demo" class="btn" style="display:inline-block">Solicitar</a>
-    </div>
+  <!-- Demo -->
+  <section id="demo" class="container">
+    <h2 style="margin:0 0 8px 0">Agenda una demo</h2>
+    <p class="lead">Déjanos tus datos y te contactamos.</p>
 
-    <div style="border:1px solid #e2e8f0;border-radius:12px;padding:20px;background:#fff">
-      <h3 style="margin:0 0 6px 0">Paquete Avanzado – Tienda en línea completa</h3>
-      <p style="color:#475569;margin:0 0 12px 0">Ideal para negocios que quieren vender directamente desde su web sin depender solo de redes sociales.</p>
-      <div style="font-size:28px;font-weight:800;margin:6px 0">Q6,000 – Q8,000+</div>
+    <form id="demoForm" style="max-width:640px;display:grid;gap:12px;margin-top:12px">
+      <div>
+        <label for="nombre">Nombre</label>
+        <input id="nombre" name="nombre" required placeholder="Tu nombre" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px">
+      </div>
+      <div>
+        <label for="email">Correo</label>
+        <input id="email" name="email" type="email" required placeholder="tunombre@correo.com" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px">
+      </div>
+      <div>
+        <label for="telefono">Teléfono</label>
+        <input id="telefono" name="telefono" placeholder="+502 xx xx xx" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px">
+      </div>
+      <div>
+        <label for="mensaje">Mensaje</label>
+        <textarea id="mensaje" name="mensaje" rows="4" placeholder="Cuéntanos de tu proyecto" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px"></textarea>
+      </div>
 
-      <details>
-        <summary>¿Que incluye?</summary>
-      <ul style="margin:10px 0 16px 16px;color:#475569">
-        <li>Carrito de compras funcional.</li>
-        <li>Integración con pagos en línea (tarjeta, transferencias, PayPal o similar).</li>
-        <li>Gestión de inventario básico.</li>
-        <li>Sección de testimonios de clientes y reseñas.</li>
-        <li>Soporte post-lanzamiento (1 mes incluido para ajustes menores).</li>
-      </ul>
-      </details>
-      <a href="#demo" class="btn" style="display:inline-block">Solicitar</a>
-    </div>
-  </div>
-</section>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <button class="btn" type="submit">Enviar</button>
+        <button id="btnWhats" type="button" class="btn secondary">Escribir por WhatsApp</button>
+      </div>
 
-<!-- ======= NUEVO: DEMO ======= -->
-<section id="demo" class="container">
-  <h2 style="margin:0 0 8px 0">Agenda una demo</h2>
-  <p class="lead">Déjanos tus datos y te contactamos.</p>
+      <p id="demoMsg" style="margin:6px 0 0 0;color:#2d7c80;display:none">Gracias, recibimos tu solicitud.</p>
+    </form>
+  </section>
 
-  <form id="demoForm" style="max-width:640px;display:grid;gap:12px;margin-top:12px">
-    <div>
-      <label for="nombre">Nombre</label>
-      <input id="nombre" name="nombre" required placeholder="Tu nombre" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px">
-    </div>
-    <div>
-      <label for="email">Correo</label>
-      <input id="email" name="email" type="email" required placeholder="tunombre@correo.com" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px">
-    </div>
-    <div>
-      <label for="telefono">Teléfono</label>
-      <input id="telefono" name="telefono" placeholder="+502 xx xx xx" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px">
-    </div>
-    <div>
-      <label for="mensaje">Mensaje</label>
-      <textarea id="mensaje" name="mensaje" rows="4" placeholder="Cuéntanos de tu proyecto" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px"></textarea>
-    </div>
-
-    <div style="display:flex;gap:12px;flex-wrap:wrap">
-      <button class="btn" type="submit">Enviar</button>
-      <button id="btnWhats" type="button" class="btn secondary">Escribir por WhatsApp</button>
-    </div>
-
-    <p id="demoMsg" style="margin:6px 0 0 0;color:#2d7c80;display:none">Gracias, recibimos tu solicitud.</p>
-  </form>
-</section>
-<script src="/js/app.js"></script>
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    document.documentElement.classList.add('onload');
-  });
-</script>
-
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.documentElement.classList.add('onload');
+    });
+  </script>
 </body>
 </html>
