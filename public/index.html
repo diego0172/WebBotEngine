@@ -100,6 +100,41 @@
       .fondo-degradado{background:linear-gradient(to right,#e6f4f1,#ffffff)}
       .cards{grid-template-columns:1fr}
     }
+    /* =========== ANIMACIONES AL HACER SCROLL =========== */
+/* Estado inicial */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: transform 900ms ease, opacity 900ms ease;
+  will-change: transform, opacity;
+}
+
+/* Variantes por dirección */
+.reveal[data-from="left"]  { transform: translateX(-60px); }
+.reveal[data-from="right"] { transform: translateX(60px); }
+.reveal[data-from="top"]   { transform: translateY(-60px); }
+.reveal[data-from="bottom"]{ transform: translateY(60px); }
+
+/* Al volverse visible */
+.reveal.visible {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+/* Soporte de retardo opcional con data-delay="ms" */
+.reveal.visible {
+  transition-delay: var(--delay, 0ms);
+}
+
+/* Accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
   </style>
 </head>
 <body>
@@ -116,44 +151,52 @@
   </header>
 
   <!-- Hero -->
-  <section class="hero">
-    <div class="container hero-wrap">
-      <div class="hero-text">
-        <h1>Diseño y automatización para tu negocio</h1>
-        <p class="lead">Impulsamos tu negocio con chatbots, sitios rápidos y presencia digital efectiva.</p>
+ <section class="hero">
+  <div class="container hero-wrap">
+    <div class="hero-text reveal" data-from="left" style="--delay: 150ms">
+      <h1 class="reveal" data-from="top" style="--delay: 300ms">
+        Diseño y automatización para tu negocio
+      </h1>
 
-        <ul class="checks">
-          <li>
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M20 6L9 17l-5-5"></path>
-            </svg>
-            Respuestas automáticas 24/7.
-          </li>
-          <li>
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M20 6L9 17l-5-5"></path>
-            </svg>
-            Sitios rápidos y seguros.
-          </li>
-          <li>
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M20 6L9 17l-5-5"></path>
-            </svg>
-            Optimización SEO básica.
-          </li>
-        </ul>
+      <p class="lead reveal" data-from="bottom" style="--delay: 450ms">
+        Impulsamos tu negocio con chatbots, sitios rápidos y presencia digital efectiva.
+      </p>
 
-        <div class="actions">
-          <a class="btn" href="#precios">Ver precios</a>
-          <a class="btn secondary" href="#demo">Agenda demo</a>
-        </div>
-      </div>
+      <ul class="checks">
+        <li class="reveal" data-from="bottom" style="--delay: 550ms">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 6L9 17l-5-5"></path>
+          </svg>
+          Respuestas automáticas 24/7.
+        </li>
 
-      <div class="hero-bot">
-        <img class="bot" src="img/robot.png" alt="Mascota BotEngine con laptop">
+        <li class="reveal" data-from="bottom" style="--delay: 650ms">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 6L9 17l-5-5"></path>
+          </svg>
+          Sitios rápidos y seguros.
+        </li>
+
+        <li class="reveal" data-from="bottom" style="--delay: 750ms">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 6L9 17l-5-5"></path>
+          </svg>
+          Optimización SEO básica.
+        </li>
+      </ul>
+
+      <div class="actions">
+        <a class="btn reveal" data-from="bottom" style="--delay: 850ms" href="#precios">Ver precios</a>
+        <a class="btn secondary reveal" data-from="bottom" style="--delay: 950ms" href="#demo">Agenda demo</a>
       </div>
     </div>
-  </section>
+
+    <div class="hero-bot reveal" data-from="right" style="--delay: 400ms">
+      <img class="bot" src="img/robot.png" alt="Mascota BotEngine con laptop">
+    </div>
+  </div>
+</section>
+
 
   <div class="strip"></div>
 
@@ -324,5 +367,27 @@
       document.documentElement.classList.add('onload');
     });
   </script>
+  <script>
+  // IntersectionObserver para revelar al hacer scroll
+  const io = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        el.classList.add('visible');
+        // Soporte de retardo desde atributo data-delay en ms
+        const delay = el.getAttribute('data-delay');
+        if (delay) el.style.setProperty('--delay', `${parseInt(delay, 10)}ms`);
+        obs.unobserve(el); // ejecuta una sola vez
+      }
+    });
+  }, {
+    root: null,
+    threshold: 0.15,
+    rootMargin: '0px 0px -10% 0px'
+  });
+
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+
 </body>
 </html>
