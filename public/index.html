@@ -52,13 +52,14 @@
       background: linear-gradient(to right, #e6f4f1, #ffffff);
     }
 /* Animaciones hero */
-.hero-text, .hero-bot {
+.hero-text,
+.hero-bot {
   opacity: 0;
   will-change: transform, opacity;
 }
 
 .hero-text { transform: translateX(-60px); }
-.hero-bot { transform: translateX(60px); }
+.hero-bot  { transform: translateX(60px); }
 
 .onload .hero-text {
   animation: slideInLeft 600ms ease-out forwards;
@@ -69,6 +70,18 @@
   animation-delay: 120ms;
 }
 
+/* Título cae desde arriba */
+.hero-text h1 {
+  opacity: 0;
+  transform: translateY(-60px);
+}
+
+.onload .hero-text h1 {
+  animation: dropFromTop 700ms ease-out forwards;
+  animation-delay: 200ms;
+}
+
+/* Keyframes */
 @keyframes slideInLeft {
   0% { transform: translateX(-60px); opacity: 0; }
   60% { transform: translateX(8px); opacity: 1; }
@@ -80,15 +93,6 @@
   60% { transform: translateX(-8px); opacity: 1; }
   100% { transform: translateX(0); opacity: 1; }
 }
-.hero-text h1 {
-  opacity: 0;
-  transform: translateY(-60px);
-}
-
-.onload .hero-text h1 {
-  animation: dropFromTop 700ms ease-out forwards;
-  animation-delay: 200ms; /* entra un poco después de iniciar el resto */
-}
 
 @keyframes dropFromTop {
   0% { transform: translateY(-60px); opacity: 0; }
@@ -96,6 +100,10 @@
   100% { transform: translateY(0); opacity: 1; }
 }
 
+/* Accesibilidad, sin movimiento si el usuario lo pidió */
+@media (prefers-reduced-motion: reduce) {
+  .hero-text, .hero-bot, .hero-text h1 { animation: none; transform: none; opacity: 1; }
+}
 
     }
   </style>
@@ -115,7 +123,7 @@
   </header>
 
   <!-- Hero -->
-  <section class="hero">
+<section class="hero">
     <div class="container hero-wrap">
       <div class="hero-text">
         <h1>Diseño y automatización para tu negocio</h1>
@@ -181,105 +189,103 @@
   </div>
 </section>
 
-<!-- Nuestro proceso (versión alineada a tu referencia) -->
 <style>
-  .proceso-wrap{max-width:1120px;margin:0 auto;padding:60px 20px}
-  .proceso-title{font-size:32px;margin:0 0 8px 0}
-  #demo {
-  background: var(--hero-grad); /* mismo fondo que el hero */
-  padding: 60px 20px;
-  border-bottom: 8px solid rgba(58,160,165,.35);
-}
-  .proceso-bar{
-    width:300px;
-    height:6px;
-    background:var(--brand);
-    opacity: .35;
-    margin:0 0 24px 0;
-    border-radius:2px}
+  :root{
+    --bg:#ffffff;
+    --text:#0f172a;
+    --muted:#475569;
+    --brand:#3aa0a5;
+    --brand-700:#2d7c80;
+    --badge:#e6f6f7;
+    --border:#e2e8f0;
+    --hero-grad: linear-gradient(135deg, #e6f6f7, #ffffff);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+  a{color:inherit;text-decoration:none}
+  .container{max-width:1120px;margin:0 auto;padding:16px 20px}
+  .header{position:sticky;top:0;background:rgba(255,255,255,.9);backdrop-filter:saturate(180%) blur(6px);border-bottom:1px solid var(--border);z-index:10}
+  .nav{display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .brand{font-weight:800;font-size:20px}
+  .brand-badge{padding:6px 10px;background:var(--badge);border-radius:10px;border:1px solid #cfecee}
+  .menu{display:flex;gap:24px;align-items:center}
+  .hero{background:var(--hero-grad)}
+  .hero-wrap{display:grid;grid-template-columns:1.15fr .85fr;align-items:center;gap:24px;padding:56px 20px}
+  h1{font-size:44px;line-height:1.1;margin:0 0 12px 0}
+  .lead{margin:0 0 14px 0;color:var(--muted);max-width:54ch}
+  .checks{list-style:none;margin:16px 0 22px 0;padding:0;display:grid;gap:10px}
+  .checks li{display:flex;align-items:flex-start;gap:10px;color:#0f172a}
+  .checks svg{flex:0 0 22px;margin-top:2px}
+  .actions{display:flex;gap:14px;flex-wrap:wrap}
+  .btn{display:inline-block;padding:12px 16px;border-radius:10px;border:1px solid var(--brand);background:var(--brand);color:#fff;font-weight:600;cursor:pointer}
+  .btn.secondary{background:#fff;color:var(--brand);border-color:var(--brand)}
+  .btn:hover{filter:brightness(.95)}
+  .bot{width:100%;max-width:380px;justify-self:end}
+  .strip{height:12px;background:var(--brand);opacity:.35}
 
-  .proceso-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
-  /* Panel izquierdo con lista */
-  .steps{border:2px solid #3aa0a5;border-radius:6px;padding:16px}
-  .step{padding:12px 8px;border-bottom:1px dotted #cbd5e1}
-  .step:last-child{border-bottom:none}
-  .step h4{margin:0 0 6px 0;font-size:16px}
-  .step p{margin:0;color:#475569;font-size:14px;line-height:1.45}
+  /* Animaciones hero, fuera del @media para que funcionen en desktop y móvil */
+  .hero-text,
+  .hero-bot {
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+  .hero-text { transform: translateX(-60px); }
+  .hero-bot  { transform: translateX(60px); }
 
-  .proceso-actions{display:flex;gap:12px;margin-top:14px}
-  .btn{display:inline-block;padding:10px 14px;border-radius:8px;border:1px solid #3aa0a5;background:#3aa0a5;color:#fff;font-weight:600;cursor: pointer}
-  .btn.secondary{background:#fff;color:#3aa0a5}
-  #proceso {
-    background: var(--hero-grad);
-    padding: 60px 20px; /* un poco de aire alrededor */
-    border-bottom: 8px solid rgba(58, 160, 165, .35); /* línea decorativa abajo */
-}
+  .onload .hero-text {
+    animation: slideInLeft 600ms ease-out forwards;
+  }
+  .onload .hero-bot {
+    animation: slideInRight 700ms ease-out forwards;
+    animation-delay: 120ms;
+  }
 
-  /* Panel derecho 2x2 con íconos y texto */
-  .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
-  .card{display:flex;flex-direction:column;gap:6px}
-  .card h5{margin:0;font-size:16px}
-  .card p{margin:0;color:#475569;font-size:14px;line-height:1.45}
-  .ico{width:56px;height:56px}
+  /* Título cae desde arriba */
+  .hero-text h1 {
+    opacity: 0;
+    transform: translateY(-60px);
+  }
+  .onload .hero-text h1 {
+    animation: dropFromTop 700ms ease-out forwards;
+    animation-delay: 200ms;
+  }
 
+  /* Keyframes */
+  @keyframes slideInLeft {
+    0% { transform: translateX(-60px); opacity: 0; }
+    60% { transform: translateX(8px); opacity: 1; }
+    100% { transform: translateX(0); opacity: 1; }
+  }
+  @keyframes slideInRight {
+    0% { transform: translateX(60px); opacity: 0; }
+    60% { transform: translateX(-8px); opacity: 1; }
+    100% { transform: translateX(0); opacity: 1; }
+  }
+  @keyframes dropFromTop {
+    0% { transform: translateY(-60px); opacity: 0; }
+    60% { transform: translateY(8px); opacity: 1; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+
+  /* Accesibilidad */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-text, .hero-bot, .hero-text h1 { animation:none; transform:none; opacity:1; }
+  }
+
+  /* Responsive */
   @media (max-width:900px){
-    .proceso-grid{grid-template-columns:1fr;gap:22px}
-    .cards{grid-template-columns:1fr 1fr}
+    .hero-wrap{grid-template-columns:1fr;gap:28px}
+    h1{font-size:32px}
+    .bot{justify-self:center;max-width:300px}
+    .menu{display:none}
+    details{margin-top:8px}
+    summary{cursor:pointer;font-weight:600;color:var(--brand-700);list-style:none}
+    summary::-webkit-details-marker{display:none}
+    details[open] summary{color:var(--text)}
+    .fondo-degradado{background:linear-gradient(to right,#e6f4f1,#ffffff)}
   }
-  @media (max-width:620px){
-    .cards{grid-template-columns:1fr}
-  }
- :root {
-      --bg:#ffffff;
-      --text:#0f172a;
-      --muted:#475569;
-      --brand:#3aa0a5;
-      --brand-700:#2d7c80;
-      --badge:#e6f6f7;
-      --border:#e2e8f0;
-      --hero-grad: linear-gradient(135deg, #e6f6f7, #ffffff);
-    }
-    
-    /* === Estilos para los desplegables === */
-    details {
-      margin-top: 8px;
-      margin-bottom: 12px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 8px 12px;
-      background: #f9fafb;
-    }
-
-    summary {
-      cursor: pointer;
-      font-weight: 600;
-      color: var(--brand-700);
-      list-style: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    summary::-webkit-details-marker {
-      display: none;
-    }
-
-    summary::before {
-      content: "▶";
-      font-size: 12px;
-      color: var(--brand-700);
-      transition: transform 0.2s;
-    }
-
-    details[open] summary::before {
-      transform: rotate(90deg);
-    }
-
-    details[open] summary {
-      color: var(--text);
-    }
-
 </style>
+
 
 <section id="proceso">
   <div class="proceso-wrap">
