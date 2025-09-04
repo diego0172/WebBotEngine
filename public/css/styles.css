@@ -97,3 +97,45 @@ h1{font-size:44px;line-height:1.1;margin:0 0 12px 0}
   .hero .hero-text,
   .hero .hero-bot{ transition: none }
 }
+.services{padding:64px 0}
+.services-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:32px;
+  align-items:start;
+  text-align:center;
+}
+
+.service{
+  transform:translateY(24px);
+  opacity:0;
+  transition:transform 500ms ease, opacity 500ms ease;
+  will-change: transform, opacity;
+}
+.service-icon{
+  width:84px;
+  height:auto;
+  margin:0 auto 16px;
+  display:block;
+  transform:translateY(12px) scale(0.96);
+  transition:transform 500ms ease;
+  will-change: transform;
+}
+.service.in-view{
+  transform:translateY(0);
+  opacity:1;
+}
+.service.in-view .service-icon{
+  transform:translateY(0) scale(1);
+}
+
+/* responsive */
+@media (max-width: 900px){
+  .services-grid{grid-template-columns:1fr; gap:24px}
+}
+
+/* accesibilidad */
+@media (prefers-reduced-motion: reduce){
+  .service,
+  .service-icon{transition:none}
+}

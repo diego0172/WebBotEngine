@@ -177,3 +177,32 @@ if (form) {
 })();
 
 
+
+(function(){
+  function setupServicesScroll(){
+    var section = document.querySelector('[data-services]');
+    if(!section) return;
+    var cards = [].slice.call(section.querySelectorAll('.service'));
+    if(!cards.length) return;
+
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(!en.isIntersecting) return;
+        var el = en.target;
+        var idx = cards.indexOf(el);
+        var delay = Math.min(idx * 100, 300); // 0 ms, 100 ms, 200 ms
+        el.style.transitionDelay = delay + 'ms';
+        var icon = el.querySelector('.service-icon');
+        if(icon) icon.style.transitionDelay = delay + 'ms';
+        el.classList.add('in-view');
+        observer.unobserve(el);
+      });
+    }, { root: null, threshold: 0.15 });
+
+    var observer = obs;
+    cards.forEach(function(c){ observer.observe(c); });
+  }
+
+  document.addEventListener('DOMContentLoaded', setupServicesScroll);
+  window.addEventListener('pageshow', setupServicesScroll);
+})();
