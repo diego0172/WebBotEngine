@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function(){
     btnWhats.addEventListener('click', function(){
       var nombre = document.getElementById('nombre') ? document.getElementById('nombre').value.trim() : '';
       var t = 'Hola, quiero una demo.' + (nombre ? ' Soy ' + nombre + '.' : '');
-      var url = 'https://wa.me/50200000000?text=' + encodeURIComponent(t);
+      var url = 'https://wa.me/50231239807?text=' + encodeURIComponent(t);
       window.open(url, '_blank', 'noopener,noreferrer');
     });
   }
