@@ -231,12 +231,34 @@ document.addEventListener('DOMContentLoaded', function(){
   var modalTitle = document.getElementById('modalTitle');
   var lastFocus = null;
 
-  function openModal(title, html){
+  
+// Bloqueo robusto de scroll
+var __scrollY = 0;
+function lockScroll(){
+  __scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+  document.body.style.position = 'fixed';
+  document.body.style.top = `-${__scrollY}px`;
+  document.body.style.left = '0';
+  document.body.style.right = '0';
+  document.body.style.width = '100%';
+  lockScroll();
+}
+function unlockScroll(){
+  unlockScroll();
+  document.body.style.position = '';
+  document.body.style.top = '';
+  document.body.style.left = '';
+  document.body.style.right = '';
+  document.body.style.width = '';
+  window.scrollTo(0, __scrollY || 0);
+}
+
+function openModal(title, html){
     lastFocus = document.activeElement;
     modalTitle.textContent = title;
     modalBody.innerHTML = html;
     modal.classList.add('show');
-    document.body.classList.add('modal-open');
+    lockScroll();
 
     // foco inicial en el diálogo
     var dialog = modal.querySelector('.modal__dialog');
@@ -245,7 +267,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
   function closeModal(){
     modal.classList.remove('show');
-    document.body.classList.remove('modal-open');
+    unlockScroll();
     modalBody.innerHTML = '';
     if(lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
   }
