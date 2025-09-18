@@ -233,25 +233,45 @@ document.addEventListener('DOMContentLoaded', function(){
 
   
 // Bloqueo robusto de scroll
-var __scrollY = 0;
+// Bloqueo de scroll robusto sin saltos
+var __savedScrollY = 0;
+
 function lockScroll(){
-  __scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+  __savedScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+  document.body.dataset.scrollY = String(__savedScrollY);
   document.body.style.position = 'fixed';
-  document.body.style.top = `-${__scrollY}px`;
+  document.body.style.top = '-' + __savedScrollY + 'px';
   document.body.style.left = '0';
   document.body.style.right = '0';
   document.body.style.width = '100%';
-  lockScroll();
+  document.body.classList.add('modal-open');
 }
+
 function unlockScroll(){
-  unlockScroll();
+  // Leer la posición antes de limpiar estilos
+  var topStr = document.body.style.top || '';
+  var y = 0;
+  if(topStr){
+    var n = parseInt(topStr, 10);
+    if(!isNaN(n)) y = -n;
+  } else if (document.body.dataset.scrollY){
+    y = parseInt(document.body.dataset.scrollY, 10) || 0;
+  }
+
+  document.body.classList.remove('modal-open');
   document.body.style.position = '';
   document.body.style.top = '';
   document.body.style.left = '';
   document.body.style.right = '';
   document.body.style.width = '';
-  window.scrollTo(0, __scrollY || 0);
+  delete document.body.dataset.scrollY;
+
+  // Restaurar scroll en el siguiente frame para evitar el espacio en blanco
+  requestAnimationFrame(function(){
+    window.scrollTo(0, y);
+  });
 }
+
 
 function openModal(title, html){
     lastFocus = document.activeElement;
