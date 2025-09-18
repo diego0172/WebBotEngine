@@ -491,3 +491,44 @@ html,body{ background:var(--bg) !important; color:var(--text) !important }
   line-height: 1.35;
   color: #667085;
 }
+
+
+.footer {
+  text-align: center;
+  padding: 20px;
+  background: #fff;
+  color: #555;
+  font-size: 13px;
+}
+
+.footer-top p {
+  margin: 5px 0;
+}
+
+.footer .hashtag {
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.footer .social-icons {
+  margin: 10px 0;
+}
+
+.footer .social-icons a {
+  margin: 0 8px;
+  color: #666;
+  font-size: 20px;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer .social-icons a:hover {
+  color: #2A9D8F; /* cambia al color de tu marca */
+}
+
+.footer-bottom {
+  margin-top: 15px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #777;
+}
