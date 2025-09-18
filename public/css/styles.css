@@ -1,3 +1,5 @@
+/* public/css/styles.css */
+
 /* ===== Variables y base ===== */
 :root{
   --bg:#ffffff;
@@ -38,22 +40,13 @@ h1{font-size:44px;line-height:1.1;margin:0 0 12px 0}
 
 /* Hero split por scroll */
 .hero .hero-text,
-.hero .hero-bot{
-  will-change: transform;
-  transition: transform 180ms linear;
-}
+.hero .hero-bot{will-change:transform;transition:transform 180ms linear}
 @media (prefers-reduced-motion: reduce){
-  .hero .hero-text,
-  .hero .hero-bot{ transition:none }
+  .hero .hero-text,.hero .hero-bot{transition:none}
 }
 
 /* ===== Proceso ===== */
-.proceso-wrap{
-  max-width:1120px;
-  margin:0 auto;
-  padding:60px 20px;
-  background: var(--hero-grad);
-}
+.proceso-wrap{max-width:1120px;margin:0 auto;padding:60px 20px;background:var(--hero-grad)}
 .proceso-title{font-size:32px;margin:0 0 8px 0}
 .proceso-bar{width:300px;height:6px;background:var(--brand);opacity:.35;margin:0 0 24px 0;border-radius:2px}
 .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
@@ -64,103 +57,126 @@ h1{font-size:44px;line-height:1.1;margin:0 0 12px 0}
 
 /* ===== Animaciones reveal ===== */
 .reveal{opacity:1;transform:none}
-.js .reveal{
-  opacity:0;
-  transform:translateY(24px);
-  transition:transform 1500ms ease, opacity 1500ms ease;
-  will-change:transform,opacity;
-}
-.js .reveal[data-from="left"]{ transform:translateX(-60px) }
-.js .reveal[data-from="right"]{ transform:translateX(60px) }
-.js .reveal[data-from="top"]{ transform:translateY(-60px) }
-.js .reveal[data-from="bottom"]{ transform:translateY(60px) }
-.js .reveal.visible{ opacity:1; transform:translate(0,0) }
-
-/* Accesibilidad reveal */
+.js .reveal{opacity:0;transform:translateY(24px);transition:transform 1500ms ease,opacity 1500ms ease;will-change:transform,opacity}
+.js .reveal[data-from="left"]{transform:translateX(-60px)}
+.js .reveal[data-from="right"]{transform:translateX(60px)}
+.js .reveal[data-from="top"]{transform:translateY(-60px)}
+.js .reveal[data-from="bottom"]{transform:translateY(60px)}
+.js .reveal.visible{opacity:1;transform:translate(0,0)}
 @media (prefers-reduced-motion: reduce){
-  .js .reveal,
-  .js .reveal.visible{ opacity:1; transform:none; transition:none }
+  .js .reveal,.js .reveal.visible{opacity:1;transform:none;transition:none}
+}
+.card-title {
+  margin-bottom: 4px; /* sube el título un poco */
+}
+
+.card-subtitle {
+  font-size: 13px;
+  color: #555;
+  margin: 2px 0 8px 0;
+  line-height: 1.4;
 }
 
 /* ===== Servicios ===== */
 .services{padding:64px 0}
-.services-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:32px;
-  align-items:start;
-  text-align:center;
-}
-.service{
-  transform:translateY(24px);
-  opacity:0;
-  transition:transform 500ms ease, opacity 500ms ease;
-  will-change: transform, opacity;
-}
-.service-icon{
-  width:84px;
-  height:auto;
-  margin:0 auto 16px;
-  display:block;
-  transform:translateY(12px) scale(0.96);
-  transition:transform 500ms ease;
-  will-change: transform;
-}
-.service.in-view{ transform:translateY(0); opacity:1 }
-.service.in-view .service-icon{ transform:translateY(0) scale(1) }
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;text-align:center}
+.service{transform:translateY(24px);opacity:0;transition:transform 500ms ease,opacity 500ms ease;will-change:transform,opacity}
+.service-icon{width: 100px;;height:auto;margin:0 auto 16px;display:block;transform:translateY(12px) scale(.96);transition:transform 500ms ease;will-change:transform}
+.service.in-view{transform:translateY(0);opacity:1}
+.service.in-view .service-icon{transform:translateY(0) scale(1)}
 
-/* ===== Precios ===== */
-#precios{ padding:60px 20px }
-#precios h2{ margin:0 0 16px 0 }
+/* ===== TARJETAS DE PRECIOS ===== */
+.cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media (max-width:960px){.cards-grid{grid-template-columns:1fr}}
 
-/* Grid con crecimiento independiente */
-#precios .precios-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:20px;
-  align-items:start;
-}
-/* Respaldo si no usas .precios-grid en el HTML */
-#precios > div{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:20px;
-  align-items:start;
+.price-card{position:relative;border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:box-shadow .2s,transform .2s}
+.price-card:hover{box-shadow:0 10px 28px rgba(2,6,23,.12);transform:translateY(-2px)}
+.card-cover {
+  position: relative;
+  height: 180px;       /* puedes ajustar la altura si la ves muy corta */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
-/* Tarjeta */
-#precios .plan-card{
+.card-badge{position:absolute;bottom:10px;left:10px;background:var(--brand);color:#fff;font-size:12px;padding:6px 10px;border-radius:999px}
+.card-body{padding:16px}
+.card-title{margin:0 0 6px 0;font-size:20px}
+.card-desc{margin:0;color:var(--muted);font-size:14px}
+
+/* Panel superpuesto base */
+.fan-panel{position:absolute;inset:8px;padding:8px;pointer-events:none;opacity:0;transform:scale(.98);transition:opacity .25s,transform .25s;z-index:5}
+.price-card.expanded .fan-panel{pointer-events:auto;opacity:1;transform:scale(1)}
+.price-card.expanded::after{display:none}
+
+/* Cartas estilo abanico (estado compacto) */
+.fan-stack{position:relative;width:100%;min-height:260px;padding:14px;display:grid;place-items:center;z-index:6}
+.fan-item{position:absolute;width:min(92%,520px);max-width:520px;background:#fff;border:1px solid var(--border);border-radius:14px;box-shadow:0 10px 28px rgba(2,6,23,.12);padding:14px;transform-origin:bottom center;transition:transform .28s,box-shadow .2s}
+.fan-item:nth-child(1){transform:translateY(10px) rotate(-6deg);z-index:1}
+.fan-item:nth-child(2){transform:translateY(0) rotate(0);z-index:2}
+.fan-item:nth-child(3){transform:translateY(10px) rotate(6deg);z-index:1}
+.fan-item:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(2,6,23,.16);z-index:3}
+.fan-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 6px 0}
+.fan-head h4{margin:0;font-size:16px}
+.fan-price{font-weight:700;color:var(--brand-700)}
+
+/* Botón ¿Qué incluye? */
+.btn-includes{display:inline-block;margin-top:8px;padding:8px 12px;border:1px solid var(--brand);border-radius:8px;background:#fff;color:var(--brand);font-size:14px;font-weight:600;cursor:pointer}
+.btn-includes:hover{background:var(--badge)}
+.includes-content{display:none;margin-top:10px;color:var(--muted)}
+.fan-item.open .includes-content{display:block}
+
+/* ===== MODO PANTALLA COMPLETA ===== */
+body.modal-open{overflow:hidden}
+
+.price-card.expanded .fan-panel{
+  position:fixed;
+  inset:0;
+  padding:clamp(12px,4vw,28px);
+  z-index:1000;
+  opacity:1;
+  transform:none;
+  pointer-events:auto;
+  display:grid;
+  place-items:center;
+  overflow:auto;
+}
+.price-card.expanded .fan-panel::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,.55);
+  backdrop-filter:saturate(140%) blur(4px);
+  z-index:-1;
+}
+
+/* En fullscreen, apilar vertical sin rotación */
+.price-card.expanded .fan-stack{
+  width:min(1000px,92vw);
+  min-height:auto;
+  padding:clamp(12px,2vw,18px);
+  margin:auto;
   display:flex;
   flex-direction:column;
-  gap:12px;
-  border-radius:12px;
-  padding:20px;
-}
-#precios .plan-card h3{ margin:0 0 6px 0 }
-#precios .plan-card p{ margin:0 0 12px 0; color:#475569 }
-#precios .plan-card .price{ font-size:28px; font-weight:800; margin:6px 0 0 0 }
-#precios .plan-card .btn{ margin-top:auto; display:inline-block }
-
-/* “¿Que incluye?” oculto hasta tap */
-#precios details > *:not(summary){ display:none }
-#precios details[open] > *:not(summary){ display:block }
-
-/* summary tipo botón */
-#precios details{ margin-top:8px }
-#precios details summary{
-  display:inline-flex;
+  gap:14px;
   align-items:center;
-  gap:8px;
-  padding:8px 12px;
-  border:1px solid currentColor;
-  border-radius:8px;
-  cursor:pointer;
-  list-style:none;
-  user-select:none;
-  background:#fff;
 }
-#precios details summary::-webkit-details-marker{ display:none }
-#precios details ul{ margin:12px 0 0 18px; padding:0; color:#475569 }
+.price-card.expanded .fan-item{
+  position:relative;
+  width:100%;
+  max-width:none;
+  margin:6px 0;
+  transform:none !important;
+  left:auto; top:auto;
+  box-shadow:0 12px 28px rgba(2,6,23,.16);
+}
+.price-card.expanded .fan-item:hover{transform:none !important}
+.price-card.expanded .fan-close{
+  position:fixed;
+  top:clamp(10px,3vw,18px);
+  right:clamp(10px,3vw,18px);
+  z-index:1001;
+}
 
 /* ===== Responsive ===== */
 @media (max-width:900px){
@@ -170,4 +186,308 @@ h1{font-size:44px;line-height:1.1;margin:0 0 12px 0}
   .menu{display:none}
   .cards{grid-template-columns:1fr}
   .services-grid{grid-template-columns:1fr;gap:24px}
+  .price-card.expanded .fan-stack{width:100%;padding:12px}
+}
+/* Agrega al final de styles.css */
+
+/* ===== Modal pro ===== */
+.modal{position:fixed;inset:0;display:none}
+.modal.show{display:block;animation:modalFade .18s ease-out}
+@keyframes modalFade{from{opacity:0}to{opacity:1}}
+.modal__overlay{position:absolute;inset:0;background:rgba(15,23,42,.55);backdrop-filter:saturate(140%) blur(6px)}
+.modal__dialog{
+  position:relative;z-index:1;margin:auto;inset:0;
+  max-width:min(1080px,92vw);top:50%;transform:translateY(-50%);
+  background:linear-gradient(180deg,#ffffff,#f7fbfc);
+  border:1px solid rgba(15,23,42,.08);
+  border-radius:18px;
+  padding:clamp(16px,2.2vw,26px);
+  box-shadow:0 28px 70px rgba(2,6,23,.28);
+  max-height:88vh;overflow:auto;
+  animation:modalPop .22s cubic-bezier(.2,.75,.25,1);
+}
+@keyframes modalPop{from{transform:translateY(-46%) scale(.98)}to{transform:translateY(-50%) scale(1)}}
+.modal__title{margin:0 0 12px 0;font-size:22px;letter-spacing:.2px}
+.modal__close{
+  position:sticky;float:right;top:0;margin-left:auto;
+  background:#fff;border:1px solid var(--border);border-radius:999px;
+  padding:8px 12px;cursor:pointer;transition:filter .15s ease,transform .15s ease
+}
+.modal__close:hover{filter:brightness(.96);transform:translateY(-1px)}
+body.modal-open{overflow:hidden}
+
+/* ===== Contenido de planes dentro del modal ===== */
+.plans{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:18px;align-items:start
+}
+@media (max-width:1024px){.plans{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:680px){.plans{grid-template-columns:1fr}}
+
+.plan-mini{
+  background:#fff;border:1px solid rgba(15,23,42,.08);
+  border-radius:14px;padding:14px 14px 12px 14px;
+  box-shadow:0 6px 22px rgba(2,6,23,.08);
+  transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease
+}
+.plan-mini:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(2,6,23,.14);border-color:rgba(58,160,165,.35)}
+
+.plan-mini header{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:12px;margin:0 0 10px 0;padding:0 0 8px 0;
+  border-bottom:1px dashed rgba(15,23,42,.12)
+}
+.plan-mini h4{margin:0;font-size:15px;font-weight:800;letter-spacing:.2px}
+.plan-mini .price{font-weight:900;color:var(--brand-700);font-size:15px}
+
+/* Lista con viñetas personalizadas */
+.plan-mini .includes{margin:6px 0 0 0}
+.plan-mini .includes ul{list-style:none;margin:0;padding:0}
+.plan-mini .includes li{
+  position:relative;padding-left:18px;margin:8px 0;color:var(--text)
+}
+.plan-mini .includes li::before{
+  content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:999px;
+  background:var(--brand);box-shadow:0 0 0 3px var(--badge)
+}
+
+/* Modo oscuro */
+@media (prefers-color-scheme: dark){
+  .modal__dialog{background:linear-gradient(180deg,#0b1220,#0f172a);border-color:rgba(148,163,184,.18)}
+  .modal__title{color:#e2e8f0}
+  .modal__close{background:#0b1220;border-color:rgba(148,163,184,.25);color:#e2e8f0}
+  .plan-mini{background:#0b1220;border-color:rgba(148,163,184,.18);box-shadow:0 8px 28px rgba(0,0,0,.35)}
+  .plan-mini header{border-bottom-color:rgba(148,163,184,.18)}
+  .plan-mini .price{color:#67d6db}
+  .plan-mini .includes li{color:#e2e8f0}
+}
+
+/* ===== Tarjetas principales más pulidas ===== */
+.price-card{
+  border:1px solid rgba(15,23,42,.08);
+  border-radius:16px;
+  overflow:hidden;
+  transition:box-shadow .18s ease,transform .18s ease,border-color .18s ease
+}
+.price-card:hover{
+  box-shadow:0 18px 40px rgba(2,6,23,.16);
+  transform:translateY(-3px);
+  border-color:rgba(58,160,165,.35)
+}
+.card-cover {
+  position: relative;
+  height: 180px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.card-cover::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,.0) 30%,rgba(0,0,0,.14) 100%);
+}
+.card-badge{
+  position:absolute;bottom:12px;left:12px;
+  background:var(--brand);color:#fff;font-size:12px;
+  padding:6px 10px;border-radius:999px;box-shadow:0 6px 14px rgba(58,160,165,.35)
+}
+.card-body{padding:16px 16px 18px 16px}
+.card-title{margin:0 0 6px 0;font-size:20px}
+.card-desc{margin:0;color:var(--muted);font-size:14px}
+
+/* Oculta el botón y muestra siempre el contenido */
+.btn-includes{ display:none }
+.includes{ display:block }
+
+
+/* Fondo del popup igual al de “Nuestro proceso” */
+/* Pega esto al final de tu styles.css para sobrescribir el estilo del modal */
+
+.modal__dialog{
+  background: var(--hero-grad);
+  border: 1px solid #cfecee;
+  border-radius: 18px;
+  box-shadow: 0 28px 70px rgba(2,6,23,.28);
+  padding: clamp(16px, 2.2vw, 26px);
+  max-width: min(1080px, 92vw);
+  max-height: 88vh;
+  overflow: auto;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* borde interior suave */
+.modal__dialog::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(15,23,42,.06);
+}
+
+/* subrayado del título como en la sección */
+.modal__title{
+  margin: 0 0 12px 0;
+  font-size: 22px;
+  letter-spacing: .2px;
+}
+.modal__title::after{
+  content: "";
+  display: block;
+  width: 300px;
+  max-width: 60%;
+  height: 6px;
+  margin-top: 10px;
+  background: var(--brand);
+  opacity: .35;
+  border-radius: 3px;
+}
+
+/* modo oscuro compatible */
+@media (prefers-color-scheme: dark){
+  .modal__dialog{
+    background: linear-gradient(180deg,#0b1220,#0f172a);
+    border-color: rgba(148,163,184,.18);
+  }
+  .modal__dialog::before{
+    box-shadow: inset 0 0 0 1px rgba(148,163,184,.12);
+  }
+  .modal__title{ color: #e2e8f0 }
+  .modal__title::after{ opacity: .5 }
+}
+
+/* Pega al final de styles.css. Unifica el tema: claro por defecto, oscuro global si el sistema está en oscuro. */
+
+/* 1) Variables para modo oscuro global */
+@media (prefers-color-scheme: dark){
+  html{ color-scheme: dark }
+  :root{
+    --bg:#0b1220;
+    --text:#e2e8f0;
+    --muted:#94a3b8;
+    --brand:#3aa0a5;
+    --brand-700:#67d6db;
+    --badge:rgba(58,160,165,.18);
+    --border:rgba(148,163,184,.22);
+    --hero-grad:linear-gradient(135deg,#0b1220,#0f172a);
+  }
+}
+
+/* 2) Forzar que el modal y su contenido usen SIEMPRE las variables del tema */
+.modal__dialog{
+  background: var(--hero-grad) !important;
+  border-color: var(--border) !important;
+  color: var(--text) !important;
+}
+
+/* Botón cerrar y título del modal con el mismo tema */
+.modal__close{
+  background: var(--bg) !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+}
+.modal__title{ color: var(--text) !important }
+
+/* Tarjetas internas del modal basadas en variables, no en colores fijos */
+.plans .plan-mini{
+  background: var(--bg) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+}
+.plans .plan-mini header{
+  border-bottom: 1px dashed var(--border) !important;
+}
+.plans .plan-mini .price{
+  color: var(--brand-700) !important;
+}
+.plans .plan-mini .includes li{
+  color: var(--text) !important;
+}
+
+/* 3) Tarjetas principales de precios alineadas con el tema */
+.price-card{ border-color: var(--border) }
+.card-desc{ color: var(--muted) }
+
+/* FORZAR MODO CLARO EN TODO EL SITIO */
+html{ color-scheme: light }
+
+/* Variables de claro, siempre */
+:root{
+  --bg:#ffffff;
+  --text:#0f172a;
+  --muted:#475569;
+  --brand:#3aa0a5;
+  --brand-700:#2d7c80;
+  --badge:#e6f6f7;
+  --border:#e2e8f0;
+  --hero-grad: linear-gradient(135deg, #e6f6f7, #ffffff);
+}
+
+/* Si el sistema está en oscuro, usa igual las variables de claro */
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#ffffff;
+    --text:#0f172a;
+    --muted:#475569;
+    --brand:#3aa0a5;
+    --brand-700:#2d7c80;
+    --badge:#e6f6f7;
+    --border:#e2e8f0;
+    --hero-grad: linear-gradient(135deg, #e6f6f7, #ffffff);
+  }
+}
+
+/* Componentes con tema claro forzado */
+html,body{ background:var(--bg) !important; color:var(--text) !important }
+.header{ background:rgba(255,255,255,.9) !important; border-bottom-color:var(--border) !important }
+.brand-badge{ background:var(--badge) !important; border-color:#cfecee !important; color:var(--text) !important }
+
+.price-card{ border-color:var(--border) !important }
+.card-desc{ color:var(--muted) !important }
+
+/* Popup */
+.modal__overlay{ background:rgba(15,23,42,.55) !important; backdrop-filter:saturate(140%) blur(6px) }
+.modal__dialog{ background:var(--hero-grad) !important; border:1px solid #cfecee !important; color:var(--text) !important }
+.modal__title{ color:var(--text) !important }
+.modal__close{ background:#fff !important; color:var(--text) !important; border-color:var(--border) !important }
+
+/* Tarjetas internas del popup */
+.plans .plan-mini{
+  background:#fff !important;
+  border:1px solid var(--border) !important;
+  box-shadow:0 6px 22px rgba(2,6,23,.08) !important
+}
+.plans .plan-mini header{ border-bottom:1px dashed rgba(15,23,42,.12) !important }
+.plans .plan-mini .price{ color:var(--brand-700) !important }
+.plans .plan-mini .includes li{ color:var(--text) !important }
+
+
+.plan-mini header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-auto-rows: auto;
+  row-gap: 6px;
+}
+
+.plan-mini header h4 {
+  grid-column: 1;
+  grid-row: 1;
+  margin: 0;
+}
+
+.plan-mini header .price {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+}
+
+.plan-mini header .subtitle {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.35;
+  color: #667085;
 }

@@ -1,3 +1,5 @@
+// public/js/app.js
+
 // ===== Scroll suave en anclas =====
 document.querySelectorAll('a[href^="#"]').forEach(function(a){
   a.addEventListener('click', function(e){
@@ -29,7 +31,6 @@ document.addEventListener('DOMContentLoaded', function(){
     var items = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
     if(!items.length) return;
 
-    // reinicia estado
     items.forEach(function(el){
       el.classList.remove('visible');
       void el.offsetWidth;
@@ -73,16 +74,16 @@ document.addEventListener('DOMContentLoaded', function(){
       sections.forEach(function(sec){
         var rect = sec.getBoundingClientRect();
         var y = -rect.top;
-        var t = clamp01(y / end);
+        var t = Math.max(0, Math.min(1, y / end));
 
         var text = sec.querySelector('.hero-text');
         var bot  = sec.querySelector('.hero-bot');
         if(!text || !bot) return;
 
-        var txText = reduce ? 0 : lerp(0, -maxShift, t);
-        var txBot  = reduce ? 0 : lerp(0,  maxShift, t);
-        var tyText = reduce ? 0 : lerp(0, -maxY, t);
-        var tyBot  = reduce ? 0 : lerp(0,  maxY, t);
+        var txText = reduce ? 0 : (0 + (-maxShift - 0) * t);
+        var txBot  = reduce ? 0 : (0 + ( maxShift - 0) * t);
+        var tyText = reduce ? 0 : (0 + (-maxY    - 0) * t);
+        var tyBot  = reduce ? 0 : (0 + ( maxY    - 0) * t);
 
         text.style.transform = 'translate(' + txText + 'px,' + tyText + 'px)';
         bot.style.transform  = 'translate(' + txBot  + 'px,' + tyBot  + 'px)';
@@ -131,65 +132,155 @@ document.addEventListener('DOMContentLoaded', function(){
   window.addEventListener('pageshow', setupServicesScroll);
 })();
 
-// ===== Precios: acordeón y alturas base iguales =====
+// // ===== Tarjetas de precios con abanico (pantalla completa) =====
+// (function(){
+//   function setModalState(on){
+//     document.body.classList.toggle('modal-open', !!on);
+//   }
+
+//   function setupFanCards(){
+//     var cards = [].slice.call(document.querySelectorAll('.price-card'));
+//     if(!cards.length) return;
+
+//     function closeOthers(except){
+//       cards.forEach(function(c){ if(c !== except) c.classList.remove('expanded'); });
+//     }
+//     function open(card){
+//       closeOthers(card);
+//       card.classList.add('expanded');
+//       setModalState(true);
+//     }
+//     function close(card){
+//       card.classList.remove('expanded');
+//       if(!document.querySelector('.price-card.expanded')) setModalState(false);
+//     }
+//     function toggle(card){
+//       if(card.classList.contains('expanded')) close(card);
+//       else open(card);
+//     }
+
+//     cards.forEach(function(card){
+//       if(!card.hasAttribute('tabindex')) card.setAttribute('tabindex','0');
+
+//       // Abre/cierra al hacer clic en la tarjeta, ignorando controles internos
+//       card.addEventListener('click', function(e){
+//         var t = e.target;
+//         if(t.closest('.fan-item') || t.closest('.fan-close') || t.closest('.btn-includes')) return;
+//         toggle(card);
+//       });
+
+//       // Teclado
+//       card.addEventListener('keydown', function(e){
+//         if(e.key === 'Enter' || e.key === ' '){
+//           e.preventDefault();
+//           toggle(card);
+//         }
+//       });
+
+//       // Botón cerrar
+//       var btn = card.querySelector('.fan-close');
+//       if(btn){
+//         btn.addEventListener('click', function(e){
+//           e.stopPropagation();
+//           close(card);
+//         });
+//       }
+//     });
+
+//     // Clic fuera del panel cierra
+//     document.addEventListener('click', function(e){
+//       var openCard = document.querySelector('.price-card.expanded');
+//       if(!openCard) return;
+//       var insidePanel = e.target.closest('.fan-panel');
+//       var onCard = e.target.closest('.price-card');
+//       if(!insidePanel && !onCard) close(openCard);
+//     });
+
+//     // Tecla Esc cierra
+//     document.addEventListener('keydown', function(e){
+//       if(e.key === 'Escape'){
+//         var openCard = document.querySelector('.price-card.expanded');
+//         if(openCard) close(openCard);
+//       }
+//     });
+//   }
+
+//   document.addEventListener('DOMContentLoaded', setupFanCards);
+//   window.addEventListener('pageshow', setupFanCards);
+// })();
+
+// ===== ¿Qué incluye? por plan (delegación) =====
 (function(){
-  function getGrid(){
-    return document.querySelector('#precios .precios-grid') || document.querySelector('#precios > div');
-  }
-
-  function equalizePlanHeights(){
-    var grid = getGrid();
-    if(!grid) return;
-    var cards = grid.querySelectorAll('.plan-card');
-    if(!cards.length) return;
-
-    // cierra temporalmente <details> para medir altura base
-    var details = grid.querySelectorAll('details');
-    var openStates = [];
-    details.forEach(function(d){ openStates.push(d.open); d.open = false; });
-
-    // limpia min-height
-    cards.forEach(function(c){ c.style.minHeight = ''; });
-
-    // mide y fija mínima común
-    var maxH = 0;
-    cards.forEach(function(c){ maxH = Math.max(maxH, c.getBoundingClientRect().height); });
-    var h = Math.ceil(maxH) + 'px';
-    cards.forEach(function(c){ c.style.minHeight = h; });
-
-    // restaura estados
-    details.forEach(function(d,i){ d.open = openStates[i]; });
-  }
-
-  function setupPreciosAccordion(){
-    var cont = document.getElementById('precios');
-    if(!cont) return;
-    var items = cont.querySelectorAll('details');
-    if(!items.length) return;
-
-    // cerrar todos al cargar
-    items.forEach(function(d){ d.open = false; });
-
-    // al abrir uno, cerrar los demás
-    items.forEach(function(d){
-      d.addEventListener('toggle', function(){
-        if(this.open){
-          items.forEach(function(o){ if(o !== d) o.open = false; });
-        }
-        requestAnimationFrame(equalizePlanHeights);
-      });
-    });
-  }
-
-  document.addEventListener('DOMContentLoaded', function(){
-    setupPreciosAccordion();
-    equalizePlanHeights();
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest('.btn-includes');
+    if(!btn) return;
+    e.stopPropagation();
+    var item = btn.closest('.fan-item');
+    if(!item) return;
+    var stack = item.parentElement;
+    stack.querySelectorAll('.fan-item').forEach(function(f){ if(f !== item) f.classList.remove('open'); });
+    item.classList.toggle('open');
   });
-  window.addEventListener('pageshow', function(){
-    setupPreciosAccordion();
-    equalizePlanHeights();
+})();
+// Agrega al final de app.js
+
+// Popup de planes
+(function(){
+  var modal = document.getElementById('plansModal');
+  var modalBody = document.getElementById('modalBody');
+  var modalTitle = document.getElementById('modalTitle');
+  var lastFocus = null;
+
+  function openModal(title, html){
+    lastFocus = document.activeElement;
+    modalTitle.textContent = title;
+    modalBody.innerHTML = html;
+    modal.classList.add('show');
+    document.body.classList.add('modal-open');
+
+    // foco inicial en el diálogo
+    var dialog = modal.querySelector('.modal__dialog');
+    setTimeout(function(){ dialog && dialog.focus(); }, 10);
+  }
+
+  function closeModal(){
+    modal.classList.remove('show');
+    document.body.classList.remove('modal-open');
+    modalBody.innerHTML = '';
+    if(lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+  }
+
+  // Exponer a los otros listeners existentes
+  window.__openPlansModal = openModal;
+  window.__closePlansModal = closeModal;
+
+  // Abrir popup al hacer clic en las tarjetas de precios
+(function(){
+  var modal = document.getElementById('plansModal');
+  if(!modal) return;
+
+  // abrir desde tarjeta principal
+  document.addEventListener('click', function(e){
+    var card = e.target.closest('.price-card');
+    if(card && !e.target.closest('.modal-template')){
+      var tpl = card.querySelector('.modal-template');
+      if(!tpl) return;
+      var title = card.getAttribute('data-category') || (card.querySelector('.card-title') ? card.querySelector('.card-title').textContent : 'Planes');
+      if (window.__openPlansModal) window.__openPlansModal(title, tpl.innerHTML);
+      return;
+    }
+    // cerrar por botón u overlay
+    if(e.target.closest('[data-close="modal"]')){
+      if (window.__closePlansModal) window.__closePlansModal();
+    }
   });
-  window.addEventListener('resize', (function(){
-    var t; return function(){ clearTimeout(t); t = setTimeout(equalizePlanHeights, 150); };
-  })());
+
+  // cerrar con Esc
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && modal.classList.contains('show')){
+      if (window.__closePlansModal) window.__closePlansModal();
+    }
+  });
+})();
+
 })();
