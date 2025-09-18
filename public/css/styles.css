@@ -189,6 +189,12 @@ body.modal-open{overflow:hidden}
   .price-card.expanded .fan-stack{width:100%;padding:12px}
 }
 /* Agrega al final de styles.css */
+.modal {
+  display: flex;
+  align-items: flex-start; /* hace que se pegue arriba */
+  justify-content: center;
+  padding-top: 70px; /* separa del header */
+}
 
 /* ===== Modal pro ===== */
 .modal{position:fixed;inset:0;display:none}
