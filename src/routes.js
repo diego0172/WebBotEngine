@@ -4,16 +4,20 @@ import nodemailer from "nodemailer";
 
 const router = Router();
 
+function buildTransport() {
+  return nodemailer.createTransport({
+    host: process.env.MAIL_HOST || "smtp.gmail.com",
+    port: Number(process.env.MAIL_PORT || 465),
+    secure: true,
+    auth: { user: process.env.MAIL_USER, pass: process.env.MAIL_PASS },
+    connectionTimeout: 15000
+  });
+}
+
 // Ruta de verificación SMTP
 router.get("/api/smtp-check", async (req, res) => {
   try {
-    const transporter = nodemailer.createTransport({
-      host: process.env.MAIL_HOST || "smtp.gmail.com",
-      port: Number(process.env.MAIL_PORT || 465),
-      secure: true,
-      auth: { user: process.env.MAIL_USER, pass: process.env.MAIL_PASS },
-      connectionTimeout: 15000
-    });
+    const transporter = buildTransport();
     await transporter.verify();
     return res.json({ ok: true });
   } catch (err) {
@@ -26,21 +30,14 @@ router.get("/api/smtp-check", async (req, res) => {
   }
 });
 
-// tu ruta existente
+// Ruta de envío real
 router.post("/api/demo", async (req, res) => {
   const { nombre, email, telefono, mensaje } = req.body || {};
   if (!nombre || !email) {
     return res.status(400).json({ ok: false, error: "Faltan campos obligatorios" });
   }
   try {
-    const transporter = nodemailer.createTransport({
-      host: process.env.MAIL_HOST || "smtp.gmail.com",
-      port: Number(process.env.MAIL_PORT || 465),
-      secure: true,
-      auth: { user: process.env.MAIL_USER, pass: process.env.MAIL_PASS },
-      connectionTimeout: 15000
-    });
-
+    const transporter = buildTransport();
     await transporter.sendMail({
       from: `"BotEngine Web" <${process.env.MAIL_USER}>`,
       to: process.env.MAIL_TO,
@@ -59,7 +56,6 @@ ${mensaje || ""}`,
         <p><b>Mensaje:</b><br>${(mensaje || "").replace(/\n/g, "<br>")}</p>
       `
     });
-
     return res.json({ ok: true });
   } catch (err) {
     console.error("Error al enviar correo:", {

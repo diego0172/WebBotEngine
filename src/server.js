@@ -1,3 +1,4 @@
+// src/server.js
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -13,7 +14,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = Number(process.env.PORT || 3000);
 
 app.use(helmet());
 app.use(compression());
@@ -22,12 +23,13 @@ app.use(morgan("combined"));
 
 app.use(express.static(path.join(__dirname, "..", "public"), { index: "index.html" }));
 
-// Opcional: healthcheck y favicon
-app.get("/healthz", (req, res) => res.status(200).send("ok"));
 app.get("/favicon.ico", (req, res) => res.status(204).end());
+app.get("/healthz", (req, res) => res.status(200).send("ok"));
 
+// monta rutas
 app.use(router);
 
+// 404
 app.use((req, res) => {
   res.status(404).json({ error: "No encontrado" });
 });
