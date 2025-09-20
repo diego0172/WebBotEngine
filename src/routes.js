@@ -47,4 +47,28 @@ ${mensaje || ""}`,
   }
 });
 
+// Diagnóstico SMTP
+router.get("/api/smtp-check", async (req, res) => {
+  try {
+    const transporter = require("nodemailer").createTransport({
+      host: process.env.MAIL_HOST || "smtp.gmail.com",
+      port: Number(process.env.MAIL_PORT || 465),
+      secure: true,
+      auth: { user: process.env.MAIL_USER, pass: process.env.MAIL_PASS },
+      connectionTimeout: 15000
+    });
+    await transporter.verify();
+    return res.json({ ok: true });
+  } catch (err) {
+    console.error("SMTP verify error:", { code: err.code, command: err.command, message: err.message, response: err.response });
+    return res.status(500).json({
+      ok: false,
+      code: err && err.code ? String(err.code) : "UNKNOWN",
+      msg: err && err.message ? String(err.message) : "Error"
+    });
+  }
+});
+
+
+
 export default router;
