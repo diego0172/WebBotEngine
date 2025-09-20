@@ -6,10 +6,10 @@ const router = Router();
 
 function buildTransport() {
   return nodemailer.createTransport({
-    host: process.env.MAIL_HOST || "smtp.gmail.com",
-    port: Number(process.env.MAIL_PORT || 465),
-    secure: Number(process.env.MAIL_PORT || 465) === 465,
-    requireTLS: Number(process.env.MAIL_PORT || 465) !== 465,
+    host: process.env.MAIL_HOST,
+    port: Number(process.env.MAIL_PORT || 2525),
+    secure: false,
+    requireTLS: true,
     auth: { user: process.env.MAIL_USER, pass: process.env.MAIL_PASS },
     connectionTimeout: 8000,
     socketTimeout: 8000,
