@@ -7,30 +7,16 @@ const router = Router();
 function buildTransport() {
   return nodemailer.createTransport({
     host: process.env.MAIL_HOST || "smtp.gmail.com",
-    port: Number(process.env.MAIL_PORT || 2525),
-    secure: true,
+    port: Number(process.env.MAIL_PORT || 465),
+    secure: Number(process.env.MAIL_PORT || 465) === 465,
+    requireTLS: Number(process.env.MAIL_PORT || 465) !== 465,
     auth: { user: process.env.MAIL_USER, pass: process.env.MAIL_PASS },
-    connectionTimeout: 15000
+    connectionTimeout: 8000,
+    socketTimeout: 8000,
+    greetingTimeout: 8000
   });
 }
 
-// Ruta de verificación SMTP
-router.get("/api/smtp-check", async (req, res) => {
-  try {
-    const transporter = buildTransport();
-    await transporter.verify();
-    return res.json({ ok: true });
-  } catch (err) {
-    console.error("SMTP verify error:", { code: err.code, command: err.command, message: err.message, response: err.response });
-    return res.status(500).json({
-      ok: false,
-      code: err && err.code ? String(err.code) : "UNKNOWN",
-      msg: err && err.message ? String(err.message) : "Error"
-    });
-  }
-});
-
-// Ruta de envío real
 router.post("/api/demo", async (req, res) => {
   const { nombre, email, telefono, mensaje } = req.body || {};
   if (!nombre || !email) {
@@ -58,12 +44,7 @@ ${mensaje || ""}`,
     });
     return res.json({ ok: true });
   } catch (err) {
-    console.error("Error al enviar correo:", {
-      code: err && err.code,
-      command: err && err.command,
-      response: err && err.response,
-      message: err && err.message
-    });
+    console.error("SMTP error:", { code: err.code, command: err.command, message: err.message });
     return res.status(500).json({ ok: false, error: "No se pudo enviar el correo" });
   }
 });
