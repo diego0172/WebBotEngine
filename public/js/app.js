@@ -53,9 +53,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
 // ===== Hero: separación al hacer scroll (data-scroll-fade) =====
 (function(){
-  function clamp01(x){ return x<0?0:x>1?1:x }
-  function lerp(a,b,t){ return a + (b-a)*t }
-
   function setupScrollSplitSections(){
     var sections = [].slice.call(document.querySelectorAll('[data-scroll-fade]'));
     if(!sections.length) return;
@@ -132,83 +129,6 @@ document.addEventListener('DOMContentLoaded', function(){
   window.addEventListener('pageshow', setupServicesScroll);
 })();
 
-// // ===== Tarjetas de precios con abanico (pantalla completa) =====
-// (function(){
-//   function setModalState(on){
-//     document.body.classList.toggle('modal-open', !!on);
-//   }
-
-//   function setupFanCards(){
-//     var cards = [].slice.call(document.querySelectorAll('.price-card'));
-//     if(!cards.length) return;
-
-//     function closeOthers(except){
-//       cards.forEach(function(c){ if(c !== except) c.classList.remove('expanded'); });
-//     }
-//     function open(card){
-//       closeOthers(card);
-//       card.classList.add('expanded');
-//       setModalState(true);
-//     }
-//     function close(card){
-//       card.classList.remove('expanded');
-//       if(!document.querySelector('.price-card.expanded')) setModalState(false);
-//     }
-//     function toggle(card){
-//       if(card.classList.contains('expanded')) close(card);
-//       else open(card);
-//     }
-
-//     cards.forEach(function(card){
-//       if(!card.hasAttribute('tabindex')) card.setAttribute('tabindex','0');
-
-//       // Abre/cierra al hacer clic en la tarjeta, ignorando controles internos
-//       card.addEventListener('click', function(e){
-//         var t = e.target;
-//         if(t.closest('.fan-item') || t.closest('.fan-close') || t.closest('.btn-includes')) return;
-//         toggle(card);
-//       });
-
-//       // Teclado
-//       card.addEventListener('keydown', function(e){
-//         if(e.key === 'Enter' || e.key === ' '){
-//           e.preventDefault();
-//           toggle(card);
-//         }
-//       });
-
-//       // Botón cerrar
-//       var btn = card.querySelector('.fan-close');
-//       if(btn){
-//         btn.addEventListener('click', function(e){
-//           e.stopPropagation();
-//           close(card);
-//         });
-//       }
-//     });
-
-//     // Clic fuera del panel cierra
-//     document.addEventListener('click', function(e){
-//       var openCard = document.querySelector('.price-card.expanded');
-//       if(!openCard) return;
-//       var insidePanel = e.target.closest('.fan-panel');
-//       var onCard = e.target.closest('.price-card');
-//       if(!insidePanel && !onCard) close(openCard);
-//     });
-
-//     // Tecla Esc cierra
-//     document.addEventListener('keydown', function(e){
-//       if(e.key === 'Escape'){
-//         var openCard = document.querySelector('.price-card.expanded');
-//         if(openCard) close(openCard);
-//       }
-//     });
-//   }
-
-//   document.addEventListener('DOMContentLoaded', setupFanCards);
-//   window.addEventListener('pageshow', setupFanCards);
-// })();
-
 // ===== ¿Qué incluye? por plan (delegación) =====
 (function(){
   document.addEventListener('click', function(e){
@@ -222,65 +142,56 @@ document.addEventListener('DOMContentLoaded', function(){
     item.classList.toggle('open');
   });
 })();
-// Agrega al final de app.js
 
-// Popup de planes
+// ===== Popup de planes =====
 (function(){
   var modal = document.getElementById('plansModal');
   var modalBody = document.getElementById('modalBody');
   var modalTitle = document.getElementById('modalTitle');
   var lastFocus = null;
 
-  
-// Bloqueo robusto de scroll
-// Bloqueo de scroll robusto sin saltos
-var __savedScrollY = 0;
+  var __savedScrollY = 0;
 
-function lockScroll(){
-  __savedScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
-  document.body.dataset.scrollY = String(__savedScrollY);
-  document.body.style.position = 'fixed';
-  document.body.style.top = '-' + __savedScrollY + 'px';
-  document.body.style.left = '0';
-  document.body.style.right = '0';
-  document.body.style.width = '100%';
-  document.body.classList.add('modal-open');
-}
-
-function unlockScroll(){
-  // Leer la posición antes de limpiar estilos
-  var topStr = document.body.style.top || '';
-  var y = 0;
-  if(topStr){
-    var n = parseInt(topStr, 10);
-    if(!isNaN(n)) y = -n;
-  } else if (document.body.dataset.scrollY){
-    y = parseInt(document.body.dataset.scrollY, 10) || 0;
+  function lockScroll(){
+    __savedScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+    document.body.dataset.scrollY = String(__savedScrollY);
+    document.body.style.position = 'fixed';
+    document.body.style.top = '-' + __savedScrollY + 'px';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+    document.body.classList.add('modal-open');
   }
 
-  document.body.classList.remove('modal-open');
-  document.body.style.position = '';
-  document.body.style.top = '';
-  document.body.style.left = '';
-  document.body.style.right = '';
-  document.body.style.width = '';
-  delete document.body.dataset.scrollY;
+  function unlockScroll(){
+    var topStr = document.body.style.top || '';
+    var y = 0;
+    if(topStr){
+      var n = parseInt(topStr, 10);
+      if(!isNaN(n)) y = -n;
+    } else if (document.body.dataset.scrollY){
+      y = parseInt(document.body.dataset.scrollY, 10) || 0;
+    }
 
-  // Restaurar scroll en el siguiente frame para evitar el espacio en blanco
-  requestAnimationFrame(function(){
-    window.scrollTo(0, y);
-  });
-}
+    document.body.classList.remove('modal-open');
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+    delete document.body.dataset.scrollY;
 
+    requestAnimationFrame(function(){
+      window.scrollTo(0, y);
+    });
+  }
 
-function openModal(title, html){
+  function openModal(title, html){
     lastFocus = document.activeElement;
     modalTitle.textContent = title;
     modalBody.innerHTML = html;
     modal.classList.add('show');
     lockScroll();
-
-    // foco inicial en el diálogo
     var dialog = modal.querySelector('.modal__dialog');
     setTimeout(function(){ dialog && dialog.focus(); }, 10);
   }
@@ -292,68 +203,78 @@ function openModal(title, html){
     if(lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
   }
 
-  // Exponer a los otros listeners existentes
   window.__openPlansModal = openModal;
   window.__closePlansModal = closeModal;
 
-  // Abrir popup al hacer clic en las tarjetas de precios
-(function(){
-  var modal = document.getElementById('plansModal');
-  if(!modal) return;
+  (function(){
+    var modal = document.getElementById('plansModal');
+    if(!modal) return;
 
-  // abrir desde tarjeta principal
-  document.addEventListener('click', function(e){
-    var card = e.target.closest('.price-card');
-    if(card && !e.target.closest('.modal-template')){
-      var tpl = card.querySelector('.modal-template');
-      if(!tpl) return;
-      var title = card.getAttribute('data-category') || (card.querySelector('.card-title') ? card.querySelector('.card-title').textContent : 'Planes');
-      if (window.__openPlansModal) window.__openPlansModal(title, tpl.innerHTML);
+    document.addEventListener('click', function(e){
+      var card = e.target.closest('.price-card');
+      if(card && !e.target.closest('.modal-template')){
+        var tpl = card.querySelector('.modal-template');
+        if(!tpl) return;
+        var title = card.getAttribute('data-category') || (card.querySelector('.card-title') ? card.querySelector('.card-title').textContent : 'Planes');
+        if (window.__openPlansModal) window.__openPlansModal(title, tpl.innerHTML);
+        return;
+      }
+      if(e.target.closest('[data-close="modal"]')){
+        if (window.__closePlansModal) window.__closePlansModal();
+      }
+    });
+
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape' && modal.classList.contains('show')){
+        if (window.__closePlansModal) window.__closePlansModal();
+      }
+    });
+  })();
+
+})();
+
+// ===== Envío del formulario de demo =====
+document.addEventListener("DOMContentLoaded", function () {
+  var form = document.getElementById("demoForm");
+  var msg  = document.getElementById("demoMsg");
+  if (!form) return;
+
+  var submitBtn = form.querySelector('button[type="submit"]');
+
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    var payload = {
+      nombre:   form.nombre ? form.nombre.value.trim() : '',
+      email:    form.email ? form.email.value.trim() : '',
+      telefono: form.telefono ? form.telefono.value.trim() : '',
+      mensaje:  form.mensaje ? form.mensaje.value.trim() : ''
+    };
+
+    if (!payload.nombre || !payload.email) {
+      alert("Completa nombre y correo");
       return;
     }
-    // cerrar por botón u overlay
-    if(e.target.closest('[data-close="modal"]')){
-      if (window.__closePlansModal) window.__closePlansModal();
-    }
-  });
 
-  // cerrar con Esc
-  document.addEventListener('keydown', function(e){
-    if(e.key === 'Escape' && modal.classList.contains('show')){
-      if (window.__closePlansModal) window.__closePlansModal();
-    }
-  });
-})();
+    try {
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Enviando..."; }
 
-})();
-// ===== Botón Enviar =====
-document.addEventListener("DOMContentLoaded", function(){
-  const form = document.getElementById("demoForm");
-  if(form){
-    form.addEventListener("submit", function(e){
-      e.preventDefault();
-
-      const data = {
-        nombre: form.nombre.value,
-        correo: form.correo.value,
-        telefono: form.telefono.value,
-        mensaje: form.mensaje.value
-      };
-
-      fetch("/api/enviarDemo", {
+      var res = await fetch("/api/demo", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      })
-      .then(r => r.json())
-      .then(res => {
-        alert("Formulario enviado con éxito");
-        form.reset();
-      })
-      .catch(err => {
-        console.error(err);
-        alert("Error al enviar el formulario");
+        body: JSON.stringify(payload)
       });
-    });
-  }
+
+      var data = await res.json();
+      if (!res.ok || !data.ok) throw new Error(data.error || "Error");
+
+      form.reset();
+      if (msg) { msg.style.display = "block"; }
+    } catch (err) {
+      console.error(err);
+      alert("No se pudo enviar, intenta de nuevo");
+    } finally {
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "Enviar"; }
+    }
+  });
 });

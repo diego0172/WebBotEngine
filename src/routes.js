@@ -22,9 +22,9 @@ router.post("/api/demo", async (req, res) => {
     });
 
     await transporter.sendMail({
-      from: `"BotEngine Web" <${process.env.MAIL_USER}>`,  // tu buzón real
-      to: process.env.MAIL_TO,                            // a dónde quieres recibirlo
-      replyTo: `${nombre} <${email}>`,                    // aquí pones el correo del usuario
+      from: `"BotEngine Web" <${process.env.MAIL_USER}>`,
+      to: process.env.MAIL_TO,
+      replyTo: `${nombre} <${email}>`,
       subject: "Nueva solicitud de demo",
       text: `Nombre: ${nombre}
 Email: ${email}
