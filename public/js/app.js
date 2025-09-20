@@ -326,3 +326,34 @@ function openModal(title, html){
 })();
 
 })();
+// ===== Botón Enviar =====
+document.addEventListener("DOMContentLoaded", function(){
+  const form = document.getElementById("demoForm");
+  if(form){
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+
+      const data = {
+        nombre: form.nombre.value,
+        correo: form.correo.value,
+        telefono: form.telefono.value,
+        mensaje: form.mensaje.value
+      };
+
+      fetch("/api/enviarDemo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      })
+      .then(r => r.json())
+      .then(res => {
+        alert("Formulario enviado con éxito");
+        form.reset();
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Error al enviar el formulario");
+      });
+    });
+  }
+});
