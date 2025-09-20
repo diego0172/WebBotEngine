@@ -7,7 +7,7 @@ const router = Router();
 function buildTransport() {
   return nodemailer.createTransport({
     host: process.env.MAIL_HOST || "smtp.gmail.com",
-    port: Number(process.env.MAIL_PORT || 465),
+    port: Number(process.env.MAIL_PORT || 2525),
     secure: true,
     auth: { user: process.env.MAIL_USER, pass: process.env.MAIL_PASS },
     connectionTimeout: 15000
