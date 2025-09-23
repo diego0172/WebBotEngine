@@ -16,7 +16,12 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = Number(process.env.PORT || 3000);
 
-app.use(helmet());
+app.use(helmet({
+  hsts: false,                    // evita forzar HTTPS (por ahora)
+  crossOriginOpenerPolicy: false, // silencia warning hasta tener HTTPS
+  originAgentCluster: false       // silencia warning hasta tener HTTPS
+}));
+
 app.use(compression());
 app.use(express.json({ limit: "1mb" }));
 app.use(morgan("combined"));
