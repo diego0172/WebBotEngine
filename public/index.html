@@ -10,20 +10,29 @@
   <title>BotEngine</title>
   <link rel="icon" href="/img/favicon.png" type="image/png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="/css/styles.css?v=6">
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-  <header class="header">
-    <div class="container nav">
-      <span class="brand">BotEngine</span>
-      <nav class="menu">
-        <a href="#sobre">Sobre nosotros</a>
-        <a href="#clientes">Clientes activos</a>
-        <a href="#contacto">Contáctanos</a>
-        <span class="brand-badge">BotEngine</span>
-      </nav>
-    </div>
-  </header>
+
+<header class="header">
+  <div class="container nav">
+    <span class="brand">BotEngine</span>
+
+    <button class="menu-toggle" aria-expanded="false" aria-controls="site-menu" aria-label="Abrir menú">
+      <span class="menu-bar"></span>
+      <span class="menu-bar"></span>
+      <span class="menu-bar"></span>
+    </button>
+
+    <nav id="site-menu" class="menu">
+      <a href="#sobre">Sobre nosotros</a>
+      <a href="#clientes">Clientes activos</a>
+      <a href="#contacto">Contáctanos</a>
+      <span class="brand-badge">BotEngine</span>
+    </nav>
+  </div>
+</header>
+
 
   <!-- Hero -->
   <section class="hero" data-scroll-fade>

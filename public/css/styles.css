@@ -538,3 +538,297 @@ html,body{ background:var(--bg) !important; color:var(--text) !important }
   line-height: 1.4;
   color: #777;
 }
+/* === TAGS VISIBILITY PATCH (mobile friendly) === */
+.tag-list, .etiquetas, .tag-container, .section-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  align-items: center;
+  min-width: 0;            /* evita que flex hijos recorten contenido */
+  overflow: visible;       /* no cortar chips si desbordan */
+}
+
+.tag, .etiqueta, .chip {
+  display: inline-flex;
+  align-items: center;
+  padding: .35rem .6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,.12);
+  white-space: nowrap;     /* evita quiebres feos dentro de la etiqueta */
+  max-width: 100%;
+  color: inherit;          /* asegura contraste consistente */
+  background: inherit;
+}
+
+/* Si antes se ocultaban en móvil por utilidades tipo d-none o media queries */
+@media (max-width: 640px) {
+  .d-none, .d-sm-none, .d-md-none, .hide-on-mobile {
+    display: initial !important;
+  }
+  .tag, .etiqueta, .chip { font-size: .9rem; }
+}
+
+/* Móviles no tienen :hover: asegúralas visibles */
+@media (hover: none) {
+  .tag, .etiqueta, .chip { opacity: 1; pointer-events: auto; }
+  .hidden-on-hover { display: inline !important; }
+}
+
+/* Si un header fijo las tapa en móvil */
+.header, .navbar { position: sticky; top: 0; z-index: 1000; }
+.tag-list, .etiquetas { position: relative; z-index: 1; }
+
+/* Por si el contenedor padre es flex y colapsa ancho */
+.flex > .tag-list, .flex > .etiquetas { min-width: 0; }
+
+
+/* === TAGS VISIBILITY PATCH === */
+/* Ajusta estos selectores a los tuyos si difieren */
+.tag-list, .etiquetas, .tags, .tag-container, .section-tags {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: .5rem;
+  align-items: center;
+  min-width: 0;
+  overflow: visible;
+}
+.tag, .etiqueta, .chip {
+  display: inline-flex !important;
+  align-items: center;
+  padding: .35rem .6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,.12);
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+/* Si las etiquetas viven dentro de .menu, muéstralas incluso cuando .menu está oculto en móvil */
+@media (max-width: 900px){
+  .menu .tag-list,
+  .menu .etiquetas,
+  .menu .tags { display: flex !important; }
+}
+
+/* Si el bloque de etiquetas usa .includes-content, muéstralo */
+.includes-content { display: block !important; }
+
+/* En móviles no hay hover; asegúralas visibles */
+@media (hover: none){
+  .tag, .etiqueta, .chip { opacity: 1; pointer-events: auto; }
+}
+/* --- Fix nav en móvil --- */
+@media (max-width:900px){
+  .menu{
+    display:flex !important;
+    flex-wrap:wrap;
+    gap:.75rem;
+  }
+  .menu a{
+    display:inline-flex;
+    align-items:center;
+    padding:.45rem .75rem;
+    border:1px solid rgba(0,0,0,.08);
+    border-radius:999px;
+    white-space:nowrap;
+  }
+  .nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:.75rem;
+  }
+}
+
+/* === Hamburguer menu === */
+.menu-toggle{display:none; background:transparent; border:0; padding:.5rem; border-radius:.75rem; }
+.menu-toggle:focus{outline:2px solid rgba(0,0,0,.2); outline-offset:2px;}
+.menu-toggle .menu-bar{display:block; width:22px; height:2px; margin:5px 0; background:#0b2233; border-radius:2px; transition:transform .2s ease, opacity .2s;}
+/* animación X cuando está abierto */
+.menu.is-open ~ .menu-toggle .menu-bar:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+.menu.is-open ~ .menu-toggle .menu-bar:nth-child(2){ opacity:0; }
+.menu.is-open ~ .menu-toggle .menu-bar:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+
+@media (max-width: 900px){
+  .menu-toggle{ display:inline-flex; align-items:center; justify-content:center; }
+  .menu{ display:none; }
+  .menu.is-open{ 
+    display:flex; 
+    flex-direction:column; 
+    gap:.75rem; 
+    background:rgba(255,255,255,.96);
+    position:absolute; 
+    top:56px;          /* ajusta según alto de tu header */
+    left:0; right:0;
+    padding:12px 16px;
+    box-shadow:0 8px 24px rgba(0,0,0,.08);
+    border-bottom:1px solid rgba(0,0,0,.06);
+  }
+  .menu a{
+    display:inline-flex; 
+    padding:.5rem .75rem; 
+    border:1px solid rgba(0,0,0,.08); 
+    border-radius:999px;
+    background:#fff;
+  }
+  .nav{ position:relative; }  /* para posicionar el dropdown */
+}
+
+/* === Hamburguesa === */
+.menu-toggle{display:none;background:transparent;border:0;padding:.5rem;border-radius:.75rem}
+.menu-toggle .menu-bar{display:block;width:22px;height:2px;margin:5px 0;background:#0b2233;border-radius:2px}
+
+@media (max-width:900px){
+  .menu-toggle{display:inline-flex;align-items:center;justify-content:center}
+  .menu{display:none}
+  .menu.is-open{
+    display:flex;flex-direction:column;gap:.75rem;background:rgba(255,255,255,.96);
+    position:absolute;top:56px;left:0;right:0;padding:12px 16px;box-shadow:0 8px 24px rgba(0,0,0,.08);
+    border-bottom:1px solid rgba(0,0,0,.06);
+  }
+  .menu a{display:inline-flex;padding:.5rem .75rem;border:1px solid rgba(0,0,0,.08);border-radius:999px;background:#fff}
+  .nav{position:relative}
+}
+
+/* Header fijo opcional */
+.header{position:sticky;top:0;z-index:1000;background:#fff}
+
+/* === Header móvil limpio === */
+.header{position:sticky;top:0;z-index:1000;background:#fff}
+
+/* botón */
+.menu-toggle{display:none;background:transparent;border:0;padding:.5rem;border-radius:.75rem}
+.menu-toggle .menu-bar{display:block;width:22px;height:2px;margin:5px 0;background:#0b2233;border-radius:2px}
+
+/* móvil */
+@media (max-width:900px){
+  /* layout del header */
+  .nav{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:.5rem;padding:10px 16px;
+  }
+
+  .menu-toggle{display:inline-flex;align-items:center;justify-content:center}
+
+  /* ocultar SIEMPRE el menú en móvil hasta abrirlo */
+  .header .menu{display:none !important}
+
+  /* dropdown cuando está abierto */
+  .header .menu.is-open{
+    display:flex !important;flex-direction:column;align-items:flex-start;gap:.6rem;
+    position:absolute;left:0;right:0;top:100%;
+    padding:12px 16px;background:#fff;border-bottom:1px solid rgba(0,0,0,.06);
+    box-shadow:0 8px 24px rgba(0,0,0,.08);
+  }
+
+  /* chips del menú */
+  .header .menu a{
+    display:inline-flex;padding:.5rem .75rem;
+    border:1px solid rgba(0,0,0,.10);border-radius:999px;background:#fff;
+  }
+
+  /* no dupliques la marca dentro del menú en móvil */
+  .header .menu .brand-badge{display:none}
+}
+
+/* Ajuste fino del botón hamburguesa en móvil */
+@media (max-width:900px){
+  .menu-toggle{ margin-left:auto; }              /* empuja el botón a la derecha */
+  .menu-toggle .menu-bar{
+    width:22px; height:2px;                      /* tamaño parejo */
+    background:#0b2233;                          /* color */
+    opacity:.85; border-radius:2px;
+  }
+  .nav{ padding:12px 16px; }                     /* un poco más de aire */
+}
+
+/* Centrado vertical y separación correcta del header móvil */
+@media (max-width:900px){
+  .header{
+    position: sticky; top: 0; z-index: 1000; background:#fff;
+    padding-top: max(0px, env(safe-area-inset-top)); /* iPhone notch */
+    border-bottom: 1px solid rgba(0,0,0,.06);
+  }
+
+  .nav{
+    display:flex;
+    align-items:center;              /* <— centra vertical */
+    justify-content:space-between;
+    min-height: 56px;                /* alto cómodo del header */
+    padding: 8px 16px;
+    line-height: 1;                  /* evita que suba/baje por tipografías */
+  }
+
+  .brand{ display:flex; align-items:center; }
+
+  .menu-toggle{
+    display:inline-flex;
+    align-items:center;              /* <— centra las barras dentro del botón */
+    justify-content:center;
+    height: 36px;                    /* ayuda al centrado visual */
+    margin: 0;                       /* quita desplazamientos raros */
+  }
+  .menu-toggle .menu-bar{
+    width:22px; height:2px; margin:4px 0; border-radius:2px; background:#0b2233;
+  }
+
+  /* el dropdown aparece justo debajo del header */
+  .header .menu.is-open{
+    top: calc(100% + 2px);
+  }
+}
+
+/* Forzar hamburguesa en columnas, no guiones en fila */
+.menu-toggle{
+  display:inline-flex;
+  flex-direction:column;   /* ← apila vertical */
+  align-items:center;
+  justify-content:center;
+  gap:4px;                 /* separación entre barras */
+  width:40px; height:36px; /* área táctil cómoda */
+}
+.menu-toggle .menu-bar{
+  display:block;
+  width:22px;
+  height:2px;
+  background:#0b2233;
+  border-radius:2px;
+}
+
+
+/* Colores del botón hamburguesa
+/* Ajuste visual final para el botón hamburguesa */
+.menu-toggle{
+  background:#e9ecef;                 /* gris más visible */
+  border:1px solid rgba(0,0,0,.15);
+  border-radius:10px;
+  box-shadow:0 1px 2px rgba(0,0,0,.08);
+  width:40px; height:36px;
+  display:inline-flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:4px;
+}
+
+.menu-toggle .menu-bar{
+  width:20px;
+  height:2px;
+  background:#2b2b2b;                 /* gris oscuro más visible */
+  border-radius:1px;
+  transition:background .2s ease;
+}
+
+.menu-toggle:hover .menu-bar{
+  background:#0b2233;                 /* más fuerte al pasar el dedo */
+}
+
+/* estados */
+.menu-toggle:active{ transform:scale(.98); }
+.menu-toggle:focus{ outline:2px solid rgba(0,0,0,.15); outline-offset:2px; }
+
+/* dark mode opcional */
+@media (prefers-color-scheme: dark){
+  .menu-toggle{ background:#20242a; border-color:rgba(255,255,255,.15); box-shadow:none; }
+  .menu-toggle .menu-bar{ background:#cbd5e1 !important; } /* gris claro en dark */
+}
+

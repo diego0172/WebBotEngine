@@ -233,6 +233,28 @@ document.addEventListener('DOMContentLoaded', function(){
 
 })();
 
+
+// === Hamburguesa (pegar al final de app.js) ===
+(() => {
+  const header = document.querySelector('.header');
+  const nav = header ? header.querySelector('.menu') : null;
+  const btn = header ? header.querySelector('.menu-toggle') : null;
+  if (!nav || !btn) return;
+
+  btn.addEventListener('click', () => {
+    const open = nav.classList.toggle('is-open');
+    btn.setAttribute('aria-expanded', String(open));
+  });
+
+  // Cerrar al hacer click en un link
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    nav.classList.remove('is-open');
+    btn.setAttribute('aria-expanded', 'false');
+  }));
+})();
+
+
+
 // ===== Envío del formulario de demo =====
 document.addEventListener("DOMContentLoaded", function () {
   var form = document.getElementById("demoForm");

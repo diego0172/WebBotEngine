@@ -1,1 +1,14 @@
+# dependencias y builds
+node_modules/
+dist/
+# entorno y credenciales
 .env
+# logs y temporales
+*.log
+logs/
+*.bak
+# PM2 y runtime
+.pids/
+dump.rdb
+# archivos locales que no usaremos
+server.js
