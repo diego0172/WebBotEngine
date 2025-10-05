@@ -11,6 +11,15 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
     }
   });
 });
+// Sombra en header al hacer scroll
+(() => {
+  const h = document.querySelector('.header');
+  if(!h) return;
+  const onScroll = () => h.classList.toggle('is-scrolled', window.scrollY > 2);
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+})();
+
 
 // ===== WhatsApp (opcional) =====
 document.addEventListener('DOMContentLoaded', function(){
