@@ -832,3 +832,30 @@ html,body{ background:var(--bg) !important; color:var(--text) !important }
   .menu-toggle .menu-bar{ background:#cbd5e1 !important; } /* gris claro en dark */
 }
 
+/* === Botón destacado "Ir al bot" === */
+.menu a.btn-bot{
+  background:#0b2233;
+  color:#fff !important;
+  padding:.45rem .9rem;
+  border-radius:999px;
+  border:1px solid transparent;
+  font-weight:600;
+  transition:all .2s ease;
+}
+
+.menu a.btn-bot:hover{
+  background:#13324d;
+  transform:scale(1.04);
+}
+
+/* En versión móvil */
+@media (max-width:900px){
+  .menu a.btn-bot{
+    width:100%;
+    text-align:center;
+    background:#0b2233;
+  }
+}
+
+
+
