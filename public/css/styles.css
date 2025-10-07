@@ -1,6 +1,4 @@
-/* public/css/styles.css */
-
-/* ===== Variables y base ===== */
+/* ========= Variables y base ========= */
 :root{
   --bg:#ffffff;
   --text:#0f172a;
@@ -9,23 +7,90 @@
   --brand-700:#2d7c80;
   --badge:#e6f6f7;
   --border:#e2e8f0;
-  --hero-grad: linear-gradient(135deg, #e6f6f7, #ffffff);
+  --hero-grad:linear-gradient(135deg,#e6f6f7,#ffffff);
 }
+
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+html,body{
+  margin:0;padding:0;background:var(--bg);color:var(--text);
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif
+}
 a{color:inherit;text-decoration:none}
 .container{max-width:1120px;margin:0 auto;padding:16px 20px}
 
-/* ===== Header ===== */
-.header{position:sticky;top:0;background:rgba(255,255,255,.9);backdrop-filter:saturate(180%) blur(6px);border-bottom:1px solid var(--border);z-index:10}
-.nav{display:flex;align-items:center;justify-content:space-between;gap:16px}
-.brand{font-weight:800;font-size:20px}
-.brand-badge{padding:6px 10px;background:var(--badge);border-radius:10px;border:1px solid #cfecee}
-.menu{display:flex;gap:24px;align-items:center}
+/* ========= Header y navegación ========= */
+.header{
+  position:sticky;top:0;z-index:1000;background:#fff;
+  border-bottom:1px solid var(--border);
+  backdrop-filter:saturate(180%) blur(6px);
+  transition:box-shadow .2s ease
+}
+.header.is-scrolled{box-shadow:0 4px 18px rgba(0,0,0,.06)}
 
-/* ===== Hero ===== */
+.nav{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px;padding:12px 20px
+}
+.brand{font-weight:800;font-size:20px;letter-spacing:.2px}
+.brand-badge{padding:6px 10px;background:var(--badge);border-radius:10px;border:1px solid #cfecee}
+
+.menu{display:flex;gap:24px;align-items:center}
+.menu a{padding:8px 0;border-radius:10px}
+.menu a:hover{color:#0c5a6b}
+.menu a.btn-bot{
+  background:#0c7c89;color:#fff;
+  padding:.45rem .9rem;border-radius:999px;border:1px solid transparent;
+  font-weight:700;box-shadow:0 2px 10px rgba(12,124,137,.18);
+  transition:transform .15s ease,box-shadow .15s ease
+}
+.menu a.btn-bot:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(12,124,137,.22)}
+
+.menu-toggle{
+  display:none;background:#e9ecef;border:1px solid rgba(0,0,0,.15);
+  border-radius:10px;box-shadow:0 1px 2px rgba(0,0,0,.08);
+  width:40px;height:36px;padding:0;gap:4px;
+  align-items:center;justify-content:center;flex-direction:column
+}
+.menu-toggle .menu-bar{
+  width:20px;height:2px;background:#2b2b2b;border-radius:1px;transition:background .2s ease
+}
+.menu.is-open ~ .menu-toggle .menu-bar:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.menu.is-open ~ .menu-toggle .menu-bar:nth-child(2){opacity:0}
+.menu.is-open ~ .menu-toggle .menu-bar:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.menu-toggle:active{transform:scale(.98)}
+.menu-toggle:focus{outline:2px solid rgba(0,0,0,.15);outline-offset:2px}
+
+/* Desktop */
+@media (min-width:901px){
+  .menu-toggle{display:none}
+  .menu{display:flex}
+  .menu .brand-badge{display:none}
+}
+
+/* Móvil */
+@media (max-width:900px){
+  .nav{padding:10px 16px}
+  .menu-toggle{display:inline-flex}
+  .menu{display:none}
+  .menu.is-open{
+    display:flex;flex-direction:column;align-items:flex-start;gap:.6rem;
+    position:absolute;left:0;right:0;top:calc(100% + 2px);
+    padding:12px 16px;background:#fff;border-bottom:1px solid rgba(0,0,0,.06);
+    box-shadow:0 8px 24px rgba(0,0,0,.08)
+  }
+  .menu a{
+    display:inline-flex;padding:.5rem .75rem;border:1px solid rgba(0,0,0,.10);
+    border-radius:999px;background:#fff
+  }
+  .menu .brand-badge{display:none}
+  .menu a.btn-bot{width:100%;text-align:center}
+}
+
+/* ========= Hero ========= */
 .hero{background:var(--hero-grad)}
-.hero-wrap{display:grid;grid-template-columns:1.15fr .85fr;align-items:center;gap:24px;padding:56px 20px}
+.hero-wrap{
+  display:grid;grid-template-columns:1.15fr .85fr;align-items:center;gap:24px;padding:56px 20px
+}
 h1{font-size:44px;line-height:1.1;margin:0 0 12px 0}
 .lead{margin:0 0 14px 0;color:var(--muted);max-width:54ch}
 .checks{list-style:none;margin:16px 0 22px 0;padding:0;display:grid;gap:10px}
@@ -33,19 +98,21 @@ h1{font-size:44px;line-height:1.1;margin:0 0 12px 0}
 .checks svg{flex:0 0 22px;margin-top:2px}
 .actions{display:flex;gap:14px;flex-wrap:wrap}
 .btn{display:inline-block;padding:12px 16px;border-radius:10px;border:1px solid var(--brand);background:var(--brand);color:#fff;font-weight:600;cursor:pointer}
-.btn.secondary{background:#fff;color:var(--brand);border-color:var(--brand)}
+.btn.secondary{background:#fff;color:var(--brand)}
 .btn:hover{filter:brightness(.95)}
 .bot{width:100%;max-width:380px;justify-self:end}
 .strip{height:12px;background:var(--brand);opacity:.35}
 
-/* Hero split por scroll */
-.hero .hero-text,
-.hero .hero-bot{will-change:transform;transition:transform 180ms linear}
-@media (prefers-reduced-motion: reduce){
-  .hero .hero-text,.hero .hero-bot{transition:none}
+.hero .hero-text,.hero .hero-bot{will-change:transform;transition:transform 180ms linear}
+@media (prefers-reduced-motion:reduce){.hero .hero-text,.hero .hero-bot{transition:none}}
+
+@media (max-width:900px){
+  .hero-wrap{grid-template-columns:1fr;gap:28px}
+  h1{font-size:32px}
+  .bot{justify-self:center;max-width:300px}
 }
 
-/* ===== Proceso ===== */
+/* ========= Sección Proceso ========= */
 .proceso-wrap{max-width:1120px;margin:0 auto;padding:60px 20px;background:var(--hero-grad)}
 .proceso-title{font-size:32px;margin:0 0 8px 0}
 .proceso-bar{width:300px;height:6px;background:var(--brand);opacity:.35;margin:0 0 24px 0;border-radius:2px}
@@ -54,64 +121,69 @@ h1{font-size:44px;line-height:1.1;margin:0 0 12px 0}
 .card h5{margin:0;font-size:16px}
 .card p{margin:0;color:#475569;font-size:14px;line-height:1.45}
 .ico{width:56px;height:56px}
+.card-title{margin:0 0 4px 0}
+.card-subtitle{font-size:13px;color:#555;margin:2px 0 8px 0;line-height:1.4}
 
-/* ===== Animaciones reveal ===== */
+@media (max-width:900px){.cards{grid-template-columns:1fr}}
+
+/* Reveal */
 .reveal{opacity:1;transform:none}
-.js .reveal{opacity:0;transform:translateY(24px);transition:transform 1500ms ease,opacity 1500ms ease;will-change:transform,opacity}
+.js .reveal{
+  opacity:0;transform:translateY(24px);
+  transition:transform 1500ms ease,opacity 1500ms ease;will-change:transform,opacity
+}
 .js .reveal[data-from="left"]{transform:translateX(-60px)}
 .js .reveal[data-from="right"]{transform:translateX(60px)}
 .js .reveal[data-from="top"]{transform:translateY(-60px)}
 .js .reveal[data-from="bottom"]{transform:translateY(60px)}
 .js .reveal.visible{opacity:1;transform:translate(0,0)}
-@media (prefers-reduced-motion: reduce){
+@media (prefers-reduced-motion:reduce){
   .js .reveal,.js .reveal.visible{opacity:1;transform:none;transition:none}
 }
-.card-title {
-  margin-bottom: 4px; /* sube el título un poco */
-}
 
-.card-subtitle {
-  font-size: 13px;
-  color: #555;
-  margin: 2px 0 8px 0;
-  line-height: 1.4;
-}
-
-/* ===== Servicios ===== */
-.services{padding:64px 0}
+/* ========= Servicios ========= */
+.services{padding:64px 0; background: #ffffff;}
 .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;text-align:center}
 .service{transform:translateY(24px);opacity:0;transition:transform 500ms ease,opacity 500ms ease;will-change:transform,opacity}
-.service-icon{width: 100px;;height:auto;margin:0 auto 16px;display:block;transform:translateY(12px) scale(.96);transition:transform 500ms ease;will-change:transform}
+.service-icon{width:100px;height:auto;margin:0 auto 16px;display:block;transform:translateY(12px) scale(.96);transition:transform 500ms ease;will-change:transform}
 .service.in-view{transform:translateY(0);opacity:1}
 .service.in-view .service-icon{transform:translateY(0) scale(1)}
 
-/* ===== TARJETAS DE PRECIOS ===== */
+@media (max-width:900px){.services-grid{grid-template-columns:1fr;gap:24px}}
+
+/* ========= Tarjetas de precios ========= */
 .cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 @media (max-width:960px){.cards-grid{grid-template-columns:1fr}}
 
-.price-card{position:relative;border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:box-shadow .2s,transform .2s}
-.price-card:hover{box-shadow:0 10px 28px rgba(2,6,23,.12);transform:translateY(-2px)}
-.card-cover {
-  position: relative;
-  height: 180px;       /* puedes ajustar la altura si la ves muy corta */
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
+.price-card{
+  position:relative;border:1px solid var(--border);border-radius:16px;overflow:hidden;cursor:pointer;
+  transition:box-shadow .18s ease,transform .18s ease,border-color .18s ease
+}
+.price-card:hover{box-shadow:0 18px 40px rgba(2,6,23,.16);transform:translateY(-3px);border-color:rgba(58,160,165,.35)}
+
+.card-cover{
+  position:relative;height:180px;background-size:contain;background-repeat:no-repeat;background-position:center
+}
+.card-cover::after{
+  content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.0) 30%,rgba(0,0,0,.14) 100%)
 }
 
-.card-badge{position:absolute;bottom:10px;left:10px;background:var(--brand);color:#fff;font-size:12px;padding:6px 10px;border-radius:999px}
-.card-body{padding:16px}
+.card-badge{
+  position:absolute;bottom:12px;left:12px;background:var(--brand);color:#fff;font-size:12px;
+  padding:6px 10px;border-radius:999px;box-shadow:0 6px 14px rgba(58,160,165,.35)
+}
+.card-body{padding:16px 16px 18px 16px}
 .card-title{margin:0 0 6px 0;font-size:20px}
 .card-desc{margin:0;color:var(--muted);font-size:14px}
 
-/* Panel superpuesto base */
+/* Abanico compacto */
 .fan-panel{position:absolute;inset:8px;padding:8px;pointer-events:none;opacity:0;transform:scale(.98);transition:opacity .25s,transform .25s;z-index:5}
 .price-card.expanded .fan-panel{pointer-events:auto;opacity:1;transform:scale(1)}
-.price-card.expanded::after{display:none}
-
-/* Cartas estilo abanico (estado compacto) */
 .fan-stack{position:relative;width:100%;min-height:260px;padding:14px;display:grid;place-items:center;z-index:6}
-.fan-item{position:absolute;width:min(92%,520px);max-width:520px;background:#fff;border:1px solid var(--border);border-radius:14px;box-shadow:0 10px 28px rgba(2,6,23,.12);padding:14px;transform-origin:bottom center;transition:transform .28s,box-shadow .2s}
+.fan-item{
+  position:absolute;width:min(92%,520px);max-width:520px;background:#fff;border:1px solid var(--border);
+  border-radius:14px;box-shadow:0 10px 28px rgba(2,6,23,.12);padding:14px;transform-origin:bottom center;transition:transform .28s,box-shadow .2s
+}
 .fan-item:nth-child(1){transform:translateY(10px) rotate(-6deg);z-index:1}
 .fan-item:nth-child(2){transform:translateY(0) rotate(0);z-index:2}
 .fan-item:nth-child(3){transform:translateY(10px) rotate(6deg);z-index:1}
@@ -119,307 +191,112 @@ h1{font-size:44px;line-height:1.1;margin:0 0 12px 0}
 .fan-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 6px 0}
 .fan-head h4{margin:0;font-size:16px}
 .fan-price{font-weight:700;color:var(--brand-700)}
+.btn-includes{display:none}
+.includes,.includes-content{display:block}
 
-/* Botón ¿Qué incluye? */
-.btn-includes{display:inline-block;margin-top:8px;padding:8px 12px;border:1px solid var(--brand);border-radius:8px;background:#fff;color:var(--brand);font-size:14px;font-weight:600;cursor:pointer}
-.btn-includes:hover{background:var(--badge)}
-.includes-content{display:none;margin-top:10px;color:var(--muted)}
-.fan-item.open .includes-content{display:block}
-
-/* ===== MODO PANTALLA COMPLETA ===== */
+/* Pantalla completa */
 body.modal-open{overflow:hidden}
-
 .price-card.expanded .fan-panel{
-  position:fixed;
-  inset:0;
-  padding:clamp(12px,4vw,28px);
-  z-index:1000;
-  opacity:1;
-  transform:none;
-  pointer-events:auto;
-  display:grid;
-  place-items:center;
-  overflow:auto;
+  position:fixed;inset:0;padding:clamp(12px,4vw,28px);z-index:1000;display:grid;place-items:center;overflow:auto
 }
 .price-card.expanded .fan-panel::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  background:rgba(15,23,42,.55);
-  backdrop-filter:saturate(140%) blur(4px);
-  z-index:-1;
+  content:"";position:fixed;inset:0;background:rgba(15,23,42,.55);backdrop-filter:saturate(140%) blur(4px);z-index:-1
 }
-
-/* En fullscreen, apilar vertical sin rotación */
 .price-card.expanded .fan-stack{
-  width:min(1000px,92vw);
-  min-height:auto;
-  padding:clamp(12px,2vw,18px);
-  margin:auto;
-  display:flex;
-  flex-direction:column;
-  gap:14px;
-  align-items:center;
+  width:min(1000px,92vw);min-height:auto;padding:clamp(12px,2vw,18px);margin:auto;display:flex;flex-direction:column;gap:14px;align-items:center
 }
 .price-card.expanded .fan-item{
-  position:relative;
-  width:100%;
-  max-width:none;
-  margin:6px 0;
-  transform:none !important;
-  left:auto; top:auto;
-  box-shadow:0 12px 28px rgba(2,6,23,.16);
+  position:relative;width:100%;max-width:none;margin:6px 0;transform:none !important;left:auto;top:auto;box-shadow:0 12px 28px rgba(2,6,23,.16)
 }
 .price-card.expanded .fan-item:hover{transform:none !important}
 .price-card.expanded .fan-close{
-  position:fixed;
-  top:clamp(10px,3vw,18px);
-  right:clamp(10px,3vw,18px);
-  z-index:1001;
+  position:fixed;top:clamp(10px,3vw,18px);right:clamp(10px,3vw,18px);z-index:1001
 }
 
-/* ===== Responsive ===== */
-@media (max-width:900px){
-  .hero-wrap{grid-template-columns:1fr;gap:28px}
-  h1{font-size:32px}
-  .bot{justify-self:center;max-width:300px}
-  .menu{display:none}
-  .cards{grid-template-columns:1fr}
-  .services-grid{grid-template-columns:1fr;gap:24px}
-  .price-card.expanded .fan-stack{width:100%;padding:12px}
-}
-/* Agrega al final de styles.css */
-.modal {
-  display: flex;
-  align-items: flex-start; /* hace que se pegue arriba */
-  justify-content: center;
-  padding-top: 70px; /* separa del header */
-}
-
-/* ===== Modal pro ===== */
+/* ========= Modal ========= */
 .modal{position:fixed;inset:0;display:none}
 .modal.show{display:block;animation:modalFade .18s ease-out}
 @keyframes modalFade{from{opacity:0}to{opacity:1}}
 .modal__overlay{position:absolute;inset:0;background:rgba(15,23,42,.55);backdrop-filter:saturate(140%) blur(6px)}
 .modal__dialog{
-  position:relative;z-index:1;margin:auto;inset:0;
-  max-width:min(1080px,92vw);top:50%;transform:translateY(-50%);
-  background:linear-gradient(180deg,#ffffff,#f7fbfc);
-  border:1px solid rgba(15,23,42,.08);
-  border-radius:18px;
-  padding:clamp(16px,2.2vw,26px);
-  box-shadow:0 28px 70px rgba(2,6,23,.28);
-  max-height:88vh;overflow:auto;
-  animation:modalPop .22s cubic-bezier(.2,.75,.25,1);
+  position:relative;margin:auto;inset:0;max-width:min(1080px,92vw);
+  top:50%;transform:translateY(-50%);
+  background:var(--hero-grad);
+  border:1px solid #cfecee;border-radius:18px;
+  padding:clamp(16px,2.2vw,26px);box-shadow:0 28px 70px rgba(2,6,23,.28);
+  max-height:88vh;overflow:auto;animation:modalPop .22s cubic-bezier(.2,.75,.25,1);
+  color:var(--text)
 }
 @keyframes modalPop{from{transform:translateY(-46%) scale(.98)}to{transform:translateY(-50%) scale(1)}}
-.modal__title{margin:0 0 12px 0;font-size:22px;letter-spacing:.2px}
+.modal__dialog::before{
+  content:"";position:absolute;inset:0;border-radius:18px;pointer-events:none;box-shadow:inset 0 0 0 1px rgba(15,23,42,.06)
+}
+.modal__title{margin:0 0 12px 0;font-size:22px;letter-spacing:.2px;color:var(--text)}
+.modal__title::after{
+  content:"";display:block;width:300px;max-width:60%;height:6px;margin-top:10px;background:var(--brand);opacity:.35;border-radius:3px
+}
 .modal__close{
-  position:sticky;float:right;top:0;margin-left:auto;
-  background:#fff;border:1px solid var(--border);border-radius:999px;
-  padding:8px 12px;cursor:pointer;transition:filter .15s ease,transform .15s ease
+  position:sticky;float:right;top:0;margin-left:auto;background:var(--bg);border:1px solid var(--border);border-radius:999px;
+  padding:8px 12px;cursor:pointer;transition:filter .15s ease,transform .15s ease;color:var(--text)
 }
 .modal__close:hover{filter:brightness(.96);transform:translateY(-1px)}
-body.modal-open{overflow:hidden}
 
-/* ===== Contenido de planes dentro del modal ===== */
 .plans{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:18px;align-items:start
+  display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:start
 }
 @media (max-width:1024px){.plans{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:680px){.plans{grid-template-columns:1fr}}
 
 .plan-mini{
-  background:#fff;border:1px solid rgba(15,23,42,.08);
-  border-radius:14px;padding:14px 14px 12px 14px;
+  background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:14px 14px 12px;
   box-shadow:0 6px 22px rgba(2,6,23,.08);
   transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease
 }
 .plan-mini:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(2,6,23,.14);border-color:rgba(58,160,165,.35)}
-
 .plan-mini header{
-  display:flex;justify-content:space-between;align-items:center;
-  gap:12px;margin:0 0 10px 0;padding:0 0 8px 0;
-  border-bottom:1px dashed rgba(15,23,42,.12)
+  display:grid;grid-template-columns:1fr auto;row-gap:6px;gap:12px;margin:0 0 10px;padding:0 0 8px;
+  border-bottom:1px dashed var(--border)
 }
 .plan-mini h4{margin:0;font-size:15px;font-weight:800;letter-spacing:.2px}
-.plan-mini .price{font-weight:900;color:var(--brand-700);font-size:15px}
-
-/* Lista con viñetas personalizadas */
-.plan-mini .includes{margin:6px 0 0 0}
+.plan-mini .price{font-weight:900;color:var(--brand-700);font-size:15px;justify-self:end}
+.plan-mini header .subtitle{grid-column:1 / -1;margin:0;font-size:13px;line-height:1.35;color:#667085}
+.plan-mini .includes{margin:6px 0 0}
 .plan-mini .includes ul{list-style:none;margin:0;padding:0}
 .plan-mini .includes li{
   position:relative;padding-left:18px;margin:8px 0;color:var(--text)
 }
 .plan-mini .includes li::before{
-  content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:999px;
-  background:var(--brand);box-shadow:0 0 0 3px var(--badge)
+  content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:999px;background:var(--brand);box-shadow:0 0 0 3px var(--badge)
 }
 
-/* Modo oscuro */
-@media (prefers-color-scheme: dark){
-  .modal__dialog{background:linear-gradient(180deg,#0b1220,#0f172a);border-color:rgba(148,163,184,.18)}
-  .modal__title{color:#e2e8f0}
-  .modal__close{background:#0b1220;border-color:rgba(148,163,184,.25);color:#e2e8f0}
-  .plan-mini{background:#0b1220;border-color:rgba(148,163,184,.18);box-shadow:0 8px 28px rgba(0,0,0,.35)}
-  .plan-mini header{border-bottom-color:rgba(148,163,184,.18)}
-  .plan-mini .price{color:#67d6db}
-  .plan-mini .includes li{color:#e2e8f0}
-}
+/* ========= Footer ========= */
+.footer{text-align:center;padding:20px;background:#fff;color:#555;font-size:13px}
+.footer-top p{margin:5px 0}
+.footer .hashtag{font-weight:600;margin-bottom:10px}
+.footer .social-icons{margin:10px 0}
+.footer .social-icons a{margin:0 8px;color:#666;font-size:20px;text-decoration:none;transition:color .3s}
+.footer .social-icons a:hover{color:#2A9D8F}
+.footer-bottom{margin-top:15px;font-size:12px;line-height:1.4;color:#777}
 
-/* ===== Tarjetas principales más pulidas ===== */
-.price-card{
-  border:1px solid rgba(15,23,42,.08);
-  border-radius:16px;
-  overflow:hidden;
-  transition:box-shadow .18s ease,transform .18s ease,border-color .18s ease
+/* ========= Tags visibles en móvil ========= */
+.tag-list,.etiquetas,.tags,.tag-container,.section-tags{
+  display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;min-width:0;overflow:visible
 }
-.price-card:hover{
-  box-shadow:0 18px 40px rgba(2,6,23,.16);
-  transform:translateY(-3px);
-  border-color:rgba(58,160,165,.35)
+.tag,.etiqueta,.chip{
+  display:inline-flex;align-items:center;padding:.35rem .6rem;border-radius:999px;border:1px solid rgba(0,0,0,.12);
+  white-space:nowrap;max-width:100%;color:inherit;background:inherit
 }
-.card-cover {
-  position: relative;
-  height: 180px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
+@media (max-width:640px){
+  .d-none,.d-sm-none,.d-md-none,.hide-on-mobile{display:initial !important}
+  .tag,.etiqueta,.chip{font-size:.9rem}
 }
+@media (hover:none){
+  .tag,.etiqueta,.chip{opacity:1;pointer-events:auto}
+  .hidden-on-hover{display:inline !important}
+}
+/* === Hotfix: forzar tema claro original === */
+html{ color-scheme: light !important; }
 
-.card-cover::after{
-  content:"";position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(0,0,0,.0) 30%,rgba(0,0,0,.14) 100%);
-}
-.card-badge{
-  position:absolute;bottom:12px;left:12px;
-  background:var(--brand);color:#fff;font-size:12px;
-  padding:6px 10px;border-radius:999px;box-shadow:0 6px 14px rgba(58,160,165,.35)
-}
-.card-body{padding:16px 16px 18px 16px}
-.card-title{margin:0 0 6px 0;font-size:20px}
-.card-desc{margin:0;color:var(--muted);font-size:14px}
-
-/* Oculta el botón y muestra siempre el contenido */
-.btn-includes{ display:none }
-.includes{ display:block }
-
-
-/* Fondo del popup igual al de “Nuestro proceso” */
-/* Pega esto al final de tu styles.css para sobrescribir el estilo del modal */
-
-.modal__dialog{
-  background: var(--hero-grad);
-  border: 1px solid #cfecee;
-  border-radius: 18px;
-  box-shadow: 0 28px 70px rgba(2,6,23,.28);
-  padding: clamp(16px, 2.2vw, 26px);
-  max-width: min(1080px, 92vw);
-  max-height: 88vh;
-  overflow: auto;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-/* borde interior suave */
-.modal__dialog::before{
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 18px;
-  pointer-events: none;
-  box-shadow: inset 0 0 0 1px rgba(15,23,42,.06);
-}
-
-/* subrayado del título como en la sección */
-.modal__title{
-  margin: 0 0 12px 0;
-  font-size: 22px;
-  letter-spacing: .2px;
-}
-.modal__title::after{
-  content: "";
-  display: block;
-  width: 300px;
-  max-width: 60%;
-  height: 6px;
-  margin-top: 10px;
-  background: var(--brand);
-  opacity: .35;
-  border-radius: 3px;
-}
-
-/* modo oscuro compatible */
-@media (prefers-color-scheme: dark){
-  .modal__dialog{
-    background: linear-gradient(180deg,#0b1220,#0f172a);
-    border-color: rgba(148,163,184,.18);
-  }
-  .modal__dialog::before{
-    box-shadow: inset 0 0 0 1px rgba(148,163,184,.12);
-  }
-  .modal__title{ color: #e2e8f0 }
-  .modal__title::after{ opacity: .5 }
-}
-
-/* Pega al final de styles.css. Unifica el tema: claro por defecto, oscuro global si el sistema está en oscuro. */
-
-/* 1) Variables para modo oscuro global */
-@media (prefers-color-scheme: dark){
-  html{ color-scheme: dark }
-  :root{
-    --bg:#0b1220;
-    --text:#e2e8f0;
-    --muted:#94a3b8;
-    --brand:#3aa0a5;
-    --brand-700:#67d6db;
-    --badge:rgba(58,160,165,.18);
-    --border:rgba(148,163,184,.22);
-    --hero-grad:linear-gradient(135deg,#0b1220,#0f172a);
-  }
-}
-
-/* 2) Forzar que el modal y su contenido usen SIEMPRE las variables del tema */
-.modal__dialog{
-  background: var(--hero-grad) !important;
-  border-color: var(--border) !important;
-  color: var(--text) !important;
-}
-
-/* Botón cerrar y título del modal con el mismo tema */
-.modal__close{
-  background: var(--bg) !important;
-  color: var(--text) !important;
-  border-color: var(--border) !important;
-}
-.modal__title{ color: var(--text) !important }
-
-/* Tarjetas internas del modal basadas en variables, no en colores fijos */
-.plans .plan-mini{
-  background: var(--bg) !important;
-  border: 1px solid var(--border) !important;
-  box-shadow: 0 8px 24px rgba(0,0,0,.12);
-}
-.plans .plan-mini header{
-  border-bottom: 1px dashed var(--border) !important;
-}
-.plans .plan-mini .price{
-  color: var(--brand-700) !important;
-}
-.plans .plan-mini .includes li{
-  color: var(--text) !important;
-}
-
-/* 3) Tarjetas principales de precios alineadas con el tema */
-.price-card{ border-color: var(--border) }
-.card-desc{ color: var(--muted) }
-
-/* FORZAR MODO CLARO EN TODO EL SITIO */
-html{ color-scheme: light }
-
-/* Variables de claro, siempre */
 :root{
   --bg:#ffffff;
   --text:#0f172a;
@@ -431,485 +308,263 @@ html{ color-scheme: light }
   --hero-grad: linear-gradient(135deg, #e6f6f7, #ffffff);
 }
 
-/* Si el sistema está en oscuro, usa igual las variables de claro */
-@media (prefers-color-scheme: dark){
+/* Asegurar fondos claros en zonas clave */
+html, body { background: var(--bg) !important; color: var(--text) !important; }
+.header{ background: rgba(255,255,255,.9) !important; border-bottom-color: var(--border) !important; }
+.hero{ background: var(--hero-grad) !important; }
+.services {
+  padding: 64px 0;
+  background: #ffffff; /* ← fondo blanco fijo */
+}
+.proceso-wrap{ background: var(--hero-grad) !important; }
+
+/* Navegación con color de texto correcto */
+.menu a{ color:#0b2233 !important; }
+.brand-badge{ background: var(--badge) !important; border-color:#cfecee !important; color: var(--text) !important; }
+
+
+/* ========= Modo oscuro opcional ========= */
+/* Actívalo quitando el color-scheme forzado abajo y dejando este bloque 
+@media (prefers-color-scheme:dark){
   :root{
-    --bg:#ffffff;
-    --text:#0f172a;
-    --muted:#475569;
-    --brand:#3aa0a5;
-    --brand-700:#2d7c80;
-    --badge:#e6f6f7;
-    --border:#e2e8f0;
-    --hero-grad: linear-gradient(135deg, #e6f6f7, #ffffff);
+    --bg:#0b1220; --text:#e2e8f0; --muted:#94a3b8;
+    --brand:#3aa0a5; --brand-700:#67d6db;
+    --badge:rgba(58,160,165,.18); --border:rgba(148,163,184,.22);
+    --hero-grad:linear-gradient(135deg,#0b1220,#0f172a);
   }
+  .menu-toggle{background:#20242a;border-color:rgba(255,255,255,.15);box-shadow:none}
+  .menu-toggle .menu-bar{background:#cbd5e1}
 }
 
-/* Componentes con tema claro forzado */
-html,body{ background:var(--bg) !important; color:var(--text) !important }
-.header{ background:rgba(255,255,255,.9) !important; border-bottom-color:var(--border) !important }
-.brand-badge{ background:var(--badge) !important; border-color:#cfecee !important; color:var(--text) !important }
+/* ========= Preferencia explícita: forzar claro ========= */
+html{color-scheme:light}
 
-.price-card{ border-color:var(--border) !important }
-.card-desc{ color:var(--muted) !important }
-
-/* Popup */
-.modal__overlay{ background:rgba(15,23,42,.55) !important; backdrop-filter:saturate(140%) blur(6px) }
-.modal__dialog{ background:var(--hero-grad) !important; border:1px solid #cfecee !important; color:var(--text) !important }
-.modal__title{ color:var(--text) !important }
-.modal__close{ background:#fff !important; color:var(--text) !important; border-color:var(--border) !important }
-
-/* Tarjetas internas del popup */
-.plans .plan-mini{
-  background:#fff !important;
-  border:1px solid var(--border) !important;
-  box-shadow:0 6px 22px rgba(2,6,23,.08) !important
+/* Simula transparencia en íconos con fondo blanco */
+.service-icon {
+  mix-blend-mode: multiply;
+  background: transparent;
 }
-.plans .plan-mini header{ border-bottom:1px dashed rgba(15,23,42,.12) !important }
-.plans .plan-mini .price{ color:var(--brand-700) !important }
-.plans .plan-mini .includes li{ color:var(--text) !important }
 
+/* ===== Sección DEMO ===== */
+#demo {
+  padding: 80px 20px;
+  background: #ffffff;             /* fondo blanco limpio */
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
 
-.plan-mini header {
+/* Encabezados */
+#demo h2 {
+  font-size: 28px;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+#demo .lead {
+  font-size: 16px;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+
+/* Formulario */
+#demo form {
+  max-width: 640px;
+  margin-top: 12px;
   display: grid;
-  grid-template-columns: 1fr auto;
-  grid-auto-rows: auto;
-  row-gap: 6px;
+  gap: 16px;
 }
 
-.plan-mini header h4 {
-  grid-column: 1;
-  grid-row: 1;
-  margin: 0;
-}
-
-.plan-mini header .price {
-  grid-column: 2;
-  grid-row: 1;
-  justify-self: end;
-}
-
-.plan-mini header .subtitle {
-  grid-column: 1 / -1;
-  grid-row: 2;
-  margin: 0;
-  font-size: 13px;
-  line-height: 1.35;
-  color: #667085;
-}
-
-
-.footer {
-  text-align: center;
-  padding: 20px;
-  background: #fff;
-  color: #555;
-  font-size: 13px;
-}
-
-.footer-top p {
-  margin: 5px 0;
-}
-
-.footer .hashtag {
+#demo label {
+  display: block;
   font-weight: 600;
-  margin-bottom: 10px;
+  font-size: 14px;
+  color: var(--text);
+  margin-bottom: 4px;
 }
 
-.footer .social-icons {
-  margin: 10px 0;
+#demo input,
+#demo textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+  color: var(--text);
+  background: #fff;
+  transition: border-color .2s ease, box-shadow .2s ease;
 }
 
-.footer .social-icons a {
-  margin: 0 8px;
-  color: #666;
-  font-size: 20px;
-  text-decoration: none;
-  transition: color 0.3s;
+#demo input:focus,
+#demo textarea:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(58,160,165,.2);
+  outline: none;
 }
 
-.footer .social-icons a:hover {
-  color: #2A9D8F; /* cambia al color de tu marca */
+/* Botones */
+#demo .btn {
+  display: inline-block;
+  padding: 12px 18px;
+  border-radius: 10px;
+  border: 1px solid var(--brand);
+  background: var(--brand);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s ease, transform .15s ease;
 }
 
-.footer-bottom {
-  margin-top: 15px;
-  font-size: 12px;
-  line-height: 1.4;
-  color: #777;
-}
-/* === TAGS VISIBILITY PATCH (mobile friendly) === */
-.tag-list, .etiquetas, .tag-container, .section-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .5rem;
-  align-items: center;
-  min-width: 0;            /* evita que flex hijos recorten contenido */
-  overflow: visible;       /* no cortar chips si desbordan */
+#demo .btn:hover {
+  background: var(--brand-700);
+  transform: translateY(-1px);
 }
 
-.tag, .etiqueta, .chip {
-  display: inline-flex;
-  align-items: center;
-  padding: .35rem .6rem;
-  border-radius: 999px;
-  border: 1px solid rgba(0,0,0,.12);
-  white-space: nowrap;     /* evita quiebres feos dentro de la etiqueta */
-  max-width: 100%;
-  color: inherit;          /* asegura contraste consistente */
-  background: inherit;
+#demo .btn.secondary {
+  background: #fff;
+  color: var(--brand);
+  border: 1px solid var(--brand);
 }
 
-/* Si antes se ocultaban en móvil por utilidades tipo d-none o media queries */
-@media (max-width: 640px) {
-  .d-none, .d-sm-none, .d-md-none, .hide-on-mobile {
-    display: initial !important;
+#demo .btn.secondary:hover {
+  background: var(--badge);
+}
+
+/* Mensaje de éxito */
+#demoMsg {
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--brand-700);
+  font-weight: 600;
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+  #demo {
+    padding: 60px 16px;
   }
-  .tag, .etiqueta, .chip { font-size: .9rem; }
-}
-
-/* Móviles no tienen :hover: asegúralas visibles */
-@media (hover: none) {
-  .tag, .etiqueta, .chip { opacity: 1; pointer-events: auto; }
-  .hidden-on-hover { display: inline !important; }
-}
-
-/* Si un header fijo las tapa en móvil */
-.header, .navbar { position: sticky; top: 0; z-index: 1000; }
-.tag-list, .etiquetas { position: relative; z-index: 1; }
-
-/* Por si el contenedor padre es flex y colapsa ancho */
-.flex > .tag-list, .flex > .etiquetas { min-width: 0; }
-
-
-/* === TAGS VISIBILITY PATCH === */
-/* Ajusta estos selectores a los tuyos si difieren */
-.tag-list, .etiquetas, .tags, .tag-container, .section-tags {
-  display: flex !important;
-  flex-wrap: wrap;
-  gap: .5rem;
-  align-items: center;
-  min-width: 0;
-  overflow: visible;
-}
-.tag, .etiqueta, .chip {
-  display: inline-flex !important;
-  align-items: center;
-  padding: .35rem .6rem;
-  border-radius: 999px;
-  border: 1px solid rgba(0,0,0,.12);
-  white-space: nowrap;
-  max-width: 100%;
-}
-
-/* Si las etiquetas viven dentro de .menu, muéstralas incluso cuando .menu está oculto en móvil */
-@media (max-width: 900px){
-  .menu .tag-list,
-  .menu .etiquetas,
-  .menu .tags { display: flex !important; }
-}
-
-/* Si el bloque de etiquetas usa .includes-content, muéstralo */
-.includes-content { display: block !important; }
-
-/* En móviles no hay hover; asegúralas visibles */
-@media (hover: none){
-  .tag, .etiqueta, .chip { opacity: 1; pointer-events: auto; }
-}
-/* --- Fix nav en móvil --- */
-@media (max-width:900px){
-  .menu{
-    display:flex !important;
-    flex-wrap:wrap;
-    gap:.75rem;
+  #demo h2 {
+    font-size: 24px;
   }
-  .menu a{
-    display:inline-flex;
-    align-items:center;
-    padding:.45rem .75rem;
-    border:1px solid rgba(0,0,0,.08);
-    border-radius:999px;
-    white-space:nowrap;
-  }
-  .nav{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:.75rem;
+  #demo form {
+    gap: 12px;
   }
 }
 
-/* === Hamburguer menu === */
-.menu-toggle{display:none; background:transparent; border:0; padding:.5rem; border-radius:.75rem; }
-.menu-toggle:focus{outline:2px solid rgba(0,0,0,.2); outline-offset:2px;}
-.menu-toggle .menu-bar{display:block; width:22px; height:2px; margin:5px 0; background:#0b2233; border-radius:2px; transition:transform .2s ease, opacity .2s;}
-/* animación X cuando está abierto */
-.menu.is-open ~ .menu-toggle .menu-bar:nth-child(1){ transform:translateY(7px) rotate(45deg); }
-.menu.is-open ~ .menu-toggle .menu-bar:nth-child(2){ opacity:0; }
-.menu.is-open ~ .menu-toggle .menu-bar:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
-
-@media (max-width: 900px){
-  .menu-toggle{ display:inline-flex; align-items:center; justify-content:center; }
-  .menu{ display:none; }
-  .menu.is-open{ 
-    display:flex; 
-    flex-direction:column; 
-    gap:.75rem; 
-    background:rgba(255,255,255,.96);
-    position:absolute; 
-    top:56px;          /* ajusta según alto de tu header */
-    left:0; right:0;
-    padding:12px 16px;
-    box-shadow:0 8px 24px rgba(0,0,0,.08);
-    border-bottom:1px solid rgba(0,0,0,.06);
-  }
-  .menu a{
-    display:inline-flex; 
-    padding:.5rem .75rem; 
-    border:1px solid rgba(0,0,0,.08); 
-    border-radius:999px;
-    background:#fff;
-  }
-  .nav{ position:relative; }  /* para posicionar el dropdown */
+/* ===== Sección DEMO mejorada ===== */
+#demo {
+  padding: 80px 20px;
+  background: var(--hero-grad);  /* Fondo celeste degradado */
+  border-top: 1px solid var(--border);
+  text-align: left;
 }
 
-/* === Hamburguesa === */
-.menu-toggle{display:none;background:transparent;border:0;padding:.5rem;border-radius:.75rem}
-.menu-toggle .menu-bar{display:block;width:22px;height:2px;margin:5px 0;background:#0b2233;border-radius:2px}
-
-@media (max-width:900px){
-  .menu-toggle{display:inline-flex;align-items:center;justify-content:center}
-  .menu{display:none}
-  .menu.is-open{
-    display:flex;flex-direction:column;gap:.75rem;background:rgba(255,255,255,.96);
-    position:absolute;top:56px;left:0;right:0;padding:12px 16px;box-shadow:0 8px 24px rgba(0,0,0,.08);
-    border-bottom:1px solid rgba(0,0,0,.06);
-  }
-  .menu a{display:inline-flex;padding:.5rem .75rem;border:1px solid rgba(0,0,0,.08);border-radius:999px;background:#fff}
-  .nav{position:relative}
+#demo h2 {
+  font-size: 28px;
+  color: var(--text);
+  margin-bottom: 8px;
 }
 
-/* Header fijo opcional */
-.header{position:sticky;top:0;z-index:1000;background:#fff}
-
-/* === Header móvil limpio === */
-.header{position:sticky;top:0;z-index:1000;background:#fff}
-
-/* botón */
-.menu-toggle{display:none;background:transparent;border:0;padding:.5rem;border-radius:.75rem}
-.menu-toggle .menu-bar{display:block;width:22px;height:2px;margin:5px 0;background:#0b2233;border-radius:2px}
-
-/* móvil */
-@media (max-width:900px){
-  /* layout del header */
-  .nav{
-    display:flex;align-items:center;justify-content:space-between;
-    gap:.5rem;padding:10px 16px;
-  }
-
-  .menu-toggle{display:inline-flex;align-items:center;justify-content:center}
-
-  /* ocultar SIEMPRE el menú en móvil hasta abrirlo */
-  .header .menu{display:none !important}
-
-  /* dropdown cuando está abierto */
-  .header .menu.is-open{
-    display:flex !important;flex-direction:column;align-items:flex-start;gap:.6rem;
-    position:absolute;left:0;right:0;top:100%;
-    padding:12px 16px;background:#fff;border-bottom:1px solid rgba(0,0,0,.06);
-    box-shadow:0 8px 24px rgba(0,0,0,.08);
-  }
-
-  /* chips del menú */
-  .header .menu a{
-    display:inline-flex;padding:.5rem .75rem;
-    border:1px solid rgba(0,0,0,.10);border-radius:999px;background:#fff;
-  }
-
-  /* no dupliques la marca dentro del menú en móvil */
-  .header .menu .brand-badge{display:none}
+#demo .lead {
+  font-size: 16px;
+  color: var(--muted);
+  margin-bottom: 24px;
 }
 
-/* Ajuste fino del botón hamburguesa en móvil */
-@media (max-width:900px){
-  .menu-toggle{ margin-left:auto; }              /* empuja el botón a la derecha */
-  .menu-toggle .menu-bar{
-    width:22px; height:2px;                      /* tamaño parejo */
-    background:#0b2233;                          /* color */
-    opacity:.85; border-radius:2px;
-  }
-  .nav{ padding:12px 16px; }                     /* un poco más de aire */
+/* Formulario */
+#demo form {
+  max-width: 640px;
+  margin-top: 12px;
+  display: grid;
+  gap: 16px;
 }
 
-/* Centrado vertical y separación correcta del header móvil */
-@media (max-width:900px){
-  .header{
-    position: sticky; top: 0; z-index: 1000; background:#fff;
-    padding-top: max(0px, env(safe-area-inset-top)); /* iPhone notch */
-    border-bottom: 1px solid rgba(0,0,0,.06);
-  }
+#demo label {
+  display: block;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text);
+  margin-bottom: 4px;
+}
 
-  .nav{
-    display:flex;
-    align-items:center;              /* <— centra vertical */
-    justify-content:space-between;
-    min-height: 56px;                /* alto cómodo del header */
-    padding: 8px 16px;
-    line-height: 1;                  /* evita que suba/baje por tipografías */
-  }
+#demo input,
+#demo textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+  color: var(--text);
+  background: #fff;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
 
-  .brand{ display:flex; align-items:center; }
+#demo input:focus,
+#demo textarea:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(58,160,165,.2);
+  outline: none;
+}
 
-  .menu-toggle{
-    display:inline-flex;
-    align-items:center;              /* <— centra las barras dentro del botón */
-    justify-content:center;
-    height: 36px;                    /* ayuda al centrado visual */
-    margin: 0;                       /* quita desplazamientos raros */
-  }
-  .menu-toggle .menu-bar{
-    width:22px; height:2px; margin:4px 0; border-radius:2px; background:#0b2233;
-  }
+/* Estado de error */
+#demo .error {
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 0 3px rgba(220,38,38,.1);
+}
 
-  /* el dropdown aparece justo debajo del header */
-  .header .menu.is-open{
-    top: calc(100% + 2px);
+#demo .error-message {
+  color: #dc2626;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+/* Botones */
+#demo .btn {
+  display: inline-block;
+  padding: 12px 18px;
+  border-radius: 10px;
+  border: 1px solid var(--brand);
+  background: var(--brand);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s ease, transform .15s ease;
+}
+
+#demo .btn:hover {
+  background: var(--brand-700);
+  transform: translateY(-1px);
+}
+
+#demo .btn.secondary {
+  background: #fff;
+  color: var(--brand);
+  border: 1px solid var(--brand);
+}
+
+#demo .btn.secondary:hover {
+  background: var(--badge);
+}
+
+/* Mensaje de éxito */
+#demoMsg {
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--brand-700);
+  font-weight: 600;
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+  #demo {
+    padding: 60px 16px;
+  }
+  #demo h2 {
+    font-size: 24px;
+  }
+  #demo form {
+    gap: 12px;
   }
 }
-
-/* Forzar hamburguesa en columnas, no guiones en fila */
-.menu-toggle{
-  display:inline-flex;
-  flex-direction:column;   /* ← apila vertical */
-  align-items:center;
-  justify-content:center;
-  gap:4px;                 /* separación entre barras */
-  width:40px; height:36px; /* área táctil cómoda */
-}
-.menu-toggle .menu-bar{
-  display:block;
-  width:22px;
-  height:2px;
-  background:#0b2233;
-  border-radius:2px;
-}
-
-
-/* Colores del botón hamburguesa
-/* Ajuste visual final para el botón hamburguesa */
-.menu-toggle{
-  background:#e9ecef;                 /* gris más visible */
-  border:1px solid rgba(0,0,0,.15);
-  border-radius:10px;
-  box-shadow:0 1px 2px rgba(0,0,0,.08);
-  width:40px; height:36px;
-  display:inline-flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  gap:4px;
-}
-
-.menu-toggle .menu-bar{
-  width:20px;
-  height:2px;
-  background:#2b2b2b;                 /* gris oscuro más visible */
-  border-radius:1px;
-  transition:background .2s ease;
-}
-
-.menu-toggle:hover .menu-bar{
-  background:#0b2233;                 /* más fuerte al pasar el dedo */
-}
-
-/* estados */
-.menu-toggle:active{ transform:scale(.98); }
-.menu-toggle:focus{ outline:2px solid rgba(0,0,0,.15); outline-offset:2px; }
-
-/* dark mode opcional */
-@media (prefers-color-scheme: dark){
-  .menu-toggle{ background:#20242a; border-color:rgba(255,255,255,.15); box-shadow:none; }
-  .menu-toggle .menu-bar{ background:#cbd5e1 !important; } /* gris claro en dark */
-}
-
-/* === Botón destacado "Ir al bot" === */
-.menu a.btn-bot{
-  background:#0b2233;
-  color:#fff !important;
-  padding:.45rem .9rem;
-  border-radius:999px;
-  border:1px solid transparent;
-  font-weight:600;
-  transition:all .2s ease;
-}
-
-.menu a.btn-bot:hover{
-  background:#13324d;
-  transform:scale(1.04);
-}
-
-/* En versión móvil */
-@media (max-width:900px){
-  .menu a.btn-bot{
-    width:100%;
-    text-align:center;
-    background:#0b2233;
-  }
-}
-/* ======= Header refinado ======= */
-.header{position:sticky;top:0;z-index:1000;background:#fff;transition:box-shadow .2s ease}
-.header.is-scrolled{box-shadow:0 4px 18px rgba(0,0,0,.06)}
-
-.nav{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:16px; padding:12px 20px;
-}
-
-/* Marca */
-.brand{font-weight:800;letter-spacing:.2px}
-
-/* Menú desktop */
-@media (min-width:901px){
-  .menu-toggle{display:none !important;}              /* no hamburguesa en desktop */
-  .menu{display:flex;gap:24px;align-items:center}
-  .menu a{
-    color:#0b2233;text-decoration:none;padding:8px 0;border-radius:10px;
-  }
-  .menu a:hover{color:#0c5a6b}
-  .menu .brand-badge{display:none;}                   /* quita duplicado de marca */
-}
-
-/* Botón destacado “Ir al bot” */
-.menu a.btn-bot{
-  background:#0c7c89;color:#fff !important;
-  padding:.45rem .9rem;border-radius:999px;border:1px solid transparent;
-  font-weight:700; box-shadow:0 2px 10px rgba(12,124,137,.18); transition:transform .15s ease, box-shadow .15s ease
-}
-.menu a.btn-bot:hover{transform:translateY(-1px); box-shadow:0 6px 16px rgba(12,124,137,.22)}
-
-/* Menú móvil (pulido del dropdown) */
-@media (max-width:900px){
-  .nav{padding:10px 16px}
-  .menu-toggle{
-    display:inline-flex;flex-direction:column;justify-content:center;align-items:center;
-    gap:4px;width:40px;height:36px;background:#e9ecef;border:1px solid rgba(0,0,0,.15);
-    border-radius:10px;box-shadow:0 1px 2px rgba(0,0,0,.08)
-  }
-  .menu-toggle .menu-bar{width:20px;height:2px;background:#2b2b2b;border-radius:1px}
-
-  .menu{display:none !important}
-  .menu.is-open{
-    display:flex !important;flex-direction:column;align-items:flex-start;gap:.6rem;
-    position:absolute;left:0;right:0;top:calc(100% + 2px);
-    padding:12px 16px;background:#fff;border-bottom:1px solid rgba(0,0,0,.06);
-    box-shadow:0 8px 24px rgba(0,0,0,.08)
-  }
-  .menu a{display:inline-flex;padding:.5rem .75rem;border:1px solid rgba(0,0,0,.10);border-radius:999px;background:#fff}
-  .menu .brand-badge{display:none}
-  .menu a.btn-bot{width:100%;text-align:center}
-}
-
-
-
-
-

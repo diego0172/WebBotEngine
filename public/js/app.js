@@ -1,311 +1,395 @@
 // public/js/app.js
+(() => {
+  'use strict';
 
-// ===== Scroll suave en anclas =====
-document.querySelectorAll('a[href^="#"]').forEach(function(a){
-  a.addEventListener('click', function(e){
-    var id = a.getAttribute('href').slice(1);
-    var el = document.getElementById(id);
-    if(el){
-      e.preventDefault();
-      el.scrollIntoView({ behavior:'smooth', block:'start' });
+  // ===== Helpers =====
+  const $  = (sel, ctx=document) => ctx.querySelector(sel);
+  const $$ = (sel, ctx=document) => Array.from(ctx.querySelectorAll(sel));
+  const prefersReduced = () =>
+    window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ===== Estado global mínimo =====
+  const state = {
+    header: null,
+    menu: null,
+    menuBtn: null,
+    modal: null,
+    modalDialog: null,
+    modalTitle: null,
+    modalBody: null,
+    lastFocus: null,
+    scrollY: 0
+  };
+
+  // ===== Init =====
+  document.addEventListener('DOMContentLoaded', () => {
+    // Cache
+    state.header = $('.header');
+    state.menu   = $('#site-menu');
+    state.menuBtn = $('.menu-toggle');
+
+    state.modal = $('#plansModal');
+    if (state.modal) {
+      state.modalDialog = $('.modal__dialog', state.modal);
+      state.modalTitle  = $('#modalTitle', state.modal);
+      state.modalBody   = $('#modalBody', state.modal);
+    }
+
+    initSmoothAnchors();
+    initHeaderShadow();
+    initWhats();
+    initReveal();
+    initHeroSplit();
+    initServicesObserver();
+    initPlanIncludesToggle(); // para fan-items si los usas en otra vista
+    initPlansModal();
+    initHamburger();
+    initDemoForm();
+
+    // Si vienen con #hash directo
+    if (location.hash && $(location.hash)) {
+      $(location.hash).scrollIntoView({ behavior:'smooth', block:'start' });
     }
   });
-});
-// Sombra en header al hacer scroll
-(() => {
-  const h = document.querySelector('.header');
-  if(!h) return;
-  const onScroll = () => h.classList.toggle('is-scrolled', window.scrollY > 2);
-  window.addEventListener('scroll', onScroll, {passive:true});
-  onScroll();
-})();
 
+  // ===== Scroll suave en anclas =====
+  function initSmoothAnchors(){
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest('a[href^="#"]');
+      if (!a) return;
 
-// ===== WhatsApp (opcional) =====
-document.addEventListener('DOMContentLoaded', function(){
-  var btnWhats = document.getElementById('btnWhats');
-  if(btnWhats){
-    btnWhats.addEventListener('click', function(){
-      var nombre = document.getElementById('nombre') ? document.getElementById('nombre').value.trim() : '';
-      var t = 'Hola, quiero una demo.' + (nombre ? ' Soy ' + nombre + '.' : '');
-      var url = 'https://wa.me/50231239807?text=' + encodeURIComponent(t);
+      const id = a.getAttribute('href').slice(1);
+      if (!id) return;
+      const el = document.getElementById(id);
+      if (!el) return;
+
+      e.preventDefault();
+      // Cierra menú si está abierto
+      if (state.menu && state.menu.classList.contains('is-open')) {
+        state.menu.classList.remove('is-open');
+        state.menuBtn?.setAttribute('aria-expanded','false');
+      }
+      el.scrollIntoView({ behavior:'smooth', block:'start' });
+    }, { passive: false });
+  }
+
+  // ===== Sombra en header al hacer scroll =====
+  function initHeaderShadow(){
+    if (!state.header) return;
+    const onScroll = () => state.header.classList.toggle('is-scrolled', window.scrollY > 2);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  // ===== WhatsApp =====
+  function initWhats(){
+    const btnWhats = $('#btnWhats');
+    if (!btnWhats) return;
+    btnWhats.addEventListener('click', () => {
+      const nombre = $('#nombre')?.value.trim() || '';
+      const t = 'Hola, quiero una demo.' + (nombre ? ' Soy ' + nombre + '.' : '');
+      const url = 'https://wa.me/50231239807?text=' + encodeURIComponent(t);
       window.open(url, '_blank', 'noopener,noreferrer');
     });
   }
-});
 
-// ===== Reveal por scroll (.reveal) =====
-(function(){
-  function setupReveals(){
-    var items = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
-    if(!items.length) return;
+  // ===== Reveal por scroll (.reveal) =====
+  function initReveal(){
+    const items = $$('.reveal');
+    if (!items.length) return;
 
-    items.forEach(function(el){
-      el.classList.remove('visible');
-      void el.offsetWidth;
-    });
+    // reset para re-animar correctamente en back-forward cache
+    items.forEach(el => { el.classList.remove('visible'); void el.offsetWidth; });
 
-    var obs = new IntersectionObserver(function(entries, observer){
-      entries.forEach(function(entry){
-        if(entry.isIntersecting){
+    const obs = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
           entry.target.classList.add('visible');
           observer.unobserve(entry.target);
         }
       });
-    }, { threshold:0.08, rootMargin:'0px 0px -10% 0px' });
+    }, { threshold: 0.08, rootMargin: '0px 0px -10% 0px' });
 
-    items.forEach(function(el){ obs.observe(el); });
+    items.forEach(el => obs.observe(el));
+
+    window.addEventListener('pageshow', () => {
+      items.forEach(el => { el.classList.remove('visible'); void el.offsetWidth; obs.observe(el); });
+    });
   }
-  document.addEventListener('DOMContentLoaded', setupReveals);
-  window.addEventListener('pageshow', setupReveals);
-})();
 
-// ===== Hero: separación al hacer scroll (data-scroll-fade) =====
-(function(){
-  function setupScrollSplitSections(){
-    var sections = [].slice.call(document.querySelectorAll('[data-scroll-fade]'));
-    if(!sections.length) return;
+  // ===== Hero split por scroll =====
+  function initHeroSplit(){
+    const sections = $$('[data-scroll-fade]');
+    if (!sections.length) return;
 
-    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var ticking = false;
+    const reduce = prefersReduced();
+    let ticking = false;
 
-    function compute(){
+    const compute = () => {
       ticking = false;
-      var vh = window.innerHeight || 1;
-      var isMobile = window.matchMedia && window.matchMedia('(max-width: 900px)').matches;
-      var maxShift = isMobile ? 60 : 140;
-      var maxY = isMobile ? 6 : 10;
-      var end = vh * 0.4;
+      const vh = window.innerHeight || 1;
+      const isMobile = window.matchMedia && window.matchMedia('(max-width: 900px)').matches;
+      const maxShift = isMobile ? 60 : 140;
+      const maxY     = isMobile ? 6  : 10;
+      const end      = vh * 0.4;
 
-      sections.forEach(function(sec){
-        var rect = sec.getBoundingClientRect();
-        var y = -rect.top;
-        var t = Math.max(0, Math.min(1, y / end));
+      sections.forEach(sec => {
+        const rect = sec.getBoundingClientRect();
+        const y = -rect.top;
+        const t = Math.max(0, Math.min(1, y / end));
 
-        var text = sec.querySelector('.hero-text');
-        var bot  = sec.querySelector('.hero-bot');
-        if(!text || !bot) return;
+        const text = $('.hero-text', sec);
+        const bot  = $('.hero-bot', sec);
+        if (!text || !bot) return;
 
-        var txText = reduce ? 0 : (0 + (-maxShift - 0) * t);
-        var txBot  = reduce ? 0 : (0 + ( maxShift - 0) * t);
-        var tyText = reduce ? 0 : (0 + (-maxY    - 0) * t);
-        var tyBot  = reduce ? 0 : (0 + ( maxY    - 0) * t);
+        const txText = reduce ? 0 : (-maxShift * t);
+        const txBot  = reduce ? 0 : ( maxShift * t);
+        const tyText = reduce ? 0 : (-maxY    * t);
+        const tyBot  = reduce ? 0 : ( maxY    * t);
 
-        text.style.transform = 'translate(' + txText + 'px,' + tyText + 'px)';
-        bot.style.transform  = 'translate(' + txBot  + 'px,' + tyBot  + 'px)';
+        text.style.transform = `translate(${txText}px,${tyText}px)`;
+        bot .style.transform = `translate(${txBot }px,${tyBot }px)`;
       });
-    }
-    function onScroll(){
-      if(ticking) return;
+    };
+
+    const onScroll = () => {
+      if (ticking) return;
       ticking = true;
       requestAnimationFrame(compute);
-    }
+    };
 
-    window.addEventListener('scroll', onScroll, {passive:true});
+    window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
     compute();
   }
 
-  document.addEventListener('DOMContentLoaded', setupScrollSplitSections);
-  window.addEventListener('pageshow', setupScrollSplitSections);
-})();
+  // ===== Servicios in-view =====
+  function initServicesObserver(){
+    const section = $('[data-services]');
+    if (!section) return;
+    const cards = $$('.service', section);
+    if (!cards.length) return;
 
-// ===== Servicios: entrada al hacer scroll (data-services) =====
-(function(){
-  function setupServicesScroll(){
-    var section = document.querySelector('[data-services]');
-    if(!section) return;
-    var cards = [].slice.call(section.querySelectorAll('.service'));
-    if(!cards.length) return;
-
-    var observer = new IntersectionObserver(function(entries, obs){
-      entries.forEach(function(en){
-        if(!en.isIntersecting) return;
-        var el = en.target;
-        var idx = cards.indexOf(el);
-        var delay = Math.min(idx*100, 300);
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(en => {
+        if (!en.isIntersecting) return;
+        const el = en.target;
+        const idx = cards.indexOf(el);
+        const delay = Math.min(idx * 100, 300);
         el.style.transitionDelay = delay + 'ms';
-        var icon = el.querySelector('.service-icon');
-        if(icon) icon.style.transitionDelay = delay + 'ms';
+        const icon = $('.service-icon', el);
+        if (icon) icon.style.transitionDelay = delay + 'ms';
         el.classList.add('in-view');
         obs.unobserve(el);
       });
-    }, { threshold:0.15 });
+    }, { threshold: 0.15 });
 
-    cards.forEach(function(c){ observer.observe(c); });
+    cards.forEach(c => observer.observe(c));
   }
-  document.addEventListener('DOMContentLoaded', setupServicesScroll);
-  window.addEventListener('pageshow', setupServicesScroll);
-})();
 
-// ===== ¿Qué incluye? por plan (delegación) =====
-(function(){
-  document.addEventListener('click', function(e){
-    var btn = e.target.closest('.btn-includes');
-    if(!btn) return;
-    e.stopPropagation();
-    var item = btn.closest('.fan-item');
-    if(!item) return;
-    var stack = item.parentElement;
-    stack.querySelectorAll('.fan-item').forEach(function(f){ if(f !== item) f.classList.remove('open'); });
-    item.classList.toggle('open');
-  });
-})();
+  // ===== Botón ¿Qué incluye? (si usas fan-stack en otra vista) =====
+  function initPlanIncludesToggle(){
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.btn-includes');
+      if (!btn) return;
+      const item = btn.closest('.fan-item');
+      if (!item) return;
+      const stack = item.parentElement;
+      $$('.fan-item', stack).forEach(f => { if (f !== item) f.classList.remove('open'); });
+      item.classList.toggle('open');
+    });
+  }
 
-// ===== Popup de planes =====
-(function(){
-  var modal = document.getElementById('plansModal');
-  var modalBody = document.getElementById('modalBody');
-  var modalTitle = document.getElementById('modalTitle');
-  var lastFocus = null;
-
-  var __savedScrollY = 0;
-
+  // ===== Modal de planes =====
   function lockScroll(){
-    __savedScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
-    document.body.dataset.scrollY = String(__savedScrollY);
+    state.scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
     document.body.style.position = 'fixed';
-    document.body.style.top = '-' + __savedScrollY + 'px';
+    document.body.style.top = `-${state.scrollY}px`;
     document.body.style.left = '0';
     document.body.style.right = '0';
     document.body.style.width = '100%';
     document.body.classList.add('modal-open');
   }
-
   function unlockScroll(){
-    var topStr = document.body.style.top || '';
-    var y = 0;
-    if(topStr){
-      var n = parseInt(topStr, 10);
-      if(!isNaN(n)) y = -n;
-    } else if (document.body.dataset.scrollY){
-      y = parseInt(document.body.dataset.scrollY, 10) || 0;
-    }
-
     document.body.classList.remove('modal-open');
     document.body.style.position = '';
     document.body.style.top = '';
     document.body.style.left = '';
     document.body.style.right = '';
     document.body.style.width = '';
-    delete document.body.dataset.scrollY;
+    window.scrollTo(0, state.scrollY || 0);
+  }
 
-    requestAnimationFrame(function(){
-      window.scrollTo(0, y);
-    });
+  function trapFocus(e){
+    if (!state.modal || !state.modal.classList.contains('show')) return;
+    if (e.key !== 'Tab') return;
+    const focusables = $$(
+      'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      state.modal
+    ).filter(el => el.offsetParent !== null);
+    if (!focusables.length) return;
+
+    const first = focusables[0];
+    const last  = focusables[focusables.length - 1];
+    const active = document.activeElement;
+
+    if (e.shiftKey) {
+      if (active === first || !state.modal.contains(active)) {
+        last.focus(); e.preventDefault();
+      }
+    } else {
+      if (active === last) {
+        first.focus(); e.preventDefault();
+      }
+    }
   }
 
   function openModal(title, html){
-    lastFocus = document.activeElement;
-    modalTitle.textContent = title;
-    modalBody.innerHTML = html;
-    modal.classList.add('show');
+    if (!state.modal) return;
+    state.lastFocus = document.activeElement;
+
+    state.modalTitle.textContent = title || 'Planes';
+    state.modalBody.innerHTML = html || '';
+
+    state.modal.classList.add('show');
     lockScroll();
-    var dialog = modal.querySelector('.modal__dialog');
-    setTimeout(function(){ dialog && dialog.focus(); }, 10);
+
+    // foco inicial
+    setTimeout(() => state.modalDialog?.focus(), 10);
+
+    document.addEventListener('keydown', onEscClose);
+    document.addEventListener('keydown', trapFocus);
   }
 
   function closeModal(){
-    modal.classList.remove('show');
+    if (!state.modal) return;
+    state.modal.classList.remove('show');
     unlockScroll();
-    modalBody.innerHTML = '';
-    if(lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+    state.modalBody.innerHTML = '';
+
+    document.removeEventListener('keydown', onEscClose);
+    document.removeEventListener('keydown', trapFocus);
+
+    if (state.lastFocus && typeof state.lastFocus.focus === 'function') {
+      state.lastFocus.focus();
+    }
   }
 
-  window.__openPlansModal = openModal;
-  window.__closePlansModal = closeModal;
+  function onEscClose(e){
+    if (e.key === 'Escape' && state.modal?.classList.contains('show')) {
+      closeModal();
+    }
+  }
 
-  (function(){
-    var modal = document.getElementById('plansModal');
-    if(!modal) return;
+  function initPlansModal(){
+    if (!state.modal) return;
 
-    document.addEventListener('click', function(e){
-      var card = e.target.closest('.price-card');
-      if(card && !e.target.closest('.modal-template')){
-        var tpl = card.querySelector('.modal-template');
-        if(!tpl) return;
-        var title = card.getAttribute('data-category') || (card.querySelector('.card-title') ? card.querySelector('.card-title').textContent : 'Planes');
-        if (window.__openPlansModal) window.__openPlansModal(title, tpl.innerHTML);
-        return;
-      }
-      if(e.target.closest('[data-close="modal"]')){
-        if (window.__closePlansModal) window.__closePlansModal();
-      }
+    // Abrir: solo clicks en .price-card fuera de su .modal-template
+    document.addEventListener('click', (e) => {
+      const card = e.target.closest('.price-card');
+      if (!card) return;
+      if (e.target.closest('.modal-template')) return; // ignora clicks dentro de la plantilla oculta
+      const tpl = $('.modal-template', card);
+      if (!tpl) return;
+      const title = card.getAttribute('data-category') || $('.card-title', card)?.textContent || 'Planes';
+      openModal(title, tpl.innerHTML);
     });
 
-    document.addEventListener('keydown', function(e){
-      if(e.key === 'Escape' && modal.classList.contains('show')){
-        if (window.__closePlansModal) window.__closePlansModal();
+    // Cerrar: overlay o botón con data-close
+    state.modal.addEventListener('click', (e) => {
+      if (e.target.closest('[data-close="modal"]') || e.target === $('.modal__overlay', state.modal)) {
+        closeModal();
       }
     });
-  })();
+  }
 
-})();
+  // ===== Hamburguesa =====
+  function initHamburger(){
+    if (!state.menu || !state.menuBtn) return;
+    state.menuBtn.addEventListener('click', () => {
+      const open = state.menu.classList.toggle('is-open');
+      state.menuBtn.setAttribute('aria-expanded', String(open));
+    });
+    // cerrar al seleccionar un link
+    $$('.menu a', state.header).forEach(a => a.addEventListener('click', () => {
+      state.menu.classList.remove('is-open');
+      state.menuBtn.setAttribute('aria-expanded', 'false');
+    }));
+  }
 
-
-// === Hamburguesa (pegar al final de app.js) ===
-(() => {
-  const header = document.querySelector('.header');
-  const nav = header ? header.querySelector('.menu') : null;
-  const btn = header ? header.querySelector('.menu-toggle') : null;
-  if (!nav || !btn) return;
-
-  btn.addEventListener('click', () => {
-    const open = nav.classList.toggle('is-open');
-    btn.setAttribute('aria-expanded', String(open));
-  });
-
-  // Cerrar al hacer click en un link
-  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-    nav.classList.remove('is-open');
-    btn.setAttribute('aria-expanded', 'false');
-  }));
-})();
-
-
-
-// ===== Envío del formulario de demo =====
-document.addEventListener("DOMContentLoaded", function () {
-  var form = document.getElementById("demoForm");
-  var msg  = document.getElementById("demoMsg");
+ // ===== Demo form (con validación visual) =====
+function initDemoForm(){
+  const form = $('#demoForm');
+  const msg  = $('#demoMsg');
   if (!form) return;
 
-  var submitBtn = form.querySelector('button[type="submit"]');
+  // Desactiva validación nativa para usar la nuestra
+  form.setAttribute('novalidate', '');
+  form.addEventListener('invalid', (e) => e.preventDefault(), true);
 
-  form.addEventListener("submit", async function (e) {
+  const submitBtn = form.querySelector('button[type="submit"]');
+
+  // Limpia errores al escribir
+  form.addEventListener('input', (e)=>{
+    const el = e.target.closest('input, textarea');
+    if (!el) return;
+    el.classList.remove('error');
+    const m = el.parentNode.querySelector('.error-message');
+    if (m) m.remove();
+  });
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    var payload = {
-      nombre:   form.nombre ? form.nombre.value.trim() : '',
-      email:    form.email ? form.email.value.trim() : '',
-      telefono: form.telefono ? form.telefono.value.trim() : '',
-      mensaje:  form.mensaje ? form.mensaje.value.trim() : ''
+    // limpia previos
+    form.querySelectorAll('.error-message').forEach(el => el.remove());
+    form.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+
+    const payload = {
+      nombre:   form.nombre?.value.trim()   || '',
+      email:    form.email?.value.trim()    || '',
+      telefono: form.telefono?.value.trim() || '',
+      mensaje:  form.mensaje?.value.trim()  || ''
     };
 
-    if (!payload.nombre || !payload.email) {
-      alert("Completa nombre y correo");
-      return;
+    let valid = true;
+    if (!payload.nombre) showError(form.nombre, 'Por favor, ingresa tu nombre');
+    if (!payload.email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(payload.email))
+      showError(form.email, 'Correo no válido');
+    if (!payload.telefono || payload.telefono.length < 7)
+      showError(form.telefono, 'Ingresa un teléfono válido');
+
+    function showError(input, message){
+      valid = false;
+      input.classList.add('error');
+      const m = document.createElement('div');
+      m.className = 'error-message';
+      m.textContent = message;
+      input.parentNode.appendChild(m);
     }
+
+    if (!valid) return; // no enviar si hay errores
 
     try {
-      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Enviando..."; }
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Enviando...'; }
 
-      var res = await fetch("/api/demo", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res  = await fetch('/api/demo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
-
-      var data = await res.json();
-      if (!res.ok || !data.ok) throw new Error(data.error || "Error");
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || data.ok === false) throw new Error(data.error || 'Error');
 
       form.reset();
-      if (msg) { msg.style.display = "block"; }
+      if (msg) { msg.style.display = 'block'; }
     } catch (err) {
       console.error(err);
-      alert("No se pudo enviar, intenta de nuevo");
+      alert('No se pudo enviar, intenta de nuevo');
     } finally {
-      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "Enviar"; }
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Enviar'; }
     }
   });
-});
+}
+
+})();
