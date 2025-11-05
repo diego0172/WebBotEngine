@@ -93,28 +93,57 @@
     });
   }
 
-  // ===== Reveal por scroll (.reveal) =====
+  // ===== Reveal por scroll (.reveal) - Optimizado =====
   function initReveal(){
     const items = $$('.reveal');
     if (!items.length) return;
 
     // reset para re-animar correctamente en back-forward cache
-    items.forEach(el => { el.classList.remove('visible'); void el.offsetWidth; });
+    items.forEach(el => { 
+      el.classList.remove('visible'); 
+      // Fuerza reflow de manera más eficiente
+      el.getBoundingClientRect(); 
+    });
 
-    const obs = new IntersectionObserver((entries, observer) => {
+    const obs = new IntersectionObserver((entries) => {
+      // Procesa en batch para mejor performance
+      const toAnimate = [];
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
+          toAnimate.push(entry.target);
         }
       });
-    }, { threshold: 0.08, rootMargin: '0px 0px -10% 0px' });
+      
+      if (toAnimate.length) {
+        // Anima en el siguiente frame para evitar layout thrashing
+        requestAnimationFrame(() => {
+          toAnimate.forEach((el, index) => {
+            // Escala el delay basado en la posición
+            const delay = parseInt(el.style.getPropertyValue('--delay') || '0');
+            setTimeout(() => {
+              el.classList.add('visible');
+              obs.unobserve(el);
+            }, delay);
+          });
+        });
+      }
+    }, { 
+      threshold: 0.08, 
+      rootMargin: '0px 0px -8% 0px' 
+    });
 
     items.forEach(el => obs.observe(el));
 
-    window.addEventListener('pageshow', () => {
-      items.forEach(el => { el.classList.remove('visible'); void el.offsetWidth; obs.observe(el); });
-    });
+    // Optimización para navegación hacia atrás
+    window.addEventListener('pageshow', (e) => {
+      if (e.persisted) {
+        items.forEach(el => { 
+          el.classList.remove('visible'); 
+          el.getBoundingClientRect(); 
+          obs.observe(el); 
+        });
+      }
+    }, { passive: true });
   }
 
   // ===== Hero split por scroll =====

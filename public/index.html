@@ -3,14 +3,63 @@
 <html class="js" lang="es">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>BotEngine</title>
-  <link rel="icon" href="/img/favicon.png" type="image/png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  
+  <!-- SEO Mejorado -->
+  <title>BotEngine - Chatbots y Diseño Web para tu Negocio | Automatización 24/7</title>
+  <meta name="description" content="Diseño y automatización para tu negocio. Chatbots inteligentes, sitios web modernos y presencia digital efectiva. Respuestas automáticas 24/7, sitios rápidos y seguros.">
+  <meta name="keywords" content="chatbots, diseño web, automatización, whatsapp, bot, sitio web, guatemala, negocio digital">
+  <meta name="author" content="BotEngine Corp">
+  <link rel="canonical" href="https://botenginecorp.com">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://botenginecorp.com">
+  <meta property="og:title" content="BotEngine - Chatbots y Diseño Web para tu Negocio">
+  <meta property="og:description" content="Automatiza tu negocio con chatbots inteligentes y sitios web modernos. Respuestas 24/7 en WhatsApp y web.">
+  <meta property="og:image" content="img/robot.png">
+  <meta property="og:locale" content="es_GT">
+  
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="BotEngine - Chatbots y Diseño Web">
+  <meta name="twitter:description" content="Automatiza tu negocio con chatbots inteligentes y sitios web modernos.">
+  <meta name="twitter:image" content="img/robot.png">
+  
+  <!-- Favicon optimizado -->
+  <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  
+  <!-- Performance optimizations -->
+  <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  
+  <!-- Styles -->
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "BotEngine Corp",
+    "description": "Empresa especializada en chatbots y diseño web para automatización de negocios",
+    "url": "https://botenginecorp.com",
+    "logo": "/img/robot.png",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+502-3123-9807",
+      "contactType": "customer service",
+      "availableLanguage": "Spanish"
+    },
+    "sameAs": [
+      "https://www.instagram.com/botenginecorp",
+      "https://linkedin.com/company/botenginecorp"
+    ]
+  }
+  </script>
 </head>
 <body>
 
@@ -61,7 +110,11 @@
         </div>
       </div>
       <div class="hero-bot reveal" data-from="right" style="--delay:2500ms">
-        <img class="bot" src="img/robot.png" alt="Mascota BotEngine con laptop" loading="lazy" width="380" height="380">
+        <img class="bot" src="img/robot.png" alt="Mascota BotEngine con laptop" 
+             loading="eager" width="380" height="380" 
+             decoding="async" fetchpriority="high"
+             onload="console.log('🤖 Robot cargado correctamente')"
+             onerror="console.warn('⚠️ Error al cargar robot, usando fallback'); this.style.display='none';">
       </div>
     </div>
   </section>
@@ -72,17 +125,36 @@
   <section id="services" class="services" data-services>
     <div class="container services-grid">
       <article class="service">
-        <img class="service-icon" src="img/serv-chatbot.png" alt="Chatbots" loading="lazy" width="100" height="100">
+        <div class="service-icon-wrapper">
+          <img class="service-icon" src="img/serv-chatbot.png" alt="Chatbots" loading="lazy" width="100" height="100"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="service-icon-fallback" style="display:none">
+            <i class="fas fa-robot" aria-hidden="true"></i>
+          </div>
+        </div>
         <h3>Chatbots inteligentes</h3>
         <p>Automatiza respuestas en WhatsApp, Instagram y web para atender a tus clientes 24/7.</p>
+        <p><small>💬 <strong>¡Prueba nuestro chatbot!</strong> Haz clic en el botón azul abajo a la derecha</small></p>
       </article>
       <article class="service">
-        <img class="service-icon" src="img/serv-web.png" alt="Diseño web" loading="lazy" width="100" height="100">
+        <div class="service-icon-wrapper">
+          <img class="service-icon" src="img/serv-web.png" alt="Diseño web" loading="lazy" width="100" height="100"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="service-icon-fallback" style="display:none">
+            <i class="fas fa-code" aria-hidden="true"></i>
+          </div>
+        </div>
         <h3>Diseño web moderno</h3>
         <p>Creamos sitios rápidos, seguros y optimizados para tu presencia digital.</p>
       </article>
       <article class="service">
-        <img class="service-icon" src="img/serv-automatizacion.png" alt="Automatización" loading="lazy" width="100" height="100">
+        <div class="service-icon-wrapper">
+          <img class="service-icon" src="img/serv-automatizacion.png" alt="Automatización" loading="lazy" width="100" height="100"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="service-icon-fallback" style="display:none">
+            <i class="fas fa-cogs" aria-hidden="true"></i>
+          </div>
+        </div>
         <h3>Automatización de procesos</h3>
         <p>Integramos herramientas para ahorrar tiempo en agendamiento, recordatorios y seguimiento.</p>
       </article>
@@ -308,28 +380,32 @@
 
   <!-- Demo -->
   <section id="demo" class="container">
-    <h2 style="margin:0 0 8px 0">Agenda una demo</h2>
-    <p class="lead">Déjanos tus datos y te contactamos.</p>
-    <form id="demoForm" style="max-width:640px;display:grid;gap:12px;margin-top:12px">
+    <h2 style="margin:0 0 8px 0; text-align: center;">Agenda una demo</h2>
+    <p class="lead" style="text-align: center;">Déjanos tus datos y te contactamos.</p>
+    <form id="demoForm">
       <div>
         <label for="nombre">Nombre</label>
-        <input id="nombre" name="nombre" required placeholder="Tu nombre" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px">
+        <input id="nombre" name="nombre" required placeholder="Tu nombre">
       </div>
       <div>
         <label for="email">Correo</label>
-        <input id="email" name="email" type="email" required placeholder="tunombre@correo.com" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px">
+        <input id="email" name="email" type="email" required placeholder="tunombre@correo.com">
       </div>
       <div>
         <label for="telefono">Teléfono</label>
-        <input id="telefono" name="telefono" placeholder="+502 xxxx xxxx" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px">
+        <input id="telefono" name="telefono" placeholder="+502 xxxx xxxx">
       </div>
       <div>
         <label for="mensaje">Mensaje</label>
-        <textarea id="mensaje" name="mensaje" rows="4" placeholder="Cuéntanos de tu proyecto" style="width:100%;padding:10px;border:1px solid #e2e8f0;border-radius:8px"></textarea>
+        <textarea id="mensaje" name="mensaje" placeholder="Cuéntanos de tu proyecto"></textarea>
       </div>
-      <div style="display:flex;gap:12px;flex-wrap:wrap">
-        <button class="btn" type="submit">Enviar</button>
-        <button id="btnWhats" type="button" class="btn secondary">Escribir por WhatsApp</button>
+      <div class="form-actions">
+        <button type="submit">
+          <i class="fas fa-paper-plane"></i> Enviar
+        </button>
+        <button id="btnWhats" type="button">
+          <i class="fab fa-whatsapp"></i> WhatsApp
+        </button>
       </div>
       <p id="demoMsg" style="margin:6px 0 0 0;color:#2d7c80;display:none">Gracias, recibimos tu solicitud.</p>
     </form>
@@ -356,6 +432,52 @@
     </div>
   </footer>
 
-  <script src="js/app.js"></script>
+  <!-- Scripts optimizados -->
+  <script>
+    // Critical inline script para theme y performance
+    document.documentElement.style.setProperty('--initial-load', 'true');
+    
+    // Preload critical resources
+    function preloadResource(href, as, type) {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.href = href;
+      link.as = as;
+      if (type) link.type = type;
+      document.head.appendChild(link);
+    }
+    
+    // Lazy load non-critical CSS
+    function loadCSS(href) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = href;
+      document.head.appendChild(link);
+    }
+    
+    // Enhanced image lazy loading for older browsers
+    if ('IntersectionObserver' in window) {
+      document.documentElement.classList.add('intersection-observer');
+    }
+  </script>
+  
+  <script src="js/init.js"></script>
+  <script src="js/app.js" defer></script>
+  <script src="js/image-enhancer.js" defer></script>
+  <script src="js/icon-toggle.js" defer></script>
+  <script src="js/image-status-checker.js" defer></script>
+  <script src="js/form-enhancements.js" defer></script>
+  <script src="js/form-improvements.js" defer></script>
+  <script src="js/chatbot-ai.js"></script></script>
+  
+  <!-- Service Worker for caching (optional) -->
+  <script>
+    if ('serviceWorker' in navigator && location.protocol === 'https:') {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .catch(err => console.log('SW registration failed'));
+      });
+    }
+  </script>
 </body>
 </html>
