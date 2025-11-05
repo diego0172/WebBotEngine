@@ -1,0 +1,349 @@
+/* CSS específico para Chatbot Móvil - WebBotEngine */
+
+/* Variables para móviles */
+:root {
+  --mobile-padding: 16px;
+  --mobile-input-height: 56px;
+  --mobile-border-radius: 25px;
+  --mobile-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --keyboard-transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Mejoras generales para móviles */
+@media (max-width: 768px) {
+  /* Prevenir zoom en inputs en iOS */
+  input, textarea, select {
+    font-size: 16px !important;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+  }
+  
+  /* Mejorar área táctil para botones */
+  button, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    touch-action: manipulation;
+  }
+}
+
+/* Estilos específicos para chatbot en móviles pequeños */
+@media (max-width: 480px) {
+  /* Chatbot container */
+  #ai-chatbot {
+    bottom: 10px !important;
+    left: 5px !important;
+    right: 5px !important;
+  }
+  
+  /* Burbuja del chat - Optimizada para móviles */
+  #chat-bubble {
+    width: 60px !important;
+    height: 60px !important;
+    box-shadow: 0 4px 20px rgba(14, 165, 233, 0.4) !important;
+    transition: var(--mobile-transition) !important;
+  }
+  
+  #chat-bubble:active {
+    transform: scale(0.95) !important;
+  }
+  
+  /* Ventana del chat - Layout responsivo */
+  #chat-window {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 75px !important;
+    width: 100vw !important;
+    height: 75vh !important;
+    max-height: calc(100vh - 100px) !important;
+    border-radius: 20px 20px 0 0 !important;
+    transition: var(--keyboard-transition) !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+  
+  /* Header del chat - Más compacto */
+  #chat-window > div:first-child {
+    padding: 12px 16px !important;
+    min-height: 60px !important;
+  }
+  
+  /* Contenedor de mensajes - Optimizado */
+  #messages-container {
+    padding: 16px !important;
+    padding-bottom: 100px !important; /* Espacio para input */
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-behavior: smooth !important;
+  }
+  
+  /* Mensajes individuales - Mejorados */
+  .message {
+    font-size: 15px !important;
+    line-height: 1.5 !important;
+    padding: 12px 16px !important;
+    margin-bottom: 8px !important;
+    max-width: 85% !important;
+    word-wrap: break-word !important;
+    hyphens: auto !important;
+  }
+  
+  /* Container del input - Mejorado */
+  #input-container {
+    padding: 16px 20px 24px 20px !important;
+    min-height: 80px !important;
+    background: rgba(15, 23, 42, 0.98) !important;
+    backdrop-filter: blur(10px) !important;
+    border-top: 2px solid rgba(255, 255, 255, 0.1) !important;
+    gap: 16px !important;
+    position: sticky !important;
+    bottom: 0 !important;
+  }
+  
+  /* Input de texto - Optimizado para móviles */
+  #chat-input {
+    font-size: 16px !important; /* Previene zoom en iOS */
+    padding: 16px 20px !important;
+    min-height: 24px !important;
+    border-radius: var(--mobile-border-radius) !important;
+    border: 2px solid rgba(14, 165, 233, 0.3) !important;
+    background: rgba(30, 41, 59, 0.95) !important;
+    color: #f8fafc !important;
+    outline: none !important;
+    transition: var(--mobile-transition) !important;
+    box-sizing: border-box !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    -webkit-border-radius: var(--mobile-border-radius) !important;
+    touch-action: manipulation !important;
+    resize: none !important;
+  }
+  
+  #chat-input:focus {
+    border-color: rgba(14, 165, 233, 0.8) !important;
+    background: rgba(30, 41, 59, 1) !important;
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15) !important;
+  }
+  
+  /* Botón enviar - Mejorado */
+  #send-button {
+    width: 52px !important;
+    height: 52px !important;
+    font-size: 20px !important;
+    border-radius: 50% !important;
+    background: linear-gradient(135deg, #0ea5e9, #8b5cf6) !important;
+    border: none !important;
+    color: white !important;
+    cursor: pointer !important;
+    transition: var(--mobile-transition) !important;
+    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3) !important;
+    flex-shrink: 0 !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+  
+  #send-button:hover,
+  #send-button:focus {
+    transform: scale(1.05) !important;
+    box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4) !important;
+  }
+  
+  #send-button:active {
+    transform: scale(0.95) !important;
+  }
+}
+
+/* Estados especiales cuando aparece el teclado */
+@media (max-width: 480px) {
+  /* Clase aplicada cuando el teclado está abierto */
+  .keyboard-open #chat-window {
+    height: calc(100vh - 60px) !important;
+    bottom: 0 !important;
+    border-radius: 8px 8px 0 0 !important;
+    transition: var(--keyboard-transition) !important;
+  }
+  
+  .keyboard-open #input-container {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 100001 !important;
+    background: rgba(15, 23, 42, 1) !important;
+    backdrop-filter: blur(15px) !important;
+    border-top: 2px solid rgba(14, 165, 233, 0.2) !important;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3) !important;
+  }
+  
+  .keyboard-open #messages-container {
+    padding-bottom: 120px !important;
+  }
+  
+  /* Input cuando tiene focus */
+  .input-focused #chat-input {
+    border-color: rgba(14, 165, 233, 0.9) !important;
+    background: rgba(30, 41, 59, 1) !important;
+    box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.2) !important;
+  }
+}
+
+/* Manejo de orientación landscape en móviles */
+@media (max-width: 768px) and (orientation: landscape) {
+  #chat-window {
+    height: 85vh !important;
+    max-height: calc(100vh - 60px) !important;
+  }
+  
+  /* Para pantallas muy pequeñas en landscape */
+  @media (max-height: 450px) {
+    #chat-window {
+      height: calc(100vh - 80px) !important;
+      bottom: 0 !important;
+      border-radius: 8px 8px 0 0 !important;
+    }
+    
+    #input-container {
+      padding: 10px 16px 12px 16px !important;
+      min-height: 60px !important;
+    }
+    
+    .message {
+      padding: 10px 14px !important;
+      font-size: 14px !important;
+    }
+  }
+}
+
+/* Detección de teclado por altura reducida */
+@media (max-height: 500px) and (max-width: 480px) {
+  #chat-window {
+    height: calc(100vh - 90px) !important;
+    bottom: 0 !important;
+    border-radius: 0 !important;
+  }
+  
+  #input-container {
+    padding: 12px 16px 16px 16px !important;
+    min-height: 70px !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 100001 !important;
+  }
+  
+  #messages-container {
+    padding-bottom: 100px !important;
+  }
+}
+
+/* Para dispositivos muy pequeños */
+@media (max-height: 400px) and (max-width: 480px) {
+  #chat-window {
+    height: calc(100vh - 70px) !important;
+    border-radius: 0 !important;
+  }
+  
+  #input-container {
+    padding: 8px 12px 10px 12px !important;
+    min-height: 60px !important;
+  }
+  
+  #chat-input {
+    padding: 12px 16px !important;
+    font-size: 15px !important;
+  }
+  
+  #send-button {
+    width: 48px !important;
+    height: 48px !important;
+    font-size: 18px !important;
+  }
+}
+
+/* Tablets pequeñas */
+@media (min-width: 481px) and (max-width: 768px) {
+  #chat-window {
+    width: 420px !important;
+    max-width: calc(100vw - 40px) !important;
+    left: 20px !important;
+    right: auto !important;
+  }
+  
+  #input-container {
+    padding: 18px 24px 24px 24px !important;
+  }
+  
+  #chat-input {
+    padding: 16px 24px !important;
+    font-size: 16px !important;
+  }
+}
+
+/* Mejoras de accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Mejoras para modo oscuro */
+@media (prefers-color-scheme: dark) {
+  #chat-input {
+    background: rgba(30, 41, 59, 0.98) !important;
+    color: #f8fafc !important;
+  }
+  
+  #input-container {
+    background: rgba(15, 23, 42, 0.99) !important;
+  }
+}
+
+/* Scrollbar personalizado para móviles */
+#messages-container::-webkit-scrollbar {
+  width: 3px !important;
+}
+
+#messages-container::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+#messages-container::-webkit-scrollbar-thumb {
+  background: rgba(14, 165, 233, 0.4) !important;
+  border-radius: 2px !important;
+}
+
+/* Animaciones suaves para transiciones */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+/* Aplicar animaciones */
+#chat-window.opening {
+  animation: slideUp 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+#chat-window.closing {
+  animation: slideDown 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}

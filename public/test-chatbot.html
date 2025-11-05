@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Directo del Chatbot</title>
+    <style>
+        body { font-family: Arial; background: #0f172a; color: white; padding: 20px; }
+        button { background: #0ea5e9; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 10px; }
+        .result { background: #1e293b; padding: 15px; border-radius: 8px; margin: 10px 0; white-space: pre-wrap; }
+        .success { border-left: 4px solid #10b981; }
+        .error { border-left: 4px solid #ef4444; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Test Directo del Chatbot IA</h1>
+    
+    <button onclick="testMessage('Hola')">Test: Hola</button>
+    <button onclick="testMessage('que precios tienen')">Test: Precios</button>
+    <button onclick="testMessage('necesito una pagina web')">Test: Página Web</button>
+    <button onclick="testMessage('quiero contactarlos')">Test: Contacto</button>
+    
+    <div id="results"></div>
+
+    <script>
+        async function testMessage(message) {
+            const resultsDiv = document.getElementById('results');
+            const timestamp = new Date().toLocaleTimeString();
+            
+            try {
+                console.log('🔍 Enviando mensaje:', message);
+                
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        conversationHistory: []
+                    })
+                });
+                
+                console.log('📡 Respuesta HTTP:', response.status);
+                const data = await response.json();
+                console.log('📄 Datos recibidos:', data);
+                
+                if (data.ok) {
+                    const resultClass = data.fallback ? 'error' : 'success';
+                    const resultType = data.fallback ? '⚠️ FALLBACK' : '🤖 IA INTELIGENTE';
+                    
+                    resultsDiv.innerHTML = `
+                        <div class="result ${resultClass}">
+                            <strong>${timestamp} - ${resultType}</strong>
+                            <strong>Mensaje:</strong> "${message}"
+                            <strong>Respuesta:</strong> ${data.message}
+                        </div>
+                    ` + resultsDiv.innerHTML;
+                } else {
+                    resultsDiv.innerHTML = `
+                        <div class="result error">
+                            <strong>${timestamp} - ERROR</strong>
+                            <strong>Mensaje:</strong> "${message}"
+                            <strong>Error:</strong> ${data.error}
+                        </div>
+                    ` + resultsDiv.innerHTML;
+                }
+                
+            } catch (error) {
+                console.error('❌ Error:', error);
+                resultsDiv.innerHTML = `
+                    <div class="result error">
+                        <strong>${timestamp} - ERROR DE CONEXIÓN</strong>
+                        <strong>Mensaje:</strong> "${message}"
+                        <strong>Error:</strong> ${error.message}
+                    </div>
+                ` + resultsDiv.innerHTML;
+            }
+        }
+        
+        // Auto-test al cargar
+        setTimeout(() => {
+            testMessage('Hola, que servicios ofrecen?');
+        }, 1000);
+    </script>
+</body>
+</html>

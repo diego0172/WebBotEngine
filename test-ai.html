@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test IA WebBotEngine</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #0f172a; color: white; }
+        .container { max-width: 600px; margin: 0 auto; }
+        button { background: #0ea5e9; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 10px 0; }
+        button:hover { background: #0284c7; }
+        .result { background: #1e293b; padding: 15px; border-radius: 8px; margin: 10px 0; }
+        .success { border-left: 4px solid #10b981; }
+        .error { border-left: 4px solid #ef4444; }
+        input { padding: 10px; width: 300px; border: 1px solid #374151; background: #1e293b; color: white; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 Test de Conexión IA - WebBotEngine</h1>
+        
+        <h3>Prueba 1: Health Check</h3>
+        <button onclick="testHealth()">🔍 Verificar Servidor</button>
+        <div id="health-result"></div>
+        
+        <h3>Prueba 2: Test IA</h3>
+        <input type="text" id="test-message" placeholder="Escribe un mensaje..." value="Hola, que servicios ofrecen?">
+        <button onclick="testAI()">🤖 Probar IA</button>
+        <div id="ai-result"></div>
+        
+        <h3>Estado de la conexión:</h3>
+        <div id="status">⏳ Esperando pruebas...</div>
+    </div>
+
+    <script>
+        async function testHealth() {
+            const resultDiv = document.getElementById('health-result');
+            const statusDiv = document.getElementById('status');
+            
+            try {
+                const response = await fetch('/health');
+                const data = await response.json();
+                
+                if (data.status === 'ok') {
+                    resultDiv.innerHTML = `<div class="result success">
+                        ✅ <strong>Servidor OK</strong><br>
+                        📊 Uptime: ${Math.round(data.uptime)} segundos<br>
+                        🕐 Timestamp: ${data.timestamp}
+                    </div>`;
+                    statusDiv.innerHTML = '✅ Servidor funcionando correctamente';
+                } else {
+                    resultDiv.innerHTML = `<div class="result error">❌ Servidor con problemas</div>`;
+                    statusDiv.innerHTML = '❌ Problemas con el servidor';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">❌ Error de conexión: ${error.message}</div>`;
+                statusDiv.innerHTML = '❌ No se puede conectar al servidor';
+            }
+        }
+
+        async function testAI() {
+            const message = document.getElementById('test-message').value;
+            const resultDiv = document.getElementById('ai-result');
+            const statusDiv = document.getElementById('status');
+            
+            if (!message.trim()) {
+                alert('Por favor escribe un mensaje');
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result">⏳ Enviando mensaje a la IA...</div>';
+            
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        conversationHistory: []
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.ok && data.message) {
+                    const aiType = data.fallback ? '⚠️ Respuesta de Fallback' : '🤖 Respuesta de IA';
+                    resultDiv.innerHTML = `<div class="result success">
+                        <strong>${aiType}</strong><br>
+                        <strong>Tu mensaje:</strong> ${message}<br>
+                        <strong>Respuesta:</strong> ${data.message}<br>
+                        <strong>Timestamp:</strong> ${data.timestamp}
+                    </div>`;
+                    
+                    if (data.fallback) {
+                        statusDiv.innerHTML = '⚠️ IA no disponible, usando respuestas básicas';
+                    } else {
+                        statusDiv.innerHTML = '🚀 IA funcionando perfectamente!';
+                    }
+                } else {
+                    resultDiv.innerHTML = `<div class="result error">❌ Error en la respuesta: ${data.error || 'Sin respuesta'}</div>`;
+                    statusDiv.innerHTML = '❌ Problemas con la IA';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">❌ Error de conexión: ${error.message}</div>`;
+                statusDiv.innerHTML = '❌ No se puede conectar con la IA';
+            }
+        }
+
+        // Auto-test al cargar la página
+        window.onload = function() {
+            setTimeout(testHealth, 500);
+        }
+    </script>
+</body>
+</html>

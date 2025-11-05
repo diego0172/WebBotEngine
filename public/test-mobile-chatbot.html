@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <title>Test Chatbot Móvil - WebBotEngine</title>
+    
+    <!-- Estilos específicos para pruebas móviles -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0a0e1a 0%, #111827 50%, #1f2937 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1 {
+            font-size: 2em;
+            margin-bottom: 1em;
+            background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+        
+        .info-card {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(14, 165, 233, 0.3);
+        }
+        
+        .test-section {
+            margin: 20px 0;
+        }
+        
+        .test-section h3 {
+            color: #0ea5e9;
+            margin-bottom: 10px;
+        }
+        
+        .test-item {
+            background: rgba(15, 23, 42, 0.9);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 10px 0;
+            border-left: 4px solid #8b5cf6;
+        }
+        
+        .device-info {
+            background: rgba(139, 92, 246, 0.1);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+        
+        .instructions {
+            background: rgba(16, 185, 129, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            margin: 20px 0;
+        }
+        
+        .instructions h4 {
+            color: #10b981;
+            margin-bottom: 10px;
+        }
+        
+        .instructions ul {
+            margin-left: 20px;
+        }
+        
+        .instructions li {
+            margin: 8px 0;
+        }
+        
+        #debug-info {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-family: monospace;
+            z-index: 99998;
+            max-width: 200px;
+            display: none;
+        }
+        
+        .debug-toggle {
+            background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-weight: 600;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 1.5em;
+            }
+            
+            .info-card {
+                padding: 16px;
+            }
+            
+            #debug-info {
+                position: fixed;
+                bottom: 100px;
+                right: 10px;
+                top: auto;
+            }
+        }
+    </style>
+    
+    <!-- Incluir los estilos del chatbot -->
+    <link rel="stylesheet" href="css/chatbot-mobile.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 Test Chatbot Móvil</h1>
+        
+        <div class="info-card">
+            <h2>Prueba de Chatbot en Dispositivos Móviles</h2>
+            <p>Esta página está diseñada para probar las mejoras del chatbot en dispositivos móviles, especialmente el manejo del teclado virtual.</p>
+        </div>
+        
+        <div class="device-info">
+            <strong>Información del Dispositivo:</strong><br>
+            <span id="device-width">Ancho: </span><br>
+            <span id="device-height">Alto: </span><br>
+            <span id="device-ratio">Ratio: </span><br>
+            <span id="device-orientation">Orientación: </span><br>
+            <span id="device-type">Tipo: </span>
+        </div>
+        
+        <div class="instructions">
+            <h4>📱 Instrucciones de Prueba:</h4>
+            <ul>
+                <li><strong>Abrir Chat:</strong> Toca el botón flotante del chatbot</li>
+                <li><strong>Probar Input:</strong> Toca en el campo de texto y escribe un mensaje</li>
+                <li><strong>Teclado Virtual:</strong> Observa cómo se ajusta el layout cuando aparece el teclado</li>
+                <li><strong>Scroll:</strong> Verifica que puedes hacer scroll suavemente en los mensajes</li>
+                <li><strong>Orientación:</strong> Rota el dispositivo para probar ambas orientaciones</li>
+                <li><strong>Teclado Cerrar:</strong> Toca fuera del input o usa el botón "Enviar" para cerrar el teclado</li>
+            </ul>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔧 Casos de Prueba:</h3>
+            
+            <div class="test-item">
+                <strong>Caso 1:</strong> Input pequeño en móviles
+                <br><em>El campo de texto debe ser lo suficientemente grande para escribir cómodamente</em>
+            </div>
+            
+            <div class="test-item">
+                <strong>Caso 2:</strong> Teclado virtual aparece
+                <br><em>El layout debe ajustarse automáticamente sin ocultar el input</em>
+            </div>
+            
+            <div class="test-item">
+                <strong>Caso 3:</strong> Scroll con teclado abierto
+                <br><em>Debe poder hacer scroll en mensajes con el teclado visible</em>
+            </div>
+            
+            <div class="test-item">
+                <strong>Caso 4:</strong> Cerrar teclado
+                <br><em>El layout debe restaurarse suavemente al estado normal</em>
+            </div>
+            
+            <div class="test-item">
+                <strong>Caso 5:</strong> Orientación landscape
+                <br><em>Debe funcionar correctamente en modo horizontal</em>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin: 30px 0;">
+            <button class="debug-toggle" onclick="toggleDebug()">Toggle Debug Info</button>
+            <button class="debug-toggle" onclick="simulateKeyboard()">Simular Teclado</button>
+        </div>
+        
+        <!-- Contenido de relleno para pruebas de scroll -->
+        <div class="info-card">
+            <h3>📄 Contenido de Prueba</h3>
+            <p>Este contenido adicional permite probar el scroll de la página mientras el chatbot está abierto.</p>
+            
+            <div style="height: 200px; background: linear-gradient(45deg, rgba(14, 165, 233, 0.1), rgba(139, 92, 246, 0.1)); border-radius: 12px; margin: 20px 0; display: flex; align-items: center; justify-content: center;">
+                <span style="font-size: 3em; opacity: 0.5;">📱</span>
+            </div>
+            
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+            
+            <div style="height: 150px; background: rgba(16, 185, 129, 0.1); border-radius: 12px; margin: 20px 0; display: flex; align-items: center; justify-content: center;">
+                <span style="color: #10b981; font-weight: bold;">Área de Prueba</span>
+            </div>
+            
+            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.</p>
+        </div>
+    </div>
+    
+    <!-- Debug info overlay -->
+    <div id="debug-info"></div>
+    
+    <!-- Scripts -->
+    <script>
+        // Información del dispositivo
+        function updateDeviceInfo() {
+            document.getElementById('device-width').textContent = `Ancho: ${window.innerWidth}px (${window.screen.width}px)`;
+            document.getElementById('device-height').textContent = `Alto: ${window.innerHeight}px (${window.screen.height}px)`;
+            document.getElementById('device-ratio').textContent = `Ratio: ${(window.innerWidth / window.innerHeight).toFixed(2)}`;
+            document.getElementById('device-orientation').textContent = `Orientación: ${window.innerHeight > window.innerWidth ? 'Portrait' : 'Landscape'}`;
+            
+            let deviceType = 'Desktop';
+            if (window.innerWidth <= 480) deviceType = 'Móvil Pequeño';
+            else if (window.innerWidth <= 768) deviceType = 'Móvil/Tablet';
+            else if (window.innerWidth <= 1024) deviceType = 'Tablet';
+            
+            document.getElementById('device-type').textContent = `Tipo: ${deviceType}`;
+        }
+        
+        // Debug info
+        function updateDebugInfo() {
+            const debugDiv = document.getElementById('debug-info');
+            if (debugDiv.style.display !== 'none') {
+                const keyboardOpen = document.body.classList.contains('keyboard-open');
+                const inputFocused = document.body.classList.contains('input-focused');
+                
+                debugDiv.innerHTML = `
+                    <strong>Debug Info:</strong><br>
+                    Viewport: ${window.innerWidth}x${window.innerHeight}<br>
+                    Teclado: ${keyboardOpen ? '🟢 Abierto' : '🔴 Cerrado'}<br>
+                    Input Focus: ${inputFocused ? '🟢 Sí' : '🔴 No'}<br>
+                    Visual Viewport: ${window.visualViewport ? window.visualViewport.height + 'px' : 'N/A'}<br>
+                    Timestamp: ${new Date().toLocaleTimeString()}
+                `;
+            }
+        }
+        
+        function toggleDebug() {
+            const debugDiv = document.getElementById('debug-info');
+            if (debugDiv.style.display === 'none') {
+                debugDiv.style.display = 'block';
+                updateDebugInfo();
+                // Actualizar cada segundo
+                debugDiv._interval = setInterval(updateDebugInfo, 1000);
+            } else {
+                debugDiv.style.display = 'none';
+                if (debugDiv._interval) {
+                    clearInterval(debugDiv._interval);
+                }
+            }
+        }
+        
+        function simulateKeyboard() {
+            document.body.classList.toggle('keyboard-open');
+            console.log('🔧 Simulación de teclado toggled');
+        }
+        
+        // Event listeners
+        window.addEventListener('resize', updateDeviceInfo);
+        window.addEventListener('orientationchange', () => {
+            setTimeout(updateDeviceInfo, 500);
+        });
+        
+        // Inicializar
+        updateDeviceInfo();
+        
+        // Log para seguimiento
+        console.log('📱 Página de prueba móvil cargada');
+        
+        // Detectar cambios de viewport para debug
+        window.addEventListener('resize', () => {
+            console.log(`📏 Viewport cambió: ${window.innerWidth}x${window.innerHeight}`);
+        });
+        
+        // Visual Viewport API si está disponible
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', () => {
+                console.log(`👁️ Visual Viewport: ${window.visualViewport.width}x${window.visualViewport.height}`);
+            });
+        }
+    </script>
+    
+    <!-- Incluir el chatbot -->
+    <script src="js/chatbot-ai.js"></script>
+</body>
+</html>
