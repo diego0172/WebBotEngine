@@ -833,6 +833,7 @@
         let productExamples = [];
         let productCounter = 0;
         let isMobile = window.innerWidth <= 768;
+        let conversationContext = null; // Para manejar el contexto de la conversación
         
         // Detectar cambio de tamaño de pantalla
         window.addEventListener('resize', () => {
@@ -980,8 +981,18 @@
             const msg = message.toLowerCase();
             const businessName = businessNameInput.value || 'nuestro negocio';
             
+            // Verificar si estamos en un contexto de reserva
+            if (conversationContext === 'waiting_reservation_info') {
+                conversationContext = null;
+                addBotMessage(`📅 ¡Con gusto te he realizado la cita! 🎉\n\nPuedes revisar tu correo electrónico para la confirmación con todos los detalles de tu reserva.\n\n¿Hay algo más en lo que pueda ayudarte?`);
+                return;
+            }
+            
             if (msg.includes('hola') || msg.includes('buenos días') || msg.includes('buenas')) {
                 addBotMessage(`¡Hola! 👋 Bienvenido a ${businessName}. ¿En qué puedo ayudarte hoy?`);
+            } else if (msg.includes('reserva') || msg.includes('reservar') || msg.includes('cita') || msg.includes('agendar')) {
+                conversationContext = 'waiting_reservation_info';
+                addBotMessage(`📅 ¡Perfecto! Para realizar tu reserva necesito algunos datos:\n\n• ¿Para cuántas personas?\n• ¿Qué día y hora prefieres?\n• ¿Alguna solicitud especial?\n\nPor favor compárteme esta información. 😊`);
             } else if (msg.includes('precio') || msg.includes('costo') || msg.includes('cuánto')) {
                 addBotMessage(`💰 Con gusto te puedo ayudar con información de precios. ¿Sobre qué producto o servicio específico te gustaría saber?`);
             } else if (msg.includes('producto') || msg.includes('servicio') || msg.includes('menú') || msg.includes('catálogo')) {
@@ -1129,7 +1140,8 @@
                         addBotMessage(`🛍️ Contamos con una amplia variedad de productos. ¿Qué tipo de producto estás buscando específicamente? Puedo ayudarte a encontrar exactamente lo que necesitas.`);
                     }
                 } else if (option.includes('Reservar')) {
-                    addBotMessage(`📅 ¡Con gusto te he realizado la cita! 🎉\n\nPuedes revisar tu correo electrónico para la confirmación con todos los detalles de tu reserva.\n\n¿Hay algo más en lo que pueda ayudarte?`);
+                    conversationContext = 'waiting_reservation_info';
+                    addBotMessage(`📅 ¡Perfecto! Para realizar tu reserva necesito algunos datos:\n\n• ¿Para cuántas personas?\n• ¿Qué día y hora prefieres?\n• ¿Alguna solicitud especial?\n\nPor favor compárteme esta información. 😊`);
                 } else if (option.includes('Envíos')) {
                     addBotMessage(`🚚 Hacemos envíos a toda Guatemala:\n\n• Ciudad de Guatemala: Entrega el mismo día (Q25)\n• Resto del país: 2-3 días hábiles (Q35-50)\n• Envío gratis en compras mayores a Q200\n\n¿Te gustaría hacer un pedido?`);
                 } else if (option.includes('Pagos')) {
