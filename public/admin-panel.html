@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - BotEngine</title>
+    <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            color: #f8fafc;
+        }
+        
+        .header {
+            background: rgba(30, 41, 59, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid rgba(14, 165, 233, 0.3);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 2px solid;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+            border-color: transparent;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.4);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            border-color: rgba(148, 163, 184, 0.3);
+            color: #cbd5e1;
+        }
+        
+        .btn-secondary:hover {
+            border-color: #0ea5e9;
+            color: #0ea5e9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 40px;
+        }
+        
+        .section {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(14, 165, 233, 0.2);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #0ea5e9;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            color: #cbd5e1;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        
+        input[type="text"],
+        input[type="tel"],
+        input[type="email"],
+        textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid rgba(148, 163, 184, 0.2);
+            border-radius: 10px;
+            color: #f8fafc;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #0ea5e9;
+            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .save-notification {
+            position: fixed;
+            top: 100px;
+            right: 40px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+            display: none;
+            align-items: center;
+            gap: 12px;
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .price-item {
+            background: rgba(15, 23, 42, 0.6);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            margin-bottom: 15px;
+        }
+        
+        .price-item h4 {
+            color: #0ea5e9;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .container {
+                padding: 0 20px;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🤖 Panel de Administración</h1>
+        <div class="header-actions">
+            <button class="btn btn-primary" id="saveAllBtn">
+                <i class="fas fa-save"></i> Guardar Cambios
+            </button>
+            <a href="index.html" class="btn btn-secondary">
+                <i class="fas fa-eye"></i> Ver Sitio
+            </a>
+            <button class="btn btn-secondary" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </button>
+        </div>
+    </div>
+    
+    <div class="save-notification" id="saveNotification">
+        <i class="fas fa-check-circle" style="font-size: 1.5rem;"></i>
+        <span>Cambios guardados exitosamente</span>
+    </div>
+    
+    <div class="container">
+        <!-- Información Principal -->
+        <div class="section">
+            <h2 class="section-title">
+                <i class="fas fa-info-circle"></i>
+                Información Principal
+            </h2>
+            <div class="grid">
+                <div class="form-group">
+                    <label for="siteName">Nombre del Sitio</label>
+                    <input type="text" id="siteName" value="BotEngine">
+                </div>
+                <div class="form-group">
+                    <label for="siteTagline">Eslogan Principal</label>
+                    <input type="text" id="siteTagline" value="Diseño y automatización para tu negocio">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="siteDescription">Descripción</label>
+                <textarea id="siteDescription">Impulsamos tu negocio con chatbots, sitios rápidos y presencia digital efectiva.</textarea>
+            </div>
+        </div>
+        
+        <!-- Información de Contacto -->
+        <div class="section">
+            <h2 class="section-title">
+                <i class="fas fa-phone"></i>
+                Información de Contacto
+            </h2>
+            <div class="grid">
+                <div class="form-group">
+                    <label for="phone">Teléfono / WhatsApp</label>
+                    <input type="tel" id="phone" value="+502-3123-9807">
+                </div>
+                <div class="form-group">
+                    <label for="email">Correo Electrónico</label>
+                    <input type="email" id="email" value="contacto@botenginecorp.com">
+                </div>
+            </div>
+            <div class="grid">
+                <div class="form-group">
+                    <label for="instagram">Instagram</label>
+                    <input type="text" id="instagram" value="botenginecorp">
+                </div>
+                <div class="form-group">
+                    <label for="linkedin">LinkedIn</label>
+                    <input type="text" id="linkedin" value="botenginecorp">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Servicios -->
+        <div class="section">
+            <h2 class="section-title">
+                <i class="fas fa-cogs"></i>
+                Servicios
+            </h2>
+            
+            <div class="form-group">
+                <label for="service1Title">Servicio 1 - Título</label>
+                <input type="text" id="service1Title" value="Chatbots inteligentes">
+            </div>
+            <div class="form-group">
+                <label for="service1Desc">Servicio 1 - Descripción</label>
+                <textarea id="service1Desc">Automatiza respuestas en WhatsApp, Instagram y web para atender a tus clientes 24/7.</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="service2Title">Servicio 2 - Título</label>
+                <input type="text" id="service2Title" value="Diseño web moderno">
+            </div>
+            <div class="form-group">
+                <label for="service2Desc">Servicio 2 - Descripción</label>
+                <textarea id="service2Desc">Creamos sitios rápidos, seguros y optimizados para tu presencia digital.</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="service3Title">Servicio 3 - Título</label>
+                <input type="text" id="service3Title" value="Automatización de procesos">
+            </div>
+            <div class="form-group">
+                <label for="service3Desc">Servicio 3 - Descripción</label>
+                <textarea id="service3Desc">Integramos herramientas para ahorrar tiempo en agendamiento, recordatorios y seguimiento.</textarea>
+            </div>
+        </div>
+        
+        <!-- Precios -->
+        <div class="section">
+            <h2 class="section-title">
+                <i class="fas fa-dollar-sign"></i>
+                Precios
+            </h2>
+            <p style="color: #94a3b8; margin-bottom: 20px;">
+                <i class="fas fa-info-circle"></i> 
+                Edita los rangos de precios para cada categoría
+            </p>
+            
+            <div class="price-item">
+                <h4>Chatbots</h4>
+                <div class="grid">
+                    <div class="form-group">
+                        <label for="chatbotBasic">Básico</label>
+                        <input type="text" id="chatbotBasic" value="Q1,500 - Q2,500">
+                    </div>
+                    <div class="form-group">
+                        <label for="chatbotIntermediate">Intermedio</label>
+                        <input type="text" id="chatbotIntermediate" value="Q3,500 - Q5,000">
+                    </div>
+                    <div class="form-group">
+                        <label for="chatbotAdvanced">Avanzado</label>
+                        <input type="text" id="chatbotAdvanced" value="Q5,500 - Q7,000+">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="price-item">
+                <h4>Páginas Web</h4>
+                <div class="grid">
+                    <div class="form-group">
+                        <label for="webBasic">Básica</label>
+                        <input type="text" id="webBasic" value="Q1,500 - Q2,500">
+                    </div>
+                    <div class="form-group">
+                        <label for="webIntermediate">Intermedia</label>
+                        <input type="text" id="webIntermediate" value="Q3,500 - Q5,000">
+                    </div>
+                    <div class="form-group">
+                        <label for="webAdvanced">Avanzada</label>
+                        <input type="text" id="webAdvanced" value="Q6,000 - Q8,000+">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="maintenance">Mantenimiento Mensual</label>
+                <input type="text" id="maintenance" value="Q200">
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Verificar autenticación
+        const isAuthenticated = sessionStorage.getItem('adminAuthenticated');
+        const loginTime = sessionStorage.getItem('adminLoginTime');
+        
+        // Verificar si la sesión ha expirado (24 horas)
+        const twentyFourHours = 24 * 60 * 60 * 1000;
+        const sessionExpired = loginTime && (new Date().getTime() - parseInt(loginTime)) > twentyFourHours;
+        
+        if (!isAuthenticated || sessionExpired) {
+            window.location.href = 'admin-login.html';
+        }
+        
+        // Cargar datos guardados
+        function loadData() {
+            const savedData = localStorage.getItem('adminData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                Object.keys(data).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        element.value = data[key];
+                    }
+                });
+            }
+        }
+        
+        // Guardar datos
+        function saveData() {
+            const data = {};
+            const inputs = document.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                if (input.id) {
+                    data[input.id] = input.value;
+                }
+            });
+            
+            localStorage.setItem('adminData', JSON.stringify(data));
+            
+            // Mostrar notificación
+            const notification = document.getElementById('saveNotification');
+            notification.style.display = 'flex';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Event listeners
+        document.getElementById('saveAllBtn').addEventListener('click', saveData);
+        
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+                sessionStorage.removeItem('adminAuthenticated');
+                sessionStorage.removeItem('adminLoginTime');
+                window.location.href = 'admin-login.html';
+            }
+        });
+        
+        // Cargar datos al iniciar
+        loadData();
+        
+        // Auto-guardar cada 30 segundos
+        setInterval(() => {
+            const inputs = document.querySelectorAll('input, textarea');
+            let hasChanges = false;
+            
+            inputs.forEach(input => {
+                if (input.dataset.originalValue !== input.value) {
+                    hasChanges = true;
+                }
+            });
+            
+            if (hasChanges) {
+                saveData();
+            }
+        }, 30000);
+        
+        // Guardar valores originales para detectar cambios
+        window.addEventListener('load', () => {
+            const inputs = document.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                input.dataset.originalValue = input.value;
+            });
+        });
+    </script>
+</body>
+</html>

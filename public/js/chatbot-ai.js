@@ -42,7 +42,7 @@ class AIBotEngine {
                 border: 3px solid rgba(255, 255, 255, 0.3) !important;
                 animation: bounce 2s infinite ease-in-out !important;
             ">
-                <span style="font-size: 28px; color: white;">🤖</span>
+                <span style="font-size: 28px; color: white;">🎅</span>
                 <div id="notification-badge" style="
                     position: absolute !important;
                     top: -5px !important;
@@ -99,7 +99,7 @@ class AIBotEngine {
                             align-items: center;
                             justify-content: center;
                             font-size: 18px;
-                        ">🤖</div>
+                        ">🎅</div>
                         <div>
                             <h4 style="margin: 0; color: #f8fafc; font-size: 16px;">WebBot Inteligente</h4>
                             <span style="color: #10b981; font-size: 12px;">🟢 Patrones Inteligentes</span>

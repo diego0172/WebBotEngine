@@ -126,6 +126,6 @@ const formStyles = `
 `;
 
 // Inyectar estilos
-const styleSheet = document.createElement('style');
-styleSheet.textContent = formStyles;
-document.head.appendChild(styleSheet);
+const improvementsStyleSheet = document.createElement('style');
+improvementsStyleSheet.textContent = formStyles;
+document.head.appendChild(improvementsStyleSheet);

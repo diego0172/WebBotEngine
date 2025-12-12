@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demo - BotEngine Chatbot</title>
+    <title>Demo Interactiva - BotEngine Chatbot</title>
     <style>
         * {
             margin: 0;
@@ -16,134 +16,1146 @@
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
-            padding: 20px;
+            align-items: center;
             color: white;
+            padding: 20px;
         }
         
         .demo-container {
-            text-align: center;
-            max-width: 800px;
-            margin-bottom: 60px;
+            display: flex;
+            max-width: 1200px;
+            width: 100%;
+            height: 85vh;
+            max-height: 800px;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
         }
         
-        h1 {
-            font-size: 3rem;
+        /* Panel de configuración */
+        .config-panel {
+            width: 350px;
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(20px);
+            border-right: 2px solid rgba(14, 165, 233, 0.3);
+            padding: 30px 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .config-panel h2 {
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        
+        .config-panel p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+        }
+        
+        .form-group {
             margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            color: #cbd5e1;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        select, input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid rgba(148, 163, 184, 0.2);
+            border-radius: 10px;
+            color: #f8fafc;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: #0ea5e9;
+            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+        }
+        
+        .checkbox-group {
+            margin-top: 8px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .checkbox-item:hover {
+            background: rgba(14, 165, 233, 0.1);
+            border-color: rgba(14, 165, 233, 0.3);
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #0ea5e9;
+        }
+        
+        .checkbox-item label {
+            flex: 1;
+            cursor: pointer;
+            margin: 0;
+            color: #e2e8f0;
+            font-weight: normal;
+        }
+        
+        .btn-start {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn-start.mobile-mode::after {
+            content: ' y Abrir Chat';
+        }
+        
+        .btn-start:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.4);
+        }
+        
+        .btn-start:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Área del chat */
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .chat-header {
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 20px 30px;
+            border-bottom: 2px solid rgba(14, 165, 233, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .chat-header .avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .chat-header .info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .chat-header .info p {
+            color: #10b981;
+            font-size: 0.9rem;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .message {
+            max-width: 70%;
+            padding: 14px 18px;
+            border-radius: 18px;
+            animation: messageIn 0.3s ease;
+        }
+        
+        @keyframes messageIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .message.bot {
+            align-self: flex-start;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .message.user {
+            align-self: flex-end;
+            background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+        }
+        
+        .quick-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .quick-option {
+            padding: 8px 16px;
+            background: rgba(14, 165, 233, 0.15);
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            border-radius: 20px;
+            color: #0ea5e9;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .quick-option:hover {
+            background: rgba(14, 165, 233, 0.25);
+            transform: scale(1.05);
+        }
+        
+        .typing-indicator {
+            display: flex;
+            gap: 5px;
+            padding: 14px 18px;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
+            align-self: flex-start;
+            max-width: fit-content;
+        }
+        
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: #64748b;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+        
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+            30% { transform: translateY(-6px); opacity: 1; }
+        }
+        
+        .welcome-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .welcome-screen .icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        
+        .welcome-screen h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
             background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
         
-        p {
-            font-size: 1.2rem;
+        .welcome-screen p {
             color: #94a3b8;
-            margin-bottom: 30px;
+            font-size: 1.1rem;
         }
         
-        .instructions {
-            background: rgba(30, 41, 59, 0.5);
-            border: 1px solid rgba(14, 165, 233, 0.3);
+        .chat-input {
+            padding: 20px 30px;
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 2px solid rgba(14, 165, 233, 0.3);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 14px 18px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 2px solid rgba(148, 163, 184, 0.2);
+            border-radius: 25px;
+            color: #f8fafc;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .chat-input input:focus {
+            outline: none;
+            border-color: #0ea5e9;
+            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+        }
+        
+        .chat-input button {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .chat-input button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 20px rgba(14, 165, 233, 0.4);
+        }
+        
+        .chat-input button:active {
+            transform: scale(0.95);
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+            font-family: inherit;
+        }
+        
+        small {
+            font-size: 0.85rem;
+        }
+        
+        /* Sistema de Productos Mejorado */
+        #productExamplesGroup {
+            background: rgba(14, 165, 233, 0.05);
             border-radius: 16px;
-            padding: 30px;
-            margin-top: 20px;
-            text-align: left;
+            padding: 20px;
+            border: 2px solid rgba(14, 165, 233, 0.2);
         }
         
-        .instructions h2 {
+        #productExamplesGroup > label {
             color: #0ea5e9;
-            margin-bottom: 15px;
-            font-size: 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 5px;
         }
         
-        .instructions ul {
-            list-style: none;
-            margin-top: 15px;
+        #productExamplesGroup > label::before {
+            content: '🛍️';
+            font-size: 1.3rem;
         }
         
-        .instructions li {
-            margin: 10px 0;
-            padding-left: 25px;
+        #productsContainer {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        
+        #productsContainer::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        #productsContainer::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 10px;
+        }
+        
+        #productsContainer::-webkit-scrollbar-thumb {
+            background: rgba(14, 165, 233, 0.5);
+            border-radius: 10px;
+        }
+        
+        #productsContainer::-webkit-scrollbar-thumb:hover {
+            background: rgba(14, 165, 233, 0.7);
+        }
+        
+        .product-item {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%);
+            border: 2px solid rgba(14, 165, 233, 0.3);
+            border-radius: 14px;
+            padding: 18px;
             position: relative;
-            color: #cbd5e1;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease;
         }
         
-        .instructions li:before {
-            content: "✓";
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes slideOut {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+        }
+        
+        .product-item:hover {
+            border-color: rgba(14, 165, 233, 0.6);
+            box-shadow: 0 8px 25px rgba(14, 165, 233, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .product-item::before {
+            content: '';
             position: absolute;
+            top: 0;
             left: 0;
-            color: #10b981;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #0ea5e9, #8b5cf6, #0ea5e9);
+            border-radius: 14px 14px 0 0;
+            background-size: 200% 100%;
+            animation: gradientMove 3s ease infinite;
+        }
+        
+        @keyframes gradientMove {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .product-item input.product-name {
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 12px;
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            padding-left: 40px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%238b5cf6" stroke-width="2"><path d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: 12px center;
+            background-size: 20px;
+        }
+        
+        .product-item input.product-name:focus {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);
+        }
+        
+        .product-item textarea.product-desc {
+            min-height: 80px;
+            border: 2px solid rgba(14, 165, 233, 0.3);
+            padding: 12px;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+        
+        .product-item textarea.product-desc:focus {
+            border-color: #0ea5e9;
+            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15);
+        }
+        
+        .product-item .remove-product {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.4rem;
             font-weight: bold;
+            line-height: 1;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(239, 68, 68, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
-        .arrow {
-            font-size: 2rem;
-            animation: bounce 2s infinite;
-            margin-top: 30px;
+        .product-item .remove-product:hover {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            transform: scale(1.15) rotate(90deg);
+            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.5);
+        }
+        
+        .product-item .remove-product:active {
+            transform: scale(0.95) rotate(90deg);
+        }
+        
+        .btn-add-product {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.15), rgba(139, 92, 246, 0.15));
+            border: 2px dashed rgba(14, 165, 233, 0.5);
+            border-radius: 12px;
             color: #0ea5e9;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-10px);
-            }
-            60% {
-                transform: translateY(-5px);
+        .btn-add-product::before {
+            content: '+';
+            font-size: 1.4rem;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+        
+        .btn-add-product:hover {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.25), rgba(139, 92, 246, 0.25));
+            border-color: #8b5cf6;
+            color: #8b5cf6;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(139, 92, 246, 0.3);
+        }
+        
+        .btn-add-product:hover::before {
+            transform: rotate(180deg) scale(1.2);
+        }
+        
+        .btn-add-product:active {
+            transform: translateY(0);
+        }
+        
+        .product-item-count {
+            display: inline-block;
+            background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        
+        /* Botón toggle para móvil */
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.4);
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-toggle:active {
+            transform: scale(0.95);
+        }
+        
+        .mobile-back-btn {
+            display: none;
+            background: rgba(14, 165, 233, 0.2);
+            border: 2px solid rgba(14, 165, 233, 0.5);
+            color: #0ea5e9;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-back-btn:hover {
+            background: rgba(14, 165, 233, 0.3);
+        }
+        
+        @media (min-width: 769px) {
+            .mobile-back-btn {
+                display: none !important;
             }
         }
         
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
+            .mobile-back-btn {
+                display: inline-block;
+                width: 100%;
+                margin-bottom: 10px;
             }
             
-            p {
-                font-size: 1rem;
+            .chat-header .avatar,
+            .chat-header .info {
+                display: inline-flex;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
             }
             
-            .instructions {
-                padding: 20px;
+            .demo-container {
+                flex-direction: column;
+                height: 95vh;
+                max-height: none;
+                position: relative;
+            }
+            
+            .config-panel {
+                width: 100%;
+                border-right: none;
+                border-bottom: 2px solid rgba(14, 165, 233, 0.3);
+                max-height: none;
+                height: 100%;
+                transition: transform 0.3s ease;
+            }
+            
+            .chat-area {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                width: 100%;
+                height: 100%;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                z-index: 10;
+            }
+            
+            .demo-container.show-chat .config-panel {
+                transform: translateX(-100%);
+            }
+            
+            .demo-container.show-chat .chat-area {
+                transform: translateX(0);
+            }
+            
+            .mobile-toggle {
+                display: flex !important;
+            }
+            
+            .chat-header {
+                padding: 15px 20px;
             }
         }
     </style>
 </head>
 <body>
     <div class="demo-container">
-        <h1>🤖 Demo BotEngine</h1>
-        <p>Chatbot Interactivo para Ventas</p>
+        <div class="config-panel">
+            <h2>🎄 Configuración de Demo</h2>
+            <p>Personaliza tu experiencia como cliente</p>
         
-        <div class="instructions">
-            <h2>📋 Instrucciones de la Demo</h2>
-            <p>Este chatbot está diseñado para demostrar cómo automatizar conversaciones de ventas:</p>
-            <ul>
-                <li>Haz clic en el botón del chat (esquina inferior izquierda)</li>
-                <li>El bot te preguntará sobre tu tipo de negocio</li>
-                <li>Responde usando los botones o escribiendo</li>
-                <li>Recibirás recomendaciones personalizadas</li>
-                <li>Podrás solicitar cotización o contactar un agente</li>
-            </ul>
-            
-            <h2 style="margin-top: 25px;">🎯 Funcionalidades</h2>
-            <ul>
-                <li>Conversación guiada paso a paso</li>
-                <li>Botones de respuesta rápida</li>
-                <li>Recomendaciones basadas en respuestas</li>
-                <li>Botón "Chatea en vivo" funcional</li>
-                <li>Redirección a WhatsApp, teléfono o formulario</li>
-                <li>Información de precios y servicios</li>
-            </ul>
+        <div class="form-group">
+            <label for="businessType">Tu tipo de negocio:</label>
+            <select id="businessType">
+                <option value="">Selecciona...</option>
+                <option value="restaurant">🍽️ Restaurante / Cafetería</option>
+                <option value="retail">🛍️ Tienda / Retail</option>
+                <option value="ecommerce">📦 E-commerce</option>
+                <option value="services">💼 Servicios Profesionales</option>
+                <option value="health">🏥 Salud / Bienestar</option>
+                <option value="education">📚 Educación</option>
+                <option value="realestate">🏠 Bienes Raíces</option>
+                <option value="other">✨ Otro</option>
+            </select>
         </div>
         
-        <div class="arrow">↙️ Haz clic aquí abajo</div>
+        <div class="form-group">
+            <label for="businessName">Nombre de tu negocio (opcional):</label>
+            <input type="text" id="businessName" placeholder="Ej: Café Central">
+        </div>
+        
+        <div class="form-group">
+            <label>Preguntas que quieres que el bot responda:</label>
+            <div class="checkbox-group">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="q1" value="horario">
+                    <label for="q1">Horario de atención</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="q2" value="precios">
+                    <label for="q2">Precios y costos</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="q3" value="ubicacion">
+                    <label for="q3">Ubicación y direcciones</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="q4" value="productos">
+                    <label for="q4">Productos/Servicios disponibles</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="q5" value="reservas">
+                    <label for="q5">Hacer reservas/citas</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="q6" value="envios">
+                    <label for="q6">Métodos de envío/entrega</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="q7" value="pagos">
+                    <label for="q7">Formas de pago</label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group" id="productExamplesGroup" style="display: none;">
+            <label>Productos/Servicios <span class="product-item-count" id="productCount" style="display: none;">0</span></label>
+            <small style="color: #cbd5e1; display: block; margin-bottom: 15px;">✨ Agrega los productos o servicios que ofreces con su descripción</small>
+            <div id="productsContainer"></div>
+            <button type="button" class="btn-add-product" id="addProductBtn">Agregar Producto/Servicio</button>
+        </div>
+        
+        <button class="btn-start" id="startBtn" disabled>
+            🚀 Iniciar Demo como Cliente
+        </button>
     </div>
     
-    <!-- Script del chatbot -->
-    <script src="js/chatbot-ai.js"></script>
+    <div class="chat-area">
+        <div class="chat-header">
+            <button class="mobile-back-btn" id="backToConfigBtn">⬅️ Volver a Configuración</button>
+            <div class="avatar">🎅</div>
+            <div class="info">
+                <h3>BotEngine Assistant</h3>
+                <p>🟢 En línea • Demo Interactiva</p>
+            </div>
+        </div>
+        
+        <div class="chat-messages" id="chatMessages">
+            <div class="welcome-screen">
+                <div class="icon">🎁</div>
+                <h2>¡Bienvenido a la Demo!</h2>
+                <p>Configura tu negocio y las preguntas en el panel izquierdo<br>para comenzar la experiencia como cliente.</p>
+            </div>
+        </div>
+        
+        <div class="chat-input" id="chatInputArea" style="display: none;">
+            <input type="text" id="userInput" placeholder="Escribe tu mensaje...">
+            <button id="sendBtn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 2L11 13"></path>
+                    <path d="M22 2L15 22L11 13L2 9L22 2Z"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        const businessTypeSelect = document.getElementById('businessType');
+        const businessNameInput = document.getElementById('businessName');
+        const startBtn = document.getElementById('startBtn');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInputArea = document.getElementById('chatInputArea');
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const productExamplesGroup = document.getElementById('productExamplesGroup');
+        const productsContainer = document.getElementById('productsContainer');
+        const addProductBtn = document.getElementById('addProductBtn');
+        const productCountBadge = document.getElementById('productCount');
+        const q4Checkbox = document.getElementById('q4');
+        const demoContainer = document.querySelector('.demo-container');
+        const backToConfigBtn = document.getElementById('backToConfigBtn');
+        
+        let selectedQuestions = new Set();
+        let productExamples = [];
+        let productCounter = 0;
+        let isMobile = window.innerWidth <= 768;
+        
+        // Detectar cambio de tamaño de pantalla
+        window.addEventListener('resize', () => {
+            isMobile = window.innerWidth <= 768;
+            if (!isMobile) {
+                demoContainer.classList.remove('show-chat');
+            }
+        });
+        
+        // Función para mostrar chat en móvil
+        function showChatMobile() {
+            if (isMobile) {
+                demoContainer.classList.add('show-chat');
+            }
+        }
+        
+        // Función para volver a configuración en móvil
+        function showConfigMobile() {
+            if (isMobile) {
+                demoContainer.classList.remove('show-chat');
+            }
+        }
+        
+        // Botón de volver a configuración
+        backToConfigBtn.addEventListener('click', showConfigMobile);
+        
+        // Función para actualizar contador
+        function updateProductCount() {
+            const count = productsContainer.children.length;
+            if (count > 0) {
+                productCountBadge.textContent = count;
+                productCountBadge.style.display = 'inline-block';
+            } else {
+                productCountBadge.style.display = 'none';
+            }
+        }
+        
+        // Función para agregar un nuevo producto
+        function addProductField() {
+            productCounter++;
+            const productDiv = document.createElement('div');
+            productDiv.className = 'product-item';
+            productDiv.dataset.id = productCounter;
+            productDiv.innerHTML = `
+                <button type="button" class="remove-product" onclick="removeProduct(${productCounter})">×</button>
+                <input type="text" class="product-name" placeholder="🏷️ Nombre del producto/servicio" data-id="${productCounter}">
+                <textarea class="product-desc" placeholder="📝 Descripción: Precio, características, detalles importantes..." data-id="${productCounter}"></textarea>
+            `;
+            productsContainer.appendChild(productDiv);
+            updateProductCount();
+        }
+        
+        // Función para eliminar un producto
+        function removeProduct(id) {
+            const productDiv = document.querySelector(`.product-item[data-id="${id}"]`);
+            if (productDiv) {
+                productDiv.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    productDiv.remove();
+                    updateProductCount();
+                }, 280);
+            }
+        }
+        
+        // Función para recopilar todos los productos
+        function collectProducts() {
+            productExamples = [];
+            const productNames = document.querySelectorAll('.product-name');
+            productNames.forEach(input => {
+                const id = input.dataset.id;
+                const name = input.value.trim();
+                const desc = document.querySelector(`.product-desc[data-id="${id}"]`).value.trim();
+                if (name) {
+                    productExamples.push({ name, description: desc });
+                }
+            });
+        }
+        
+        // Event listener para agregar productos
+        addProductBtn.addEventListener('click', addProductField);
+        
+        // Mostrar campo de ejemplos cuando se selecciona productos/servicios
+        q4Checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                productExamplesGroup.style.display = 'block';
+                if (productsContainer.children.length === 0) {
+                    addProductField();
+                }
+            } else {
+                productExamplesGroup.style.display = 'none';
+                productsContainer.innerHTML = '';
+                productExamples = [];
+                updateProductCount();
+            }
+        });
+        
+        // Habilitar botón cuando se seleccione un tipo de negocio
+        businessTypeSelect.addEventListener('change', updateStartButton);
+        
+        // Checkboxes de preguntas
+        document.querySelectorAll('.checkbox-item input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    selectedQuestions.add(this.value);
+                } else {
+                    selectedQuestions.delete(this.value);
+                }
+                updateStartButton();
+            });
+        });
+        
+        function updateStartButton() {
+            const hasBusinessType = businessTypeSelect.value !== '';
+            const hasQuestions = selectedQuestions.size > 0;
+            startBtn.disabled = !(hasBusinessType && hasQuestions);
+        }
+        
+        // Iniciar demo
+        startBtn.addEventListener('click', startDemo);
+        
+        // Enviar mensaje
+        sendBtn.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message) return;
+            
+            addUserMessage(message);
+            userInput.value = '';
+            
+            // Responder al mensaje
+            showTyping();
+            setTimeout(() => {
+                hideTyping();
+                respondToMessage(message);
+            }, 1500);
+        }
+        
+        function respondToMessage(message) {
+            const msg = message.toLowerCase();
+            const businessName = businessNameInput.value || 'nuestro negocio';
+            
+            if (msg.includes('hola') || msg.includes('buenos días') || msg.includes('buenas')) {
+                addBotMessage(`¡Hola! 👋 Bienvenido a ${businessName}. ¿En qué puedo ayudarte hoy?`);
+            } else if (msg.includes('precio') || msg.includes('costo') || msg.includes('cuánto')) {
+                addBotMessage(`💰 Con gusto te puedo ayudar con información de precios. ¿Sobre qué producto o servicio específico te gustaría saber?`);
+            } else if (msg.includes('producto') || msg.includes('servicio') || msg.includes('menú') || msg.includes('catálogo')) {
+                if (productExamples.length > 0) {
+                    let productList = '🛍️ Tenemos estos productos/servicios:\n\n';
+                    productExamples.forEach(p => {
+                        productList += `• *${p.name}*\n`;
+                        if (p.description) {
+                            productList += `  ${p.description}\n`;
+                        }
+                        productList += '\n';
+                    });
+                    productList += '¿Te interesa alguno en particular?';
+                    addBotMessage(productList);
+                } else {
+                    addBotMessage(`🛍️ Tenemos una amplia variedad de productos y servicios. ¿Qué estás buscando específicamente?`);
+                }
+            } else if (msg.includes('horario') || msg.includes('hora') || msg.includes('abierto')) {
+                addBotMessage(`🕐 Nuestro horario es:\n\nLunes a Viernes: 9:00 AM - 6:00 PM\nSábados: 10:00 AM - 2:00 PM\nDomingos: Cerrado`);
+            } else if (msg.includes('ubicación') || msg.includes('dirección') || msg.includes('dónde')) {
+                addBotMessage(`📍 Nos ubicamos en Zona 10, Ciudad de Guatemala. ¿Te gustaría que te envíe la ubicación exacta?`);
+            } else if (msg.includes('gracias') || msg.includes('thank')) {
+                addBotMessage(`😊 ¡Con mucho gusto! ¿Hay algo más en lo que pueda ayudarte?`);
+            } else if (msg.includes('agente') || msg.includes('humano') || msg.includes('persona')) {
+                addBotMessage(`👤 Claro, te conecto con un agente. Puedes escribirnos al WhatsApp: +502-3123-9807`);
+            } else {
+                addBotMessage(`Entiendo. ¿Podrías darme más detalles sobre lo que necesitas? También puedes elegir una de las opciones rápidas que te mostré antes. 😊`);
+            }
+        }
+        
+        function startDemo() {
+            chatMessages.innerHTML = '';
+            chatInputArea.style.display = 'flex';
+            
+            const businessType = businessTypeSelect.options[businessTypeSelect.selectedIndex].text;
+            const businessName = businessNameInput.value || 'tu negocio';
+            
+            // Recopilar productos
+            collectProducts();
+            
+            // En móvil, cambiar al chat
+            showChatMobile();
+            
+            // Mensaje de bienvenida
+            setTimeout(() => addBotMessage(`¡Hola! 👋 Bienvenido a ${businessName}. Soy tu asistente virtual y estoy aquí para ayudarte. ¿En qué puedo ayudarte hoy?`), 500);
+            
+            // Opciones rápidas basadas en las preguntas seleccionadas
+            setTimeout(() => {
+                const options = [];
+                if (selectedQuestions.has('horario')) options.push('🕐 Horario');
+                if (selectedQuestions.has('precios')) options.push('💰 Precios');
+                if (selectedQuestions.has('ubicacion')) options.push('📍 Ubicación');
+                if (selectedQuestions.has('productos')) options.push('🛍️ Productos');
+                if (selectedQuestions.has('reservas')) options.push('📅 Reservar');
+                if (selectedQuestions.has('envios')) options.push('🚚 Envíos');
+                if (selectedQuestions.has('pagos')) options.push('💳 Pagos');
+                
+                addQuickOptions(options);
+                addBotMessage(`💬 También puedes escribirme directamente cualquier pregunta en el campo de abajo.`);
+            }, 1500);
+        }
+        
+        function addBotMessage(text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot';
+            messageDiv.textContent = text;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function addUserMessage(text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user';
+            messageDiv.textContent = text;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function addQuickOptions(options) {
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = 'quick-options';
+            
+            options.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'quick-option';
+                btn.textContent = option;
+                btn.onclick = () => handleQuickOption(option);
+                optionsDiv.appendChild(btn);
+            });
+            
+            chatMessages.appendChild(optionsDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function showTyping() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing-indicator';
+            typingDiv.id = 'typing';
+            typingDiv.innerHTML = '<span></span><span></span><span></span>';
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function hideTyping() {
+            const typing = document.getElementById('typing');
+            if (typing) typing.remove();
+        }
+        
+        function handleQuickOption(option) {
+            // Remover opciones
+            const quickOptions = document.querySelector('.quick-options');
+            if (quickOptions) quickOptions.remove();
+            
+            addUserMessage(option);
+            showTyping();
+            
+            setTimeout(() => {
+                hideTyping();
+                const businessName = businessNameInput.value || 'nuestro negocio';
+                const businessType = businessTypeSelect.value;
+                
+                if (option.includes('Horario')) {
+                    addBotMessage(`📅 Nuestro horario de atención es:\n\nLunes a Viernes: 9:00 AM - 6:00 PM\nSábados: 10:00 AM - 2:00 PM\nDomingos: Cerrado\n\n¿Hay algo más en lo que pueda ayudarte?`);
+                } else if (option.includes('Precios')) {
+                    if (businessType === 'restaurant') {
+                        addBotMessage(`💰 Nuestros precios promedio son:\n\n• Desayunos: Q25 - Q45\n• Almuerzos: Q45 - Q85\n• Cenas: Q55 - Q95\n• Bebidas: Q15 - Q35\n\n¿Te gustaría ver el menú completo?`);
+                    } else {
+                        addBotMessage(`💰 Tenemos diferentes planes y precios según tus necesidades. ¿Te gustaría que te envíe más información al WhatsApp o prefieres hablar con un asesor?`);
+                    }
+                } else if (option.includes('Ubicación')) {
+                    addBotMessage(`📍 Nos encontramos en:\n\nZona 10, Ciudad de Guatemala\nAv. La Reforma 12-23\n\n¿Te gustaría que te envíe la ubicación exacta por WhatsApp?`);
+                } else if (option.includes('Productos')) {
+                    if (productExamples.length > 0) {
+                        let productList = '🛍️ Estos son nuestros productos/servicios:\n\n';
+                        productExamples.forEach(p => {
+                            productList += `• *${p.name}*\n`;
+                            if (p.description) {
+                                productList += `  ${p.description}\n`;
+                            }
+                            productList += '\n';
+                        });
+                        productList += '¿Te interesa alguno en particular o quieres más información?';
+                        addBotMessage(productList);
+                    } else {
+                        addBotMessage(`🛍️ Contamos con una amplia variedad de productos. ¿Qué tipo de producto estás buscando específicamente? Puedo ayudarte a encontrar exactamente lo que necesitas.`);
+                    }
+                } else if (option.includes('Reservar')) {
+                    addBotMessage(`📅 ¡Con gusto te he realizado la cita! 🎉\n\nPuedes revisar tu correo electrónico para la confirmación con todos los detalles de tu reserva.\n\n¿Hay algo más en lo que pueda ayudarte?`);
+                } else if (option.includes('Envíos')) {
+                    addBotMessage(`🚚 Hacemos envíos a toda Guatemala:\n\n• Ciudad de Guatemala: Entrega el mismo día (Q25)\n• Resto del país: 2-3 días hábiles (Q35-50)\n• Envío gratis en compras mayores a Q200\n\n¿Te gustaría hacer un pedido?`);
+                } else if (option.includes('Pagos')) {
+                    addBotMessage(`💳 Aceptamos múltiples formas de pago:\n\n• Efectivo\n• Tarjetas de crédito/débito\n• Transferencias bancarias\n• Pago contra entrega\n\n¿Cómo prefieres pagar?`);
+                }
+                
+                // Agregar más opciones
+                setTimeout(() => {
+                    const remainingOptions = [];
+                    if (selectedQuestions.has('horario') && !option.includes('Horario')) remainingOptions.push('🕐 Horario');
+                    if (selectedQuestions.has('precios') && !option.includes('Precios')) remainingOptions.push('💰 Precios');
+                    if (selectedQuestions.has('ubicacion') && !option.includes('Ubicación')) remainingOptions.push('📍 Ubicación');
+                    if (selectedQuestions.has('productos') && !option.includes('Productos')) remainingOptions.push('🛍️ Productos');
+                    if (selectedQuestions.has('reservas') && !option.includes('Reservar')) remainingOptions.push('📅 Reservar');
+                    if (selectedQuestions.has('envios') && !option.includes('Envíos')) remainingOptions.push('🚚 Envíos');
+                    if (selectedQuestions.has('pagos') && !option.includes('Pagos')) remainingOptions.push('💳 Pagos');
+                    
+                    remainingOptions.push('👤 Hablar con un agente');
+                    
+                    if (remainingOptions.length > 0) {
+                        addQuickOptions(remainingOptions);
+                    }
+                }, 500);
+            }, 1500);
+        }
+    </script>
+    </div>
 </body>
 </html>

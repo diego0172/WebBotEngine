@@ -209,11 +209,14 @@ document.addEventListener('keydown', (e) => {
 });
 
 // Agregar estilos de animación para la notificación
-const style = document.createElement('style');
-style.textContent = `
-  @keyframes fadeInOut {
-    0%, 100% { opacity: 0; transform: translateY(-10px); }
-    10%, 90% { opacity: 1; transform: translateY(0); }
-  }
-`;
-document.head.appendChild(style);
+if (!document.getElementById('christmas-animations')) {
+    const christmasStyle = document.createElement('style');
+    christmasStyle.id = 'christmas-animations';
+    christmasStyle.textContent = `
+      @keyframes fadeInOut {
+        0%, 100% { opacity: 0; transform: translateY(-10px); }
+        10%, 90% { opacity: 1; transform: translateY(0); }
+      }
+    `;
+    document.head.appendChild(christmasStyle);
+}

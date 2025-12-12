@@ -209,6 +209,6 @@ html {
 `;
 
 // Inyectar estilos
-const styleSheet = document.createElement('style');
-styleSheet.textContent = additionalStyles;
-document.head.appendChild(styleSheet);
+const enhancementsStyleSheet = document.createElement('style');
+enhancementsStyleSheet.textContent = additionalStyles;
+document.head.appendChild(enhancementsStyleSheet);

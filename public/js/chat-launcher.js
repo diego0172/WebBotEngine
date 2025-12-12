@@ -3,76 +3,77 @@
 document.addEventListener('DOMContentLoaded', function() {
   const openChatBtn = document.getElementById('openChatBtn');
   const demoMsg = document.getElementById('demoMsg');
+  const demoForm = document.getElementById('demoForm');
   
-  if (!openChatBtn) return;
+  // Prevenir el submit del formulario
+  if (demoForm) {
+    demoForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      console.log('Form submit prevented');
+      return false;
+    });
+  }
+  
+  if (!openChatBtn) {
+    console.warn('⚠️ openChatBtn no encontrado');
+    return;
+  }
+  
+  console.log('✅ Chat launcher inicializado');
   
   openChatBtn.addEventListener('click', function(e) {
     e.preventDefault();
+    e.stopPropagation();
     
-    // Obtener datos opcionales del formulario
-    const userName = document.getElementById('userName')?.value.trim() || 'Usuario';
-    const businessType = document.getElementById('businessType')?.value || '';
+    console.log('🖱️ Click en botón de chat detectado - Abriendo nueva página');
     
-    // Guardar contexto para el chatbot
-    if (typeof sessionStorage !== 'undefined') {
-      sessionStorage.setItem('chatUserName', userName);
-      sessionStorage.setItem('chatBusinessType', businessType);
-    }
+    // Abrir la página de demo en una nueva pestaña
+    window.open('test-demo-chatbot.html', '_blank');
     
-    // Mostrar mensaje de éxito
+    // Mostrar mensaje de confirmación
     if (demoMsg) {
+      demoMsg.textContent = '✅ Demo abierta en nueva pestaña. ¡Revisa tu navegador!';
       demoMsg.style.display = 'block';
       setTimeout(() => {
         demoMsg.style.display = 'none';
       }, 5000);
     }
-    
-    // Abrir el chatbot
-    openChatbot(userName, businessType);
-    
-    // Scroll suave hacia arriba para ver el chatbot
-    setTimeout(() => {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-    }, 300);
   });
 });
 
 // Función para abrir el chatbot
 function openChatbot(userName, businessType) {
-  // Buscar el botón/toggle del chatbot
-  const chatToggle = document.querySelector('.chatbot-toggle') || 
-                     document.querySelector('.chat-toggle') ||
-                     document.querySelector('#chatbot-toggle') ||
-                     document.querySelector('.bot-toggle');
+  // Buscar el botón del nuevo chatbot (chatbot-ai.js)
+  const chatBubble = document.getElementById('chat-bubble');
+  const chatWindow = document.getElementById('chat-window');
   
-  if (chatToggle) {
-    // Si existe el toggle, hacer click en él
-    chatToggle.click();
+  if (chatBubble && chatWindow) {
+    // Si el chat no está abierto, hacer click en la burbuja
+    if (chatWindow.style.display === 'none' || !chatWindow.style.display) {
+      chatBubble.click();
+    }
     
-    // Esperar a que se abra y enviar mensaje de bienvenida personalizado
-    setTimeout(() => {
-      sendWelcomeMessage(userName, businessType);
-    }, 500);
+    // El chatbot ya tiene su propio mensaje de bienvenida
+    console.log('✅ Chatbot abierto desde formulario');
   } else {
-    // Si no hay toggle, intentar mostrar el chatbot directamente
-    const chatContainer = document.querySelector('.chatbot-container') ||
-                          document.querySelector('.chat-container') ||
-                          document.getElementById('chatbot');
+    // Fallback: buscar otros elementos del chatbot
+    const chatToggle = document.querySelector('.chatbot-toggle') || 
+                       document.querySelector('.chat-toggle') ||
+                       document.querySelector('#chatbot-toggle') ||
+                       document.querySelector('.bot-toggle');
     
-    if (chatContainer) {
-      chatContainer.style.display = 'flex';
-      chatContainer.classList.add('active', 'open');
-      
-      setTimeout(() => {
-        sendWelcomeMessage(userName, businessType);
-      }, 500);
+    if (chatToggle) {
+      chatToggle.click();
     } else {
-      // Si no existe el chatbot, mostrar alerta
-      console.warn('Chatbot no encontrado en la página');
-      alert('El chatbot se está cargando... Por favor espera un momento.');
+      console.warn('⚠️ Chatbot no encontrado. Esperando a que se cargue...');
+      // Reintentar después de un momento
+      setTimeout(() => {
+        const retryBubble = document.getElementById('chat-bubble');
+        if (retryBubble) {
+          retryBubble.click();
+          console.log('✅ Chatbot abierto (segundo intento)');
+        }
+      }, 1000);
     }
   }
 }
@@ -138,8 +139,8 @@ function sendWelcomeMessage(userName, businessType) {
 }
 
 // Agregar estilos para los mensajes de bienvenida
-const style = document.createElement('style');
-style.textContent = `
+const launcherStyle = document.createElement('style');
+launcherStyle.textContent = `
   .message {
     margin: 10px 0;
     padding: 12px 16px;
@@ -178,4 +179,4 @@ style.textContent = `
     }
   }
 `;
-document.head.appendChild(style);
+document.head.appendChild(launcherStyle);

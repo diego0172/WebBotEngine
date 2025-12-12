@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="botGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <!-- Cuerpo del robot -->
+  <circle cx="50" cy="50" r="45" fill="url(#botGradient)"/>
+  <!-- Ojos -->
+  <circle cx="38" cy="42" r="6" fill="white"/>
+  <circle cx="62" cy="42" r="6" fill="white"/>
+  <!-- Pupilas -->
+  <circle cx="38" cy="42" r="3" fill="#0f172a"/>
+  <circle cx="62" cy="42" r="3" fill="#0f172a"/>
+  <!-- Boca sonriente -->
+  <path d="M 32 58 Q 50 70 68 58" stroke="white" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <!-- Antena -->
+  <line x1="50" y1="5" x2="50" y2="15" stroke="white" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="50" cy="5" r="4" fill="#ef4444"/>
+</svg>
