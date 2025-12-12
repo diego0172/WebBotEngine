@@ -389,6 +389,7 @@ function initDemoForm(){
       showError(form.telefono, 'Ingresa un teléfono válido');
 
     function showError(input, message){
+      if (!input || !input.classList) return; // Validación para evitar error
       valid = false;
       input.classList.add('error');
       const m = document.createElement('div');

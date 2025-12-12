@@ -382,75 +382,56 @@
 
   <!-- Demo -->
   <section id="demo" class="container">
-    <h2 style="margin:0 0 8px 0; text-align: center;">🎄 Crea tu Demo Interactiva 🎅</h2>
-    <p class="lead" style="text-align: center;">Genera una demostración automática de chatbot con tu negocio y productos</p>
+    <h2 style="margin:0 0 8px 0; text-align: center;">🎄 Prueba Nuestro Chatbot 🎅</h2>
+    <p class="lead" style="text-align: center;">Chatea en vivo con nuestro asistente inteligente y descubre cómo puede ayudar a tu negocio</p>
     <form id="demoForm" style="max-width: 700px; margin: 0 auto;">
       <div>
-        <label for="businessName">
-          <i class="fas fa-store"></i> Nombre de tu Negocio
+        <label for="userName">
+          <i class="fas fa-user"></i> Tu Nombre (opcional)
         </label>
-        <input id="businessName" name="businessName" required placeholder="Ej: Café Aroma" maxlength="50">
+        <input id="userName" name="userName" placeholder="Ej: Juan Pérez" maxlength="50">
       </div>
       
       <div>
-        <label>
-          <i class="fas fa-box"></i> Productos o Servicios (3-8 items)
+        <label for="businessType">
+          <i class="fas fa-store"></i> ¿Qué tipo de negocio tienes?
         </label>
-        <div id="productsList" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px;">
-          <input type="text" class="product-input" placeholder="Producto 1" required maxlength="50">
-          <input type="text" class="product-input" placeholder="Producto 2" required maxlength="50">
-          <input type="text" class="product-input" placeholder="Producto 3" required maxlength="50">
-        </div>
-        <button type="button" id="addProductBtn" style="padding: 8px 16px; background: rgba(14, 165, 233, 0.1); border: 1px dashed rgba(14, 165, 233, 0.4); border-radius: 8px; color: #0ea5e9; cursor: pointer; width: 100%;">
-          <i class="fas fa-plus"></i> Agregar Producto
-        </button>
-      </div>
-
-      <div>
-        <label for="demoSpeed">
-          <i class="fas fa-gauge-high"></i> Velocidad de la Demo
-        </label>
-        <select id="demoSpeed" name="demoSpeed">
-          <option value="slow">Lenta (3 seg/mensaje)</option>
-          <option value="normal" selected>Normal (2 seg/mensaje)</option>
-          <option value="fast">Rápida (1 seg/mensaje)</option>
+        <select id="businessType" name="businessType">
+          <option value="">Selecciona una opción</option>
+          <option value="restaurant">Restaurante / Cafetería</option>
+          <option value="retail">Tienda / Retail</option>
+          <option value="services">Servicios Profesionales</option>
+          <option value="ecommerce">Comercio Electrónico</option>
+          <option value="health">Salud / Bienestar</option>
+          <option value="education">Educación</option>
+          <option value="other">Otro</option>
         </select>
       </div>
 
-      <div>
-        <label style="margin-bottom: 8px; display: block;">
-          <i class="fas fa-comment-dots"></i> Tipo de Consultas a Simular
-        </label>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
-          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-            <input type="checkbox" name="queryType" value="products" checked>
-            <span>Consultas de productos</span>
-          </label>
-          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-            <input type="checkbox" name="queryType" value="prices" checked>
-            <span>Preguntas de precios</span>
-          </label>
-          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-            <input type="checkbox" name="queryType" value="hours" checked>
-            <span>Horarios de atención</span>
-          </label>
-          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-            <input type="checkbox" name="queryType" value="location" checked>
-            <span>Ubicación/Delivery</span>
-          </label>
-        </div>
+      <div style="padding: 20px; background: rgba(14, 165, 233, 0.05); border-radius: 12px; border: 1px solid rgba(14, 165, 233, 0.2);">
+        <p style="margin: 0 0 10px 0; color: var(--text-secondary); font-size: 0.95em;">
+          <i class="fas fa-info-circle" style="color: var(--brand);"></i> 
+          Puedes preguntarle al chatbot sobre:
+        </p>
+        <ul style="margin: 0; padding-left: 20px; color: var(--muted); font-size: 0.9em; line-height: 1.8;">
+          <li>Servicios y características de BotEngine</li>
+          <li>Precios y planes disponibles</li>
+          <li>Cómo funciona la integración con WhatsApp</li>
+          <li>Ejemplos de chatbots para tu industria</li>
+          <li>Proceso de implementación</li>
+        </ul>
       </div>
 
       <div class="form-actions">
-        <button type="submit" style="background: linear-gradient(135deg, #d32f2f, #c62828); box-shadow: 0 0 20px rgba(211, 47, 47, 0.4);">
-          <i class="fas fa-play"></i> 🎁 Iniciar Demo
-        </button>
-        <button id="btnContact" type="button" style="background: linear-gradient(135deg, #2e7d32, #1b5e20); box-shadow: 0 0 20px rgba(46, 125, 50, 0.4);">
-          <i class="fab fa-whatsapp"></i> 🎄 Contactar Asesor
+        <button type="button" id="openChatBtn" style="background: linear-gradient(135deg, #d32f2f, #c62828); box-shadow: 0 0 20px rgba(211, 47, 47, 0.4); width: 100%;">
+          <i class="fas fa-comments"></i> 🎁 Abrir Chat Ahora
         </button>
       </div>
+      <p style="margin:12px 0 0 0; text-align: center; color: var(--muted); font-size: 0.9em;">
+        <i class="fas fa-lock"></i> Tu información es privada y segura
+      </p>
       <p id="demoMsg" style="margin:12px 0 0 0;padding:12px;background:rgba(16, 185, 129, 0.1);border-left:3px solid #10b981;border-radius:4px;display:none">
-        <i class="fas fa-check-circle"></i> 🎅 ¡Demo iniciada! Mira el chatbot en la esquina inferior izquierda ❄️
+        <i class="fas fa-check-circle"></i> 🎅 ¡Chatbot abierto! Comienza a chatear en la esquina inferior derecha ❄️
       </p>
     </form>
   </section>
@@ -515,6 +496,7 @@
   <script src="js/chatbot-ai.js"></script>
   <script src="js/demo-auto.js" defer></script>
   <script src="js/christmas.js" defer></script>
+  <script src="js/chat-launcher.js" defer></script>
   
   <!-- Service Worker for caching (optional) -->
   <script>
