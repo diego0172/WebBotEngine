@@ -339,11 +339,16 @@
       const open = state.menu.classList.toggle('is-open');
       state.menuBtn.setAttribute('aria-expanded', String(open));
     });
-    // cerrar al seleccionar un link
-    $$('.menu a', state.header).forEach(a => a.addEventListener('click', () => {
-      state.menu.classList.remove('is-open');
-      state.menuBtn.setAttribute('aria-expanded', 'false');
-    }));
+    // cerrar al seleccionar un link interno (no externos ni botones)
+    $$('.menu a', state.header).forEach(a => {
+      // Solo cerrar menú en links internos (#), no en externos o botones de acción
+      if (a.getAttribute('href')?.startsWith('#')) {
+        a.addEventListener('click', () => {
+          state.menu.classList.remove('is-open');
+          state.menuBtn.setAttribute('aria-expanded', 'false');
+        });
+      }
+    });
   }
 
  // ===== Demo form (con validación visual) =====
