@@ -381,34 +381,76 @@
 
   <!-- Demo -->
   <section id="demo" class="container">
-    <h2 style="margin:0 0 8px 0; text-align: center;">Agenda una demo</h2>
-    <p class="lead" style="text-align: center;">Déjanos tus datos y te contactamos.</p>
+    <h2 style="margin:0 0 8px 0; text-align: center;">🚀 Crea tu Demo Interactiva</h2>
+    <p class="lead" style="text-align: center;">Genera una demostración automática de chatbot con tu negocio y productos</p>
     <form id="demoForm">
       <div>
-        <label for="nombre">Nombre</label>
-        <input id="nombre" name="nombre" required placeholder="Tu nombre">
+        <label for="businessName">
+          <i class="fas fa-store"></i> Nombre de tu Negocio
+        </label>
+        <input id="businessName" name="businessName" required placeholder="Ej: Café Aroma" maxlength="50">
       </div>
+      
       <div>
-        <label for="email">Correo</label>
-        <input id="email" name="email" type="email" required placeholder="tunombre@correo.com">
+        <label>
+          <i class="fas fa-box"></i> Productos o Servicios (3-8 items)
+        </label>
+        <div id="productsList" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px;">
+          <input type="text" class="product-input" placeholder="Producto 1" required maxlength="50">
+          <input type="text" class="product-input" placeholder="Producto 2" required maxlength="50">
+          <input type="text" class="product-input" placeholder="Producto 3" required maxlength="50">
+        </div>
+        <button type="button" id="addProductBtn" style="padding: 8px 16px; background: rgba(14, 165, 233, 0.1); border: 1px dashed rgba(14, 165, 233, 0.4); border-radius: 8px; color: #0ea5e9; cursor: pointer; width: 100%;">
+          <i class="fas fa-plus"></i> Agregar Producto
+        </button>
       </div>
+
       <div>
-        <label for="telefono">Teléfono</label>
-        <input id="telefono" name="telefono" placeholder="+502 xxxx xxxx">
+        <label for="demoSpeed">
+          <i class="fas fa-gauge-high"></i> Velocidad de la Demo
+        </label>
+        <select id="demoSpeed" name="demoSpeed">
+          <option value="slow">Lenta (3 seg/mensaje)</option>
+          <option value="normal" selected>Normal (2 seg/mensaje)</option>
+          <option value="fast">Rápida (1 seg/mensaje)</option>
+        </select>
       </div>
+
       <div>
-        <label for="mensaje">Mensaje</label>
-        <textarea id="mensaje" name="mensaje" placeholder="Cuéntanos de tu proyecto"></textarea>
+        <label style="margin-bottom: 8px; display: block;">
+          <i class="fas fa-comment-dots"></i> Tipo de Consultas a Simular
+        </label>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input type="checkbox" name="queryType" value="products" checked>
+            <span>Consultas de productos</span>
+          </label>
+          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input type="checkbox" name="queryType" value="prices" checked>
+            <span>Preguntas de precios</span>
+          </label>
+          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input type="checkbox" name="queryType" value="hours" checked>
+            <span>Horarios de atención</span>
+          </label>
+          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input type="checkbox" name="queryType" value="location" checked>
+            <span>Ubicación/Delivery</span>
+          </label>
+        </div>
       </div>
+
       <div class="form-actions">
-        <button type="submit">
-          <i class="fas fa-paper-plane"></i> Enviar
+        <button type="submit" style="background: linear-gradient(135deg, #0ea5e9, #8b5cf6);">
+          <i class="fas fa-play"></i> Iniciar Demo Automática
         </button>
-        <button id="btnWhats" type="button">
-          <i class="fab fa-whatsapp"></i> WhatsApp
+        <button id="btnContact" type="button">
+          <i class="fab fa-whatsapp"></i> Contactar Asesor
         </button>
       </div>
-      <p id="demoMsg" style="margin:6px 0 0 0;color:#2d7c80;display:none">Gracias, recibimos tu solicitud.</p>
+      <p id="demoMsg" style="margin:12px 0 0 0;padding:12px;background:rgba(16, 185, 129, 0.1);border-left:3px solid #10b981;border-radius:4px;display:none">
+        <i class="fas fa-check-circle"></i> ¡Demo iniciada! Mira el chatbot en la esquina inferior izquierda
+      </p>
     </form>
   </section>
 
@@ -469,7 +511,8 @@
   <script src="js/image-status-checker.js" defer></script>
   <script src="js/form-enhancements.js" defer></script>
   <script src="js/form-improvements.js" defer></script>
-  <script src="js/chatbot-ai.js"></script></script>
+  <script src="js/chatbot-ai.js"></script>
+  <script src="js/demo-auto.js" defer></script>
   
   <!-- Service Worker for caching (optional) -->
   <script>

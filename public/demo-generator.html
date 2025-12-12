@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Demo - WebBotEngine</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="css/demo-generator.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Panel de Configuración -->
+        <div class="config-panel" id="configPanel">
+            <div class="panel-header">
+                <h1>🚀 Generador de Demo Chatbot</h1>
+                <p>Crea una demostración automática personalizada para tu negocio</p>
+            </div>
+
+            <form id="demoForm" class="demo-form">
+                <div class="form-group">
+                    <label for="businessName">
+                        <i class="fas fa-store"></i> Nombre del Negocio
+                    </label>
+                    <input 
+                        type="text" 
+                        id="businessName" 
+                        placeholder="Ej: Café Aroma" 
+                        required
+                        maxlength="50"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-box"></i> Productos o Servicios (mínimo 3, máximo 8)
+                    </label>
+                    <div class="products-list" id="productsList">
+                        <div class="product-item">
+                            <input type="text" placeholder="Producto/Servicio 1" maxlength="50" required>
+                            <button type="button" class="btn-remove" disabled>
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="product-item">
+                            <input type="text" placeholder="Producto/Servicio 2" maxlength="50" required>
+                            <button type="button" class="btn-remove" disabled>
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="product-item">
+                            <input type="text" placeholder="Producto/Servicio 3" maxlength="50" required>
+                            <button type="button" class="btn-remove" disabled>
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="button" id="addProductBtn" class="btn-add">
+                        <i class="fas fa-plus"></i> Agregar Producto/Servicio
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <label for="demoSpeed">
+                        <i class="fas fa-gauge-high"></i> Velocidad de la Demo
+                    </label>
+                    <select id="demoSpeed">
+                        <option value="slow">Lenta (3 seg/mensaje)</option>
+                        <option value="normal" selected>Normal (2 seg/mensaje)</option>
+                        <option value="fast">Rápida (1 seg/mensaje)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-comment-dots"></i> Tipo de Consultas
+                    </label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="queryType" value="products" checked>
+                            <span>Consultas de productos</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="queryType" value="prices" checked>
+                            <span>Preguntas de precios</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="queryType" value="hours" checked>
+                            <span>Horarios de atención</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="queryType" value="location" checked>
+                            <span>Ubicación/Delivery</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-play"></i> Iniciar Demo Automática
+                </button>
+            </form>
+        </div>
+
+        <!-- Preview Panel -->
+        <div class="preview-panel" id="previewPanel">
+            <div class="preview-header">
+                <h2>Vista Previa de la Demo</h2>
+                <div class="demo-controls">
+                    <button id="pauseBtn" class="btn-control" disabled>
+                        <i class="fas fa-pause"></i>
+                    </button>
+                    <button id="stopBtn" class="btn-control" disabled>
+                        <i class="fas fa-stop"></i>
+                    </button>
+                    <button id="restartBtn" class="btn-control" disabled>
+                        <i class="fas fa-rotate-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="preview-content">
+                <div class="demo-info" id="demoInfo">
+                    <i class="fas fa-info-circle"></i>
+                    <p>Configura tu negocio y productos para ver la demo en acción</p>
+                </div>
+            </div>
+
+            <div class="share-section" id="shareSection" style="display: none;">
+                <h3>Compartir Demo</h3>
+                <div class="share-link">
+                    <input type="text" id="shareLinkInput" readonly>
+                    <button id="copyLinkBtn" class="btn-copy">
+                        <i class="fas fa-copy"></i> Copiar
+                    </button>
+                </div>
+                <div class="share-buttons">
+                    <button class="btn-share whatsapp">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </button>
+                    <button class="btn-share email">
+                        <i class="fas fa-envelope"></i> Email
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chatbot Container -->
+    <div id="chatbotContainer"></div>
+
+    <!-- Scripts -->
+    <script src="js/chatbot-ai.js"></script>
+    <script src="js/demo-generator.js"></script>
+</body>
+</html>
