@@ -88,35 +88,304 @@
   filter: blur(3px);
 }
 
-/* Carrito de Santa */
+/* Carrito de Santa - Versión CSS Art Animado */
 .santa-sleigh {
   position: fixed;
   bottom: 20%;
-  left: -200px;
+  left: -300px;
   z-index: 9998;
-  animation: flySanta 30s linear infinite;
+  animation: flySanta 35s linear infinite;
   pointer-events: none;
-  font-size: 4em;
-  filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5));
+  transform-origin: center;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
 }
 
+/* Santa */
+.santa {
+  position: relative;
+  width: 60px;
+  height: 80px;
+  z-index: 2;
+}
+
+.santa-head {
+  position: absolute;
+  top: 10px;
+  left: 15px;
+  width: 35px;
+  height: 35px;
+  background: #ffd6a5;
+  border-radius: 50%;
+}
+
+.santa-hat {
+  position: absolute;
+  top: 0;
+  left: 10px;
+  width: 0;
+  height: 0;
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  border-bottom: 30px solid #c62828;
+  z-index: 3;
+}
+
+.santa-hat::after {
+  content: '';
+  position: absolute;
+  top: 28px;
+  left: -15px;
+  width: 30px;
+  height: 10px;
+  background: white;
+  border-radius: 10px;
+}
+
+.santa-hat::before {
+  content: '';
+  position: absolute;
+  top: 30px;
+  left: 0;
+  width: 15px;
+  height: 15px;
+  background: white;
+  border-radius: 50%;
+  transform: translateX(-7.5px);
+}
+
+.santa-beard {
+  position: absolute;
+  top: 30px;
+  left: 20px;
+  width: 25px;
+  height: 20px;
+  background: white;
+  border-radius: 0 0 50% 50%;
+}
+
+.santa-body {
+  position: absolute;
+  top: 45px;
+  left: 12px;
+  width: 40px;
+  height: 35px;
+  background: #c62828;
+  border-radius: 0 0 20px 20px;
+}
+
+.santa-belt {
+  position: absolute;
+  top: 55px;
+  left: 12px;
+  width: 40px;
+  height: 8px;
+  background: #333;
+}
+
+.santa-buckle {
+  position: absolute;
+  top: 54px;
+  left: 27px;
+  width: 10px;
+  height: 10px;
+  background: gold;
+  border: 2px solid #333;
+}
+
+/* Trineo */
+.sleigh {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  width: 120px;
+  height: 40px;
+}
+
+.sleigh-body {
+  position: absolute;
+  bottom: 0;
+  left: 10px;
+  width: 100px;
+  height: 30px;
+  background: linear-gradient(135deg, #8b0000, #c62828);
+  border-radius: 15px;
+  border: 3px solid #5d0000;
+}
+
+.sleigh-front {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  width: 30px;
+  height: 30px;
+  background: #8b0000;
+  border-radius: 50% 50% 0 0;
+  transform: rotate(-20deg);
+  border: 3px solid #5d0000;
+}
+
+.sleigh-runner {
+  position: absolute;
+  bottom: -10px;
+  left: 5px;
+  width: 110px;
+  height: 8px;
+  background: linear-gradient(to right, #ffd700, #ffed4e);
+  border-radius: 50px 50px 20px 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Renos */
+.reindeer {
+  position: absolute;
+  top: 35px;
+  left: -80px;
+  width: 50px;
+  height: 40px;
+  animation: reindeerRun 0.5s infinite;
+}
+
+.reindeer-body {
+  position: absolute;
+  top: 15px;
+  left: 10px;
+  width: 35px;
+  height: 20px;
+  background: #8b4513;
+  border-radius: 50%;
+}
+
+.reindeer-head {
+  position: absolute;
+  top: 5px;
+  left: 35px;
+  width: 20px;
+  height: 20px;
+  background: #8b4513;
+  border-radius: 50%;
+}
+
+.reindeer-antler-left,
+.reindeer-antler-right {
+  position: absolute;
+  top: 0;
+  width: 2px;
+  height: 12px;
+  background: #654321;
+}
+
+.reindeer-antler-left {
+  left: 38px;
+  transform: rotate(-30deg);
+}
+
+.reindeer-antler-right {
+  left: 48px;
+  transform: rotate(30deg);
+}
+
+.reindeer-nose {
+  position: absolute;
+  top: 13px;
+  left: 50px;
+  width: 8px;
+  height: 8px;
+  background: #ff0000;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #ff0000;
+  animation: noseGlow 0.5s infinite;
+}
+
+.reindeer-leg {
+  position: absolute;
+  bottom: -5px;
+  width: 3px;
+  height: 15px;
+  background: #654321;
+}
+
+.reindeer-leg:nth-child(6) { left: 15px; }
+.reindeer-leg:nth-child(7) { left: 20px; }
+.reindeer-leg:nth-child(8) { left: 30px; }
+.reindeer-leg:nth-child(9) { left: 35px; }
+
+/* Regalos en el trineo */
+.gift {
+  position: absolute;
+  bottom: 8px;
+  width: 15px;
+  height: 15px;
+  background: linear-gradient(135deg, #2e7d32, #1b5e20);
+  border: 2px solid #0d4710;
+}
+
+.gift:nth-child(1) { left: 30px; }
+.gift:nth-child(2) { left: 50px; background: linear-gradient(135deg, #d32f2f, #b71c1c); }
+.gift:nth-child(3) { left: 70px; background: linear-gradient(135deg, #1976d2, #0d47a1); }
+
+.gift::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -2px;
+  right: -2px;
+  height: 3px;
+  background: gold;
+  transform: translateY(-50%);
+}
+
+.gift::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -2px;
+  bottom: -2px;
+  width: 3px;
+  background: gold;
+  transform: translateX(-50%);
+}
+
+/* Animaciones */
 @keyframes flySanta {
   0% {
-    left: -200px;
+    left: -300px;
     transform: translateY(0) rotate(-5deg);
   }
-  25% {
-    transform: translateY(-20px) rotate(-3deg);
+  20% {
+    transform: translateY(-30px) rotate(-3deg);
   }
-  50% {
-    transform: translateY(0) rotate(-5deg);
+  40% {
+    transform: translateY(-10px) rotate(-5deg);
   }
-  75% {
-    transform: translateY(-15px) rotate(-4deg);
+  60% {
+    transform: translateY(-40px) rotate(-4deg);
+  }
+  80% {
+    transform: translateY(-15px) rotate(-5deg);
   }
   100% {
     left: 110vw;
     transform: translateY(0) rotate(-5deg);
+  }
+}
+
+@keyframes reindeerRun {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes noseGlow {
+  0%, 100% {
+    box-shadow: 0 0 10px #ff0000;
+    opacity: 1;
+  }
+  50% {
+    box-shadow: 0 0 20px #ff0000, 0 0 30px #ff0000;
+    opacity: 0.8;
   }
 }
 
@@ -295,8 +564,8 @@
 /* Responsive */
 @media (max-width: 768px) {
   .santa-sleigh {
-    font-size: 2.5em;
     bottom: 10%;
+    transform: scale(0.7);
   }
   
   .christmas-tree {
@@ -320,7 +589,7 @@
 
 @media (max-width: 480px) {
   .santa-sleigh {
-    font-size: 2em;
+    transform: scale(0.5);
   }
   
   .christmas-tree {

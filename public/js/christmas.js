@@ -27,12 +27,58 @@ function createSnowflakes() {
   }
 }
 
-// Crear carrito de Santa
+// Crear carrito de Santa con CSS Art
 function createSantaSleigh() {
+  const sleighContainer = document.createElement('div');
+  sleighContainer.className = 'santa-sleigh';
+  
+  // Crear Santa
+  const santa = document.createElement('div');
+  santa.className = 'santa';
+  santa.innerHTML = `
+    <div class="santa-hat"></div>
+    <div class="santa-head"></div>
+    <div class="santa-beard"></div>
+    <div class="santa-body"></div>
+    <div class="santa-belt"></div>
+    <div class="santa-buckle"></div>
+  `;
+  
+  // Crear trineo
   const sleigh = document.createElement('div');
-  sleigh.className = 'santa-sleigh';
-  sleigh.innerHTML = '🎅🛷';
-  document.body.appendChild(sleigh);
+  sleigh.className = 'sleigh';
+  sleigh.innerHTML = `
+    <div class="sleigh-front"></div>
+    <div class="sleigh-body">
+      <div class="gift" style="bottom: 25px; left: 20px;"></div>
+      <div class="gift" style="bottom: 25px; left: 40px;"></div>
+      <div class="gift" style="bottom: 25px; left: 60px;"></div>
+      <div class="gift" style="bottom: 10px; left: 30px;"></div>
+      <div class="gift" style="bottom: 10px; left: 50px;"></div>
+    </div>
+    <div class="sleigh-runner"></div>
+  `;
+  
+  // Crear reno
+  const reindeer = document.createElement('div');
+  reindeer.className = 'reindeer';
+  reindeer.innerHTML = `
+    <div class="reindeer-body"></div>
+    <div class="reindeer-head"></div>
+    <div class="reindeer-antler-left"></div>
+    <div class="reindeer-antler-right"></div>
+    <div class="reindeer-nose"></div>
+    <div class="reindeer-leg"></div>
+    <div class="reindeer-leg"></div>
+    <div class="reindeer-leg"></div>
+    <div class="reindeer-leg"></div>
+  `;
+  
+  sleighContainer.appendChild(reindeer);
+  sleighContainer.appendChild(sleigh);
+  sleighContainer.appendChild(santa);
+  
+  document.body.appendChild(sleighContainer);
 }
 
 // Crear árbol de Navidad con luces
