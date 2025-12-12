@@ -1,8 +1,14 @@
-// CHATBOT CON IA - WebBotEngine
+// CHATBOT DEMO PARA VENTAS - WebBotEngine
 class AIBotEngine {
     constructor() {
         this.isOpen = false;
         this.messages = [];
+        this.conversationStep = 0; // Controla el flujo de la conversación
+        this.userData = {
+            businessType: null,
+            products: null,
+            interest: null
+        };
         this.init();
     }
 
@@ -630,7 +636,14 @@ class AIBotEngine {
 
     showWelcomeMessage() {
         setTimeout(() => {
-            this.addMessage('bot', '¡Hola! 👋 Soy tu asistente de IA para WebBotEngine. Pregúntame sobre nuestros chatbots, páginas web, precios o cualquier servicio. ¿En qué puedo ayudarte?');
+            this.addMessage('bot', '¡Hola! 👋 Soy tu asistente de BotEngine. Estoy aquí para ayudarte a mejorar tu negocio con automatización.\n\n¿Me permites hacerte unas preguntas rápidas?');
+            
+            setTimeout(() => {
+                this.showQuickButtons([
+                    { text: '✅ ¡Claro, adelante!', value: 'start' },
+                    { text: '📞 Prefiero hablar con un agente', value: 'agent' }
+                ]);
+            }, 800);
         }, 1000);
     }
 
@@ -644,56 +657,239 @@ class AIBotEngine {
         this.addMessage('user', message);
         input.value = '';
 
+        // Procesar mensaje según el flujo de conversación
+        this.processUserResponse(message);
+    }
+
+    processUserResponse(message) {
         // Mostrar indicador de escritura
         this.showTyping();
 
-        try {
-            // Llamada a la IA
-            const response = await fetch('/api/chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ 
-                    message: message,
-                    conversationHistory: this.messages.slice(-10)
-                })
-            });
-
-            const data = await response.json();
-            
+        setTimeout(() => {
             this.hideTyping();
+            const msg = message.toLowerCase();
 
-            if (data.ok && data.message) {
-                this.addMessage('bot', data.message);
-            } else {
-                // Fallback si falla la IA
-                this.addMessage('bot', this.getFallbackResponse(message));
+            // Manejar solicitud de agente en cualquier momento
+            if (msg.includes('agente') || msg.includes('humano') || msg.includes('persona') || msg.includes('vivo')) {
+                this.contactAgent();
+                return;
             }
 
-        } catch (error) {
-            console.error('Error IA:', error);
-            this.hideTyping();
-            this.addMessage('bot', this.getFallbackResponse(message));
-        }
+            // Flujo de conversación
+            switch(this.conversationStep) {
+                case 0: // Mensaje inicial
+                    if (msg.includes('claro') || msg.includes('sí') || msg.includes('si') || msg.includes('adelante') || msg.includes('start')) {
+                        this.askBusinessType();
+                    } else if (msg.includes('agent')) {
+                        this.contactAgent();
+                    } else {
+                        this.askBusinessType(); // Por defecto continúa
+                    }
+                    break;
+
+                case 1: // Pregunta tipo de negocio
+                    this.userData.businessType = message;
+                    this.askProducts();
+                    break;
+
+                case 2: // Pregunta productos/servicios
+                    this.userData.products = message;
+                    this.askInterest();
+                    break;
+
+                case 3: // Pregunta interés
+                    this.userData.interest = message;
+                    this.showRecommendation();
+                    break;
+
+                case 4: // Después de recomendación
+                    if (msg.includes('sí') || msg.includes('si') || msg.includes('cotiza') || msg.includes('contacto')) {
+                        this.showContactOptions();
+                    } else if (msg.includes('precio') || msg.includes('costo')) {
+                        this.showPricing();
+                    } else {
+                        this.showContactOptions();
+                    }
+                    break;
+
+                default:
+                    this.handleGeneralQuestion(message);
+            }
+        }, 1500);
     }
 
-    getFallbackResponse(message) {
+    askBusinessType() {
+        this.conversationStep = 1;
+        this.addMessage('bot', '¡Perfecto! 🎯\n\n¿Qué tipo de negocio tienes?');
+        
+        setTimeout(() => {
+            this.showQuickButtons([
+                { text: '🛍️ Tienda / E-commerce', value: 'tienda' },
+                { text: '🍽️ Restaurante', value: 'restaurante' },
+                { text: '💼 Servicios profesionales', value: 'servicios' },
+                { text: '🏥 Salud / Belleza', value: 'salud' },
+                { text: '📚 Educación', value: 'educacion' },
+                { text: '✏️ Otro', value: 'otro' }
+            ]);
+        }, 800);
+    }
+
+    askProducts() {
+        this.conversationStep = 2;
+        this.addMessage('bot', `¡Excelente! Un negocio de ${this.userData.businessType} 👏\n\n¿Qué productos o servicios ofreces? (Ejemplo: ropa, comida, consultas, etc.)`);
+    }
+
+    askInterest() {
+        this.conversationStep = 3;
+        this.addMessage('bot', `Interesante, ${this.userData.products} suena genial 🌟\n\n¿Qué te gustaría automatizar o mejorar en tu negocio?`);
+        
+        setTimeout(() => {
+            this.showQuickButtons([
+                { text: '🤖 Automatizar respuestas', value: 'chatbot' },
+                { text: '🌐 Crear sitio web', value: 'website' },
+                { text: '📦 Catálogo digital', value: 'catalog' },
+                { text: '📱 Presencia en redes', value: 'social' },
+                { text: '💬 Todo lo anterior', value: 'all' }
+            ]);
+        }, 800);
+    }
+
+    showRecommendation() {
+        this.conversationStep = 4;
+        const interest = this.userData.interest.toLowerCase();
+        
+        let recommendation = '';
+        
+        if (interest.includes('chatbot') || interest.includes('respuesta') || interest.includes('autom')) {
+            recommendation = `🤖 **Recomendación: Chatbot Inteligente**
+
+Basado en tu negocio de ${this.userData.businessType} con ${this.userData.products}, un chatbot te ayudaría a:
+
+✅ Responder preguntas frecuentes 24/7
+✅ Tomar pedidos automáticamente
+✅ Programar citas o reservas
+✅ Enviar catálogos y precios
+✅ Dar seguimiento a clientes
+
+💰 **Desde Q1,500** - Listo en 1-2 semanas`;
+        } else if (interest.includes('web') || interest.includes('sitio') || interest.includes('página')) {
+            recommendation = `🌐 **Recomendación: Sitio Web Profesional**
+
+Para tu negocio de ${this.userData.businessType} con ${this.userData.products}, un sitio web incluiría:
+
+✅ Diseño moderno y atractivo
+✅ Optimizado para celulares
+✅ Catálogo de productos
+✅ Formulario de contacto
+✅ Integración con redes sociales
+✅ SEO básico para Google
+
+💰 **Desde Q1,500** - Listo en 1-2 semanas`;
+        } else if (interest.includes('catálogo') || interest.includes('catalog')) {
+            recommendation = `📦 **Recomendación: Catálogo Digital + Chatbot**
+
+Perfecto para ${this.userData.businessType} con ${this.userData.products}:
+
+✅ Catálogo web interactivo
+✅ Chatbot que muestra productos
+✅ Botón directo a WhatsApp
+✅ Actualizaciones fáciles
+✅ Compartible en redes
+
+💰 **Desde Q2,500** - Listo en 2 semanas`;
+        } else {
+            recommendation = `🚀 **Recomendación: Paquete Completo**
+
+Para impulsar tu negocio de ${this.userData.businessType} con ${this.userData.products}:
+
+✅ Sitio web profesional
+✅ Chatbot inteligente
+✅ Catálogo de productos
+✅ Integración con redes
+✅ Sistema de mensajería
+✅ Soporte técnico incluido
+
+💰 **Desde Q4,500** - Solución integral`;
+        }
+
+        this.addMessage('bot', recommendation);
+        
+        setTimeout(() => {
+            this.addMessage('bot', '¿Te gustaría recibir una cotización personalizada? 📊');
+            setTimeout(() => {
+                this.showQuickButtons([
+                    { text: '✅ Sí, quiero cotización', value: 'cotiza' },
+                    { text: '💬 Chatea en vivo con un agente', value: 'agent' },
+                    { text: '💰 Ver todos los precios', value: 'precios' }
+                ]);
+            }, 800);
+        }, 2000);
+    }
+
+    showContactOptions() {
+        this.addMessage('bot', '¡Perfecto! 🎉\n\nPuedes contactarnos de las siguientes formas:');
+        
+        setTimeout(() => {
+            this.showQuickButtons([
+                { text: '📞 WhatsApp: +502-3123-9807', value: 'whatsapp', url: 'https://wa.me/50231239807?text=Hola,%20me%20interesa%20una%20cotización' },
+                { text: '📝 Llenar formulario', value: 'form', url: '#demo' },
+                { text: '📧 Email', value: 'email', url: 'mailto:contacto@botenginecorp.com' }
+            ]);
+        }, 1000);
+    }
+
+    showPricing() {
+        this.addMessage('bot', `💰 **Nuestros Precios**
+
+**CHATBOTS:**
+• Básico: Q1,500 - Q2,500
+• Intermedio: Q3,500 - Q5,000
+• Avanzado: Q5,500 - Q7,000+
+
+**PÁGINAS WEB:**
+• Básica: Q1,500 - Q2,500
+• Intermedia: Q3,500 - Q5,000
+• Avanzada: Q6,000 - Q8,000+
+
+**MANTENIMIENTO:**
+• Mensual: Q200
+
+¿Te interesa alguno en particular? 🎯`);
+        
+        setTimeout(() => {
+            this.showQuickButtons([
+                { text: '🤖 Chatbot', value: 'chatbot-info' },
+                { text: '🌐 Página Web', value: 'web-info' },
+                { text: '💬 Hablar con agente', value: 'agent' },
+                { text: '📞 Solicitar cotización', value: 'cotiza' }
+            ]);
+        }, 1000);
+    }
+
+    contactAgent() {
+        this.addMessage('bot', '¡Claro! Te conectaré con un agente humano 👨‍💼\n\nPuedes contactarnos directamente por:');
+        
+        setTimeout(() => {
+            this.showQuickButtons([
+                { text: '💬 WhatsApp Directo', value: 'whatsapp', url: 'https://wa.me/50231239807?text=Hola,%20necesito%20hablar%20con%20un%20agente' },
+                { text: '📞 Llamar ahora', value: 'call', url: 'tel:+50231239807' },
+                { text: '📝 Dejar mensaje', value: 'form', url: '#demo' }
+            ], true);
+        }, 1000);
+    }
+
+    handleGeneralQuestion(message) {
         const msg = message.toLowerCase();
         
         if (msg.includes('precio') || msg.includes('costo') || msg.includes('cuánto')) {
-            return '💰 Nuestros precios varían según el proyecto:\n\n• Chatbots: Q1,500 - Q7,000+\n• Páginas web: Q1,500 - Q8,000+\n• Mantenimiento: Q200\n\n¿Te interesa una cotización personalizada?';
+            this.showPricing();
+        } else if (msg.includes('servicio') || msg.includes('qué hacen') || msg.includes('ofrecen')) {
+            this.addMessage('bot', '🚀 **Nuestros Servicios:**\n\n• 🤖 Chatbots inteligentes\n• 🌐 Páginas web modernas\n• ⚙️ Automatización de procesos\n• 📱 Integración con redes sociales\n\n¿Cuál te interesa más?');
+        } else if (msg.includes('contacto') || msg.includes('teléfono') || msg.includes('email')) {
+            this.showContactOptions();
+        } else {
+            this.addMessage('bot', '🤖 Puedo ayudarte con:\n\n• Ver nuestros servicios\n• Conocer precios\n• Recibir recomendaciones\n• Contactar a un agente\n\n¿Qué te gustaría saber?');
         }
-        
-        if (msg.includes('servicio') || msg.includes('qué hacen') || msg.includes('ofrecen')) {
-            return '🚀 En WebBotEngine ofrecemos:\n\n• 🤖 Chatbots inteligentes para WhatsApp e Instagram\n• 🌐 Páginas web modernas y rápidas\n• ⚙️ Automatización de procesos\n• 🛠️ Mantenimiento de equipos\n\n¿Cuál te interesa más?';
-        }
-        
-        if (msg.includes('contacto') || msg.includes('teléfono') || msg.includes('email')) {
-            return '📞 Puedes contactarnos:\n\n• Completa nuestro formulario en esta página\n• WhatsApp: +502-3123-9807\n• Redes sociales: @botenginecorp\n\n¿Prefieres que te contactemos nosotros?';
-        }
-        
-        return '🤖 Gracias por tu mensaje. Te puedo ayudar con información sobre nuestros chatbots, páginas web, precios y servicios. ¿Hay algo específico que te gustaría saber?';
     }
 
     addMessage(sender, text) {
@@ -796,6 +992,90 @@ class AIBotEngine {
         if (typing) {
             typing.remove();
         }
+    }
+
+    showQuickButtons(buttons, isLink = false) {
+        const container = document.getElementById('messages-container');
+        const buttonsDiv = document.createElement('div');
+        
+        buttonsDiv.className = 'quick-buttons';
+        buttonsDiv.style.cssText = `
+            display: flex !important;
+            flex-wrap: wrap !important;
+            gap: 8px !important;
+            margin: 8px 0 !important;
+            padding: 0 !important;
+            max-width: 100% !important;
+        `;
+
+        buttons.forEach(button => {
+            const btn = document.createElement('button');
+            btn.textContent = button.text;
+            btn.style.cssText = `
+                background: rgba(14, 165, 233, 0.15) !important;
+                color: #0ea5e9 !important;
+                border: 1px solid rgba(14, 165, 233, 0.3) !important;
+                padding: 10px 16px !important;
+                border-radius: 20px !important;
+                cursor: pointer !important;
+                font-size: 14px !important;
+                transition: all 0.2s ease !important;
+                white-space: nowrap !important;
+                flex: 0 1 auto !important;
+                font-weight: 500 !important;
+            `;
+
+            // Hover effect
+            btn.onmouseover = () => {
+                btn.style.background = 'rgba(14, 165, 233, 0.25)';
+                btn.style.borderColor = 'rgba(14, 165, 233, 0.5)';
+                btn.style.transform = 'scale(1.05)';
+            };
+            btn.onmouseout = () => {
+                btn.style.background = 'rgba(14, 165, 233, 0.15)';
+                btn.style.borderColor = 'rgba(14, 165, 233, 0.3)';
+                btn.style.transform = 'scale(1)';
+            };
+
+            btn.onclick = () => {
+                // Si tiene URL, abrir en nueva pestaña
+                if (button.url) {
+                    if (button.url.startsWith('http') || button.url.startsWith('tel:') || button.url.startsWith('mailto:')) {
+                        window.open(button.url, '_blank');
+                        this.addMessage('user', button.text);
+                        setTimeout(() => {
+                            this.addMessage('bot', '✅ Perfecto, te he redirigido. Si tienes alguna otra pregunta, estoy aquí para ayudarte. 😊');
+                        }, 1000);
+                    } else {
+                        // Es un anchor interno
+                        this.addMessage('user', button.text);
+                        setTimeout(() => {
+                            document.querySelector(button.url)?.scrollIntoView({ behavior: 'smooth' });
+                            this.addMessage('bot', '✅ Te he llevado a la sección correspondiente. ¿Necesitas algo más? 😊');
+                        }, 500);
+                    }
+                } else {
+                    // Procesar como respuesta normal
+                    this.addMessage('user', button.text);
+                    this.processUserResponse(button.value);
+                }
+                
+                // Remover botones después de hacer clic
+                buttonsDiv.remove();
+            };
+
+            buttonsDiv.appendChild(btn);
+        });
+
+        container.appendChild(buttonsDiv);
+        
+        // Scroll al final
+        setTimeout(() => {
+            container.scrollTo({
+                top: container.scrollHeight,
+                behavior: 'smooth'
+            });
+        }, 100);
     }
 }
 

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo - BotEngine Chatbot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: white;
+        }
+        
+        .demo-container {
+            text-align: center;
+            max-width: 800px;
+            margin-bottom: 60px;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        p {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 30px;
+        }
+        
+        .instructions {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        
+        .instructions h2 {
+            color: #0ea5e9;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .instructions ul {
+            list-style: none;
+            margin-top: 15px;
+        }
+        
+        .instructions li {
+            margin: 10px 0;
+            padding-left: 25px;
+            position: relative;
+            color: #cbd5e1;
+        }
+        
+        .instructions li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+        }
+        
+        .arrow {
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+            margin-top: 30px;
+            color: #0ea5e9;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            p {
+                font-size: 1rem;
+            }
+            
+            .instructions {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1>🤖 Demo BotEngine</h1>
+        <p>Chatbot Interactivo para Ventas</p>
+        
+        <div class="instructions">
+            <h2>📋 Instrucciones de la Demo</h2>
+            <p>Este chatbot está diseñado para demostrar cómo automatizar conversaciones de ventas:</p>
+            <ul>
+                <li>Haz clic en el botón del chat (esquina inferior izquierda)</li>
+                <li>El bot te preguntará sobre tu tipo de negocio</li>
+                <li>Responde usando los botones o escribiendo</li>
+                <li>Recibirás recomendaciones personalizadas</li>
+                <li>Podrás solicitar cotización o contactar un agente</li>
+            </ul>
+            
+            <h2 style="margin-top: 25px;">🎯 Funcionalidades</h2>
+            <ul>
+                <li>Conversación guiada paso a paso</li>
+                <li>Botones de respuesta rápida</li>
+                <li>Recomendaciones basadas en respuestas</li>
+                <li>Botón "Chatea en vivo" funcional</li>
+                <li>Redirección a WhatsApp, teléfono o formulario</li>
+                <li>Información de precios y servicios</li>
+            </ul>
+        </div>
+        
+        <div class="arrow">↙️ Haz clic aquí abajo</div>
+    </div>
+    
+    <!-- Script del chatbot -->
+    <script src="js/chatbot-ai.js"></script>
+</body>
+</html>
