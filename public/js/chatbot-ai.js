@@ -29,20 +29,20 @@ class AIBotEngine {
         ">
             <!-- Burbuja del chat -->
             <div id="chat-bubble" style="
-                width: 60px !important;
-                height: 60px !important;
+                width: 64px !important;
+                height: 64px !important;
                 background: linear-gradient(135deg, #0ea5e9, #8b5cf6) !important;
                 border-radius: 50% !important;
                 display: flex !important;
                 align-items: center !important;
                 justify-content: center !important;
                 cursor: pointer !important;
-                box-shadow: 0 4px 20px rgba(14, 165, 233, 0.5) !important;
+                box-shadow: 0 6px 24px rgba(14, 165, 233, 0.6) !important;
                 transition: all 0.3s ease !important;
-                border: 2px solid rgba(255, 255, 255, 0.2) !important;
+                border: 3px solid rgba(255, 255, 255, 0.3) !important;
                 animation: bounce 2s infinite ease-in-out !important;
             ">
-                <span style="font-size: 24px; color: white;">🤖</span>
+                <span style="font-size: 28px; color: white;">🤖</span>
                 <div id="notification-badge" style="
                     position: absolute !important;
                     top: -5px !important;
@@ -64,22 +64,21 @@ class AIBotEngine {
             <!-- Ventana del chat -->
             <div id="chat-window" style="
                 position: fixed !important;
-                bottom: 80px !important;
+                bottom: 95px !important;
                 left: 20px !important;
-                right: 20px !important;
-                width: auto !important;
-                max-width: 380px !important;
-                height: 70vh !important;
-                max-height: 550px !important;
-                background: rgba(15, 23, 42, 0.95) !important;
-                border-radius: 16px !important;
-                border: 1px solid rgba(14, 165, 233, 0.3) !important;
-                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5) !important;
+                width: 380px !important;
+                max-width: calc(100vw - 40px) !important;
+                height: 550px !important;
+                max-height: calc(100vh - 130px) !important;
+                background: rgba(15, 23, 42, 0.98) !important;
+                border-radius: 20px !important;
+                border: 2px solid rgba(14, 165, 233, 0.4) !important;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(14, 165, 233, 0.1) !important;
                 display: none !important;
                 flex-direction: column !important;
                 backdrop-filter: blur(20px) !important;
                 overflow: hidden !important;
-                transition: all 0.3s ease !important;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
             ">
                 <!-- Header -->
                 <div style="
@@ -182,56 +181,69 @@ class AIBotEngine {
         <style>
             @keyframes bounce {
                 0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-                40% { transform: translateY(-3px); }
-                60% { transform: translateY(-1px); }
+                40% { transform: translateY(-4px); }
+                60% { transform: translateY(-2px); }
             }
             @keyframes pulse {
-                0% { transform: scale(1); }
-                50% { transform: scale(1.1); }
-                100% { transform: scale(1); }
+                0%, 100% { transform: scale(1); opacity: 1; }
+                50% { transform: scale(1.15); opacity: 0.9; }
             }
             
-            /* Estilos para móviles */
+            /* Hover para botón del chat */
+            #chat-bubble:hover {
+                transform: scale(1.08) !important;
+                box-shadow: 0 8px 32px rgba(14, 165, 233, 0.8) !important;
+            }
+            
+            #chat-bubble:active {
+                transform: scale(0.95) !important;
+            }
+            
+            /* Estilos para móviles - Mantener consistencia */
             @media (max-width: 480px) {
                 #ai-chatbot {
-                    bottom: 10px !important;
-                    left: 10px !important;
-                    right: 10px !important;
+                    bottom: 20px !important;
+                    left: 20px !important;
+                }
+                #chat-bubble {
+                    width: 64px !important;
+                    height: 64px !important;
+                    box-shadow: 0 8px 28px rgba(14, 165, 233, 0.7) !important;
                 }
                 #chat-window {
-                    left: 0 !important;
-                    right: 0 !important;
-                    bottom: 80px !important;
-                    height: 75vh !important;
-                    max-height: calc(100vh - 120px) !important;
-                    border-radius: 20px 20px 0 0 !important;
+                    left: 10px !important;
+                    right: 10px !important;
+                    bottom: 95px !important;
                     width: calc(100vw - 20px) !important;
-                    max-width: none !important;
+                    max-width: calc(100vw - 20px) !important;
+                    height: 500px !important;
+                    max-height: calc(100vh - 130px) !important;
+                    border-radius: 20px 20px 0 0 !important;
                     transition: height 0.3s ease, bottom 0.3s ease, border-radius 0.3s ease !important;
                 }
                 #chat-input {
-                    font-size: 16px !important; /* Evita zoom en iOS */
-                    padding: 18px 24px !important; /* Más área táctil */
-                    min-height: 28px !important;
-                    border-radius: 30px !important;
+                    font-size: 16px !important;
+                    padding: 16px 20px !important;
+                    min-height: 24px !important;
+                    border-radius: 25px !important;
                     border-width: 2px !important;
-                    box-shadow: 0 2px 12px rgba(14, 165, 233, 0.1) !important;
+                    box-shadow: 0 2px 12px rgba(14, 165, 233, 0.15) !important;
                 }
                 #input-container {
-                    padding: 20px 20px 28px 20px !important; /* Más espacio abajo */
-                    min-height: 88px !important;
+                    padding: 16px !important;
+                    min-height: 76px !important;
                     background: rgba(15, 23, 42, 1) !important;
                     border-top: 2px solid rgba(255, 255, 255, 0.1) !important;
                 }
                 #send-button {
-                    width: 56px !important;
-                    height: 56px !important;
-                    font-size: 22px !important;
-                    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3) !important;
+                    width: 48px !important;
+                    height: 48px !important;
+                    font-size: 20px !important;
+                    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4) !important;
                 }
                 #messages-container {
-                    padding: 20px 20px !important; /* Más espacio en móviles */
-                    padding-bottom: 120px !important; /* Espacio extra para el input */
+                    padding: 16px !important;
+                    padding-bottom: 100px !important;
                 }
                 
                 /* Mejorar legibilidad en móviles */
