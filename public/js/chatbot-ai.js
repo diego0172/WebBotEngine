@@ -1037,19 +1037,20 @@ Para impulsar tu negocio de ${this.userData.businessType} con ${this.userData.pr
                 font-weight: 500 !important;
             `;
 
-            // Hover effect
-            btn.onmouseover = () => {
+            // Hover effect - usando addEventListener en lugar de inline handlers
+            btn.addEventListener('mouseover', () => {
                 btn.style.background = 'rgba(14, 165, 233, 0.25)';
                 btn.style.borderColor = 'rgba(14, 165, 233, 0.5)';
                 btn.style.transform = 'scale(1.05)';
-            };
-            btn.onmouseout = () => {
+            });
+            
+            btn.addEventListener('mouseout', () => {
                 btn.style.background = 'rgba(14, 165, 233, 0.15)';
                 btn.style.borderColor = 'rgba(14, 165, 233, 0.3)';
                 btn.style.transform = 'scale(1)';
-            };
+            });
 
-            btn.onclick = () => {
+            btn.addEventListener('click', () => {
                 // Si tiene URL, abrir en nueva pestaña
                 if (button.url) {
                     if (button.url.startsWith('http') || button.url.startsWith('tel:') || button.url.startsWith('mailto:')) {
@@ -1074,7 +1075,7 @@ Para impulsar tu negocio de ${this.userData.businessType} con ${this.userData.pr
                 
                 // Remover botones después de hacer clic
                 buttonsDiv.remove();
-            };
+            });
 
             buttonsDiv.appendChild(btn);
         });

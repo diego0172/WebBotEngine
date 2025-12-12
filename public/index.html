@@ -112,11 +112,9 @@
         </div>
       </div>
       <div class="hero-bot reveal" data-from="right" style="--delay:2500ms">
-        <img class="bot" src="img/robot.png" alt="Mascota BotEngine con laptop" 
+        <img class="bot" id="hero-robot" src="img/robot.png" alt="Mascota BotEngine con laptop" 
              loading="eager" width="380" height="380" 
-             decoding="async" fetchpriority="high"
-             onload="console.log('🤖 Robot cargado correctamente')"
-             onerror="console.warn('⚠️ Error al cargar robot, usando fallback'); this.style.display='none';">
+             decoding="async" fetchpriority="high">
       </div>
     </div>
   </section>
@@ -129,7 +127,7 @@
       <article class="service">
         <div class="service-icon-wrapper">
           <img class="service-icon" src="img/serv-chatbot.png" alt="Chatbots" loading="lazy" width="100" height="100"
-               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+               data-fallback="robot">
           <div class="service-icon-fallback" style="display:none">
             <i class="fas fa-robot" aria-hidden="true"></i>
           </div>
@@ -141,7 +139,7 @@
       <article class="service">
         <div class="service-icon-wrapper">
           <img class="service-icon" src="img/serv-web.png" alt="Diseño web" loading="lazy" width="100" height="100"
-               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+               data-fallback="code">
           <div class="service-icon-fallback" style="display:none">
             <i class="fas fa-code" aria-hidden="true"></i>
           </div>
@@ -152,7 +150,7 @@
       <article class="service">
         <div class="service-icon-wrapper">
           <img class="service-icon" src="img/serv-automatizacion.png" alt="Automatización" loading="lazy" width="100" height="100"
-               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+               data-fallback="cogs">
           <div class="service-icon-fallback" style="display:none">
             <i class="fas fa-cogs" aria-hidden="true"></i>
           </div>
@@ -493,6 +491,7 @@
   <script src="js/image-status-checker.js" defer></script>
   <script src="js/form-enhancements.js" defer></script>
   <script src="js/form-improvements.js" defer></script>
+  <script src="js/image-handlers.js" defer></script>
   <script src="js/chatbot-ai.js"></script>
   <script src="js/demo-auto.js" defer></script>
   <script src="js/christmas.js" defer></script>
