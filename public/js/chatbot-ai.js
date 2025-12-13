@@ -127,40 +127,43 @@ class AIBotEngine {
 
                 <!-- Input -->
                 <div id="input-container" style="
-                    padding: 16px !important;
-                    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+                    padding: 20px !important;
+                    border-top: 2px solid rgba(14, 165, 233, 0.3) !important;
                     display: flex !important;
-                    gap: 12px !important;
-                    background: rgba(15, 23, 42, 0.98) !important;
-                    min-height: 70px !important;
+                    gap: 14px !important;
+                    background: rgba(10, 14, 26, 0.99) !important;
+                    min-height: 80px !important;
                     align-items: center !important;
                     position: sticky !important;
                     bottom: 0 !important;
+                    backdrop-filter: blur(20px) !important;
+                    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4) !important;
                 ">
                     <input id="chat-input" type="text" placeholder="Pregunta sobre servicios, precios, contacto..." style="
                         flex: 1 !important;
-                        background: rgba(30, 41, 59, 0.9) !important;
-                        border: 2px solid rgba(14, 165, 233, 0.3) !important;
-                        border-radius: 25px !important;
-                        padding: 16px 20px !important;
+                        background: rgba(30, 41, 59, 0.95) !important;
+                        border: 2px solid rgba(14, 165, 233, 0.5) !important;
+                        border-radius: 28px !important;
+                        padding: 18px 24px !important;
                         color: #f8fafc !important;
                         font-size: 16px !important;
                         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
                         outline: none !important;
-                        min-height: 24px !important;
-                        line-height: 1.4 !important;
-                        transition: all 0.3s ease !important;
+                        min-height: 28px !important;
+                        line-height: 1.5 !important;
+                        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
                         -webkit-appearance: none !important;
-                        -webkit-border-radius: 25px !important;
+                        -webkit-border-radius: 28px !important;
                         box-sizing: border-box !important;
                         touch-action: manipulation !important;
                         -webkit-user-select: text !important;
                         user-select: text !important;
+                        box-shadow: 0 2px 12px rgba(14, 165, 233, 0.15), inset 0 1px 3px rgba(0, 0, 0, 0.2) !important;
                     ">
                     <button id="send-button" style="
-                        width: 52px !important;
-                        height: 52px !important;
-                        background: linear-gradient(135deg, #0ea5e9, #8b5cf6) !important;
+                        width: 56px !important;
+                        height: 56px !important;
+                        background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
                         border: none !important;
                         border-radius: 50% !important;
                         color: white !important;
@@ -168,12 +171,14 @@ class AIBotEngine {
                         display: flex !important;
                         align-items: center !important;
                         justify-content: center !important;
-                        font-size: 20px !important;
-                        transition: all 0.3s ease !important;
+                        font-size: 24px !important;
+                        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
                         flex-shrink: 0 !important;
                         -webkit-tap-highlight-color: transparent !important;
                         touch-action: manipulation !important;
-                    ">📩</button>
+                        box-shadow: 0 4px 16px rgba(16, 185, 129, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+                        font-weight: bold !important;
+                    ">▶</button>
                 </div>
             </div>
         </div>
@@ -211,39 +216,50 @@ class AIBotEngine {
                     box-shadow: 0 8px 28px rgba(14, 165, 233, 0.7) !important;
                 }
                 #chat-window {
-                    left: 10px !important;
-                    right: 10px !important;
-                    bottom: 95px !important;
-                    width: calc(100vw - 20px) !important;
-                    max-width: calc(100vw - 20px) !important;
-                    height: 500px !important;
-                    max-height: calc(100vh - 130px) !important;
-                    border-radius: 20px 20px 0 0 !important;
+                    left: 0 !important;
+                    right: 0 !important;
+                    bottom: 90px !important;
+                    width: 100vw !important;
+                    max-width: 100vw !important;
+                    height: 520px !important;
+                    max-height: calc(100vh - 120px) !important;
+                    border-radius: 24px 24px 0 0 !important;
                     transition: height 0.3s ease, bottom 0.3s ease, border-radius 0.3s ease !important;
                 }
                 #chat-input {
                     font-size: 16px !important;
-                    padding: 16px 20px !important;
-                    min-height: 24px !important;
-                    border-radius: 25px !important;
+                    padding: 18px 24px !important;
+                    min-height: 28px !important;
+                    border-radius: 28px !important;
                     border-width: 2px !important;
-                    box-shadow: 0 2px 12px rgba(14, 165, 233, 0.15) !important;
+                    border-color: rgba(14, 165, 233, 0.6) !important;
+                    box-shadow: 0 3px 15px rgba(14, 165, 233, 0.2), inset 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+                }
+                #chat-input:focus {
+                    border-color: rgba(14, 165, 233, 0.9) !important;
+                    box-shadow: 0 4px 20px rgba(14, 165, 233, 0.3), inset 0 1px 3px rgba(0, 0, 0, 0.2), 0 0 0 4px rgba(14, 165, 233, 0.15) !important;
                 }
                 #input-container {
-                    padding: 16px !important;
-                    min-height: 76px !important;
-                    background: rgba(15, 23, 42, 1) !important;
-                    border-top: 2px solid rgba(255, 255, 255, 0.1) !important;
+                    padding: 20px !important;
+                    min-height: 90px !important;
+                    background: rgba(10, 14, 26, 1) !important;
+                    border-top: 2px solid rgba(14, 165, 233, 0.3) !important;
+                    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4) !important;
                 }
                 #send-button {
-                    width: 48px !important;
-                    height: 48px !important;
-                    font-size: 20px !important;
-                    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4) !important;
+                    width: 56px !important;
+                    height: 56px !important;
+                    font-size: 24px !important;
+                    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+                    box-shadow: 0 4px 18px rgba(16, 185, 129, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+                }
+                #send-button:hover, #send-button:active {
+                    transform: scale(1.08) !important;
+                    box-shadow: 0 6px 24px rgba(16, 185, 129, 0.6), 0 3px 12px rgba(0, 0, 0, 0.4) !important;
                 }
                 #messages-container {
-                    padding: 16px !important;
-                    padding-bottom: 100px !important;
+                    padding: 20px !important;
+                    padding-bottom: 120px !important;
                 }
                 
                 /* Mejorar legibilidad en móviles */
