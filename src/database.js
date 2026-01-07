@@ -21,18 +21,11 @@ try {
 let poolConfig;
 
 if (process.env.DATABASE_URL) {
-  // Limpiar URL: remover todos los parámetros SSL
-  let dbUrl = process.env.DATABASE_URL
-    .replace('?sslmode=require', '')
-    .replace('?sslmode=disable', '')
-    .replace('?sslmode=allow', '');
-  
-  // Asegurar que la URL base sea limpia
-  dbUrl = dbUrl.split('?')[0];
-  
+  // DigitalOcean puerto 25060 requiere SSL obligatoriamente
+  // Mantener la URL tal cual, pero deshabilitar validación de certificado
   poolConfig = {
-    connectionString: dbUrl,
-    ssl: false,
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false },
     application_name: 'botenginecorp',
     statement_timeout: 30000,
     query_timeout: 30000
