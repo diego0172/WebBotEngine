@@ -5,9 +5,20 @@ import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
+import { initializeDatabase } from "./database.js";
+import commerceRoutes from "./commerce-routes.js";
+import authRoutes from "./auth-routes.js";
 
-// Cargar variables de entorno
-dotenv.config();
+// Cargar variables de entorno - Intentar .env.production primero
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const prodEnvFile = path.join(__dirname, '..', '.env.production');
+const devEnvFile = path.join(__dirname, '..', '.env');
+
+try {
+  dotenv.config({ path: prodEnvFile });
+} catch (err) {
+  dotenv.config({ path: devEnvFile });
+}
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -125,9 +136,7 @@ function getSmartPatternResponse(message, conversationHistory = []) {
   return "🤔 Te puedo ayudar con información específica sobre:\n\n🤖 **Chatbots** (Q1,500 - Q7,000+)\n🌐 **Páginas Web** (Q1,500 - Q8,000+)\n🛠️ **Mantenimiento PC** (Q200)\n\n📞 **Contacto real:**\n💬 **WhatsApp**: +502-3123-9807\n📋 **Formulario**: Complétalo en esta página\n� **Instagram**: @botenginecorp\n\n¿Qué servicio te interesa más?";
 }
 
-// __dirname en ESM
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+
 const PUBLIC_DIR = path.join(__dirname, "..", "public");
 
 // ===== Middleware de Seguridad y Performance =====
@@ -137,6 +146,7 @@ app.use(helmet({
       defaultSrc: ["'self'"],
       styleSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com"],
       scriptSrc: ["'self'", "'unsafe-inline'"],
+      scriptSrcAttr: ["'unsafe-inline'"],
       imgSrc: ["'self'", "data:", "https:"],
       connectSrc: ["'self'"],
       fontSrc: ["'self'", "https://cdnjs.cloudflare.com"],
@@ -271,6 +281,12 @@ app.use(express.static(PUBLIC_DIR, {
   }
 }));
 
+// ===== Rutas de Autenticación =====
+app.use('/api', authRoutes);
+
+// ===== Rutas de Comercio (API) =====
+app.use('/api', commerceRoutes);
+
 // ===== Health Check =====
 app.get('/health', (req, res) => {
   res.json({ 
@@ -295,10 +311,14 @@ app.use((err, req, res, next) => {
 });
 
 // ===== Iniciar servidor =====
-const server = app.listen(port, () => {
+const server = app.listen(port, async () => {
+  // Inicializar base de datos
+  await initializeDatabase();
+  
   console.log(`🚀 WebBotEngine running on port ${port}`);
   console.log(`📁 Serving static files from: ${PUBLIC_DIR}`);
   console.log(`🌍 Environment: ${isDev ? 'development' : 'production'}`);
+  console.log(`💾 Database: PostgreSQL DigitalOcean conectada`);
 });
 
 // Graceful shutdown

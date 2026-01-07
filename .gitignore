@@ -1,14 +1,98 @@
-# dependencias y builds
+# ========================================
+# DEPENDENCIAS Y BUILDS
+# ========================================
 node_modules/
 dist/
-# entorno y credenciales
+build/
+.next/
+
+# ========================================
+# SECRETOS Y VARIABLES DE AMBIENTE
+# ========================================
 .env
-# logs y temporales
+.env.local
+.env.*.local
+.env.production
+.env.development
+.env.test
+
+# ========================================
+# LOGS Y ARCHIVOS TEMPORALES
+# ========================================
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 logs/
+.log/
 *.bak
-# PM2 y runtime
+*.tmp
+temp/
+.cache/
+
+# ========================================
+# EDITOR Y IDE
+# ========================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.env.swp
+Thumbs.db
+
+# ========================================
+# PM2 Y RUNTIME
+# ========================================
 .pids/
 dump.rdb
-# archivos locales que no usaremos
-server.js
+ecosystem-lock.json
+pm2-error.log
+
+# ========================================
+# BASES DE DATOS Y DATOS LOCALES
+# ========================================
+*.db
+*.sqlite
+*.sqlite3
+data/
+.data/
+
+# ========================================
+# ARCHIVOS DEL SISTEMA
+# ========================================
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ========================================
+# ARCHIVOS RESPALDADOS
+# ========================================
+*.bak
+*.backup
+server.js.bak*
+database.js.bak*
+
+# ========================================
+# DIRECTORIOS NO NECESARIOS
+# ========================================
+.git/
+.github/
+coverage/
+test-results/
+
+# ========================================
+# ARCHIVOS DE DOCKER
+# ========================================
+.dockerignore
+docker-compose.override.yml
+
+# ========================================
+# OTROS
+# ========================================
+.venv/
+venv/
+.env.*.swp
+*.pem
+*.key
