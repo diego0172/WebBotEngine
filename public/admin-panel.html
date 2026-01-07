@@ -464,6 +464,11 @@
                             <span style="color: #94a3b8;">Precio de Venta Recomendado:</span><br>
                             <span style="color: #0ea5e9; font-weight: bold; font-size: 1.3rem;" id="precioRecomendado">Q 0.00</span>
                         </div>
+                        <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(148, 163, 184, 0.2); background: rgba(16, 185, 129, 0.1); padding: 12px; border-radius: 4px;">
+                            <span style="color: #94a3b8; font-size: 0.85rem;">Ganancia Total (después de descuentos):</span><br>
+                            <span style="color: #22c55e; font-weight: bold; font-size: 1.2rem;" id="gananciaTotal">Q 0.00</span>
+                            <br><span style="color: #a1a1a1; font-size: 0.75rem; margin-top: 4px; display: block;">-4.83% Paggo | -Q15 Envío</span>
+                        </div>
                     </div>
                 </div>
 
@@ -1276,6 +1281,8 @@
             currentImageBase64 = null;
             document.getElementById('modalTitle').textContent = 'Nuevo Producto';
             document.getElementById('productForm').reset();
+            document.getElementById('productStatus').value = 'activo';
+            document.getElementById('productMargin').value = 50;
             document.getElementById('imagePreview').innerHTML = 'Preview de la imagen';
             document.getElementById('productModal').classList.add('active');
         });
@@ -1302,8 +1309,11 @@
                 document.getElementById('productName').value = product.name;
                 document.getElementById('productDescription').value = product.description;
                 document.getElementById('productPrice').value = product.price;
+                document.getElementById('productCost').value = product.cost || 0;
                 document.getElementById('productStock').value = product.stock;
                 document.getElementById('productCategory').value = product.category;
+                document.getElementById('productStatus').value = product.status || 'activo';
+                document.getElementById('productMargin').value = 50;
                 document.getElementById('productImage').value = '';
                 
                 // Mostrar preview si existe imagen
@@ -1342,15 +1352,22 @@
             
             const costo = parseFloat(costInput.value) || 0;
             const margen = parseInt(marginInput.value) || 50;
+            const COMISION_PAGGO = 0.0483;  // 4.83%
+            const COSTO_ENVIO = 15;         // Q15
             
             if (costo > 0) {
                 const ganancia = (costo * margen) / 100;
                 const precioVenta = costo + ganancia;
                 const margenReal = (ganancia / precioVenta * 100).toFixed(1);
                 
+                // Calcular ganancia total con descuentos
+                const comisionPaggo = precioVenta * COMISION_PAGGO;
+                const gananciaTotal = ganancia - comisionPaggo - COSTO_ENVIO;
+                
                 document.getElementById('gananciaDisplay').textContent = `Q ${ganancia.toFixed(2)}`;
                 document.getElementById('margenRealDisplay').textContent = `${margenReal}%`;
                 document.getElementById('precioRecomendado').textContent = `Q ${precioVenta.toFixed(2)}`;
+                document.getElementById('gananciaTotal').textContent = `Q ${gananciaTotal.toFixed(2)}`;
                 
                 // Auto-llenar el precio de venta
                 priceInput.value = precioVenta.toFixed(2);
