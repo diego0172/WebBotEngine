@@ -1819,71 +1819,12 @@
       try {
         let productos = await commerceAPI.getProducts();
         
-        // Si no hay productos en BD, crear los predeterminados
-        if (productos.length === 0) {
-          const productosDefault = [
-            {
-              name: 'Chatbot Premium',
-              description: 'Chatbot inteligente con IA para WhatsApp, Instagram y tu sitio web.',
-              price: 500,
-              stock: 100,
-              image: null,
-              category: 'Chatbots'
-            },
-            {
-              name: 'Sitio Web Profesional',
-              description: 'Diseño web moderno, rápido y optimizado para SEO.',
-              price: 2500,
-              stock: 50,
-              image: null,
-              category: 'Diseño Web'
-            },
-            {
-              name: 'Automatización de Procesos',
-              description: 'Automatiza flujos de trabajo y procesos empresariales.',
-              price: 1500,
-              stock: 75,
-              image: null,
-              category: 'Automatización'
-            },
-            {
-              name: 'Capacitación BotEngine',
-              description: 'Aprende a usar nuestras herramientas al máximo.',
-              price: 300,
-              stock: 200,
-              image: null,
-              category: 'Educación'
-            },
-            {
-              name: 'Plan Starter',
-              description: 'Perfecto para pequeños negocios que comienzan.',
-              price: 300,
-              stock: 150,
-              image: null,
-              category: 'Planes'
-            },
-            {
-              name: 'Plan Enterprise',
-              description: 'Solución completa para grandes empresas.',
-              price: 5000,
-              stock: 25,
-              image: null,
-              category: 'Planes'
-            }
-          ];
-
-          for (const prod of productosDefault) {
-            await commerceAPI.createProduct(prod);
-          }
-
-          productos = await commerceAPI.getProducts();
-        }
-        
         todosProductos = productos;
         filtrarYMostrarProductos();
       } catch (error) {
         console.error('Error cargando productos:', error);
-        alert('Error cargando productos. Verifica tu conexión.');
+        // Si falla la API, mostrar mensaje pero no bloquear
+        document.getElementById('productosGrid').innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #f97316; padding: 40px;">No hay productos disponibles. Verifica tu conexión.</div>';
       }
     }
 
