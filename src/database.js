@@ -3,7 +3,6 @@ const { Pool } = pkg;
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import fs from 'fs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -22,21 +21,13 @@ try {
 let poolConfig;
 
 if (process.env.DATABASE_URL) {
-  // DigitalOcean puerto 25060 requiere SSL con certificado CA
-  const caPath = '/opt/stack/web/ca-certificate.crt';
-  let ca = undefined;
-  
-  try {
-    if (fs.existsSync(caPath)) {
-      ca = fs.readFileSync(caPath, 'utf8');
-    }
-  } catch (err) {
-    console.warn('Certificado CA no encontrado, usando rejectUnauthorized: false');
-  }
+  // DigitalOcean puerto 25060 requiere SSL
+  // Remover ?sslmode=require de la URL y manejar SSL en la configuración del Pool
+  const dbUrl = process.env.DATABASE_URL.replace('?sslmode=require', '');
   
   poolConfig = {
-    connectionString: process.env.DATABASE_URL,
-    ssl: ca ? { ca, rejectUnauthorized: true } : { rejectUnauthorized: false },
+    connectionString: dbUrl,
+    ssl: { rejectUnauthorized: false },
     application_name: 'botenginecorp',
     statement_timeout: 30000,
     query_timeout: 30000
