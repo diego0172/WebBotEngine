@@ -1430,7 +1430,7 @@
         cart.push({
           id: producto.id,
           name: producto.name,
-          price: producto.price,
+          price: parseFloat(producto.price) || 0,
           cantidad: cantidad,
           image: producto.image
         });
@@ -1479,17 +1479,19 @@
       let total = 0;
       
       cart.forEach(item => {
-        const subtotal = item.price * item.cantidad;
+        const precio = parseFloat(item.price) || 0;
+        const cantidad = parseInt(item.cantidad) || 1;
+        const subtotal = precio * cantidad;
         total += subtotal;
         
         html += `
           <div class="cart-item">
             <div class="cart-item-info">
               <div class="cart-item-name">${item.name}</div>
-              <div class="cart-item-price">Q ${item.price.toFixed(2)} x ${item.cantidad} = Q ${subtotal.toFixed(2)}</div>
+              <div class="cart-item-price">Q ${precio.toFixed(2)} x ${cantidad} = Q ${subtotal.toFixed(2)}</div>
             </div>
             <div class="cart-item-actions">
-              <input type="number" class="cart-item-qty" value="${item.cantidad}" min="1" 
+              <input type="number" class="cart-item-qty" value="${cantidad}" min="1" 
                      onchange="actualizarCantidad(${item.id}, this.value)">
               <button class="cart-remove-btn" onclick="removerDelCarrito(${item.id})">
                 <i class="fas fa-trash"></i>
@@ -1768,6 +1770,12 @@
     const cartGuardado = localStorage.getItem('cart');
     if (cartGuardado) {
       cart = JSON.parse(cartGuardado);
+      // Asegurar que los precios sean números
+      cart = cart.map(item => ({
+        ...item,
+        price: parseFloat(item.price) || 0,
+        cantidad: parseInt(item.cantidad) || 1
+      }));
       actualizarCarrito();
     }
 
