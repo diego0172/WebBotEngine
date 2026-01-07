@@ -471,8 +471,7 @@
 
     .btn-carrito:active:not(:disabled) {
       transform: translateY(0);
-    }
-      transform: translateY(-2px);
+      transform: translateY(-2px);    
     }
 
     .btn-carrito:disabled {
@@ -1192,6 +1191,9 @@
     let cart = [];
     let todosProductos = [];
     let vistaActual = 'normal';
+
+    // Limpiar productos del localStorage para forzar recarga desde API
+    localStorage.removeItem('products');
 
     // Cargar productos
     async function cargarProductos() {
