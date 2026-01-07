@@ -148,7 +148,7 @@ app.use(helmet({
       scriptSrc: ["'self'", "'unsafe-inline'"],
       scriptSrcAttr: ["'unsafe-inline'"],
       imgSrc: ["'self'", "data:", "https:"],
-      connectSrc: ["'self'"],
+      connectSrc: ["'self'", "https://cdnjs.cloudflare.com"],
       fontSrc: ["'self'", "https://cdnjs.cloudflare.com"],
       objectSrc: ["'none'"],
       mediaSrc: ["'self'"],
