@@ -1,29 +1,33 @@
 import pkg from 'pg';
 const { Pool } = pkg;
-import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import fs from 'fs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// Intentar cargar .env.production primero, luego .env
-const prodEnvFile = path.join(__dirname, '..', '.env.production');
-const devEnvFile = path.join(__dirname, '..', '.env');
-
-// Cargar .env.production si existe, si no, .env
-try {
-  dotenv.config({ path: prodEnvFile });
-} catch (err) {
-  dotenv.config({ path: devEnvFile });
+// Leer .env.production directamente
+let DATABASE_URL = process.env.DATABASE_URL;
+if (!DATABASE_URL) {
+  try {
+    const envFile = path.join(__dirname, '..', '.env.production');
+    const envContent = fs.readFileSync(envFile, 'utf8');
+    const match = envContent.match(/DATABASE_URL=(.+)/);
+    if (match) {
+      DATABASE_URL = match[1].trim();
+    }
+  } catch (err) {
+    console.warn('No se pudo leer .env.production');
+  }
 }
 
-// Usar DATABASE_URL si está disponible, si no, construir desde variables individuales
+// Usar DATABASE_URL si está disponible
 let poolConfig;
 
-if (process.env.DATABASE_URL) {
+if (DATABASE_URL) {
   // DigitalOcean puerto 25060 requiere SSL
   // Remover ?sslmode=require de la URL y manejar SSL en la configuración del Pool
-  const dbUrl = process.env.DATABASE_URL.replace('?sslmode=require', '');
+  const dbUrl = DATABASE_URL.replace('?sslmode=require', '');
   
   poolConfig = {
     connectionString: dbUrl,
