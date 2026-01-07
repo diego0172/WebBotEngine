@@ -1362,22 +1362,16 @@
             
             const costo = parseFloat(costInput.value) || 0;
             const margen = parseInt(marginInput.value) || 50;
-            const COMISION_PAGGO = 0.0483;  // 4.83%
-            const COSTO_ENVIO = 15;         // Q15
             
             if (costo > 0) {
                 const ganancia = (costo * margen) / 100;
                 const precioVenta = costo + ganancia;
                 const margenReal = (ganancia / precioVenta * 100).toFixed(1);
                 
-                // Calcular ganancia total con descuentos
-                const comisionPaggo = precioVenta * COMISION_PAGGO;
-                const gananciaTotal = ganancia - comisionPaggo - COSTO_ENVIO;
-                
                 document.getElementById('gananciaDisplay').textContent = `Q ${ganancia.toFixed(2)}`;
                 document.getElementById('margenRealDisplay').textContent = `${margenReal}%`;
                 document.getElementById('precioRecomendado').textContent = `Q ${precioVenta.toFixed(2)}`;
-                document.getElementById('gananciaTotal').textContent = `Q ${gananciaTotal.toFixed(2)}`;
+                document.getElementById('gananciaTotal').textContent = `Q ${ganancia.toFixed(2)}`;
                 
                 // Auto-llenar el precio de venta
                 priceInput.value = precioVenta.toFixed(2);
