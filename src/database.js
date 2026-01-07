@@ -21,11 +21,13 @@ try {
 let poolConfig;
 
 if (process.env.DATABASE_URL) {
-  // Remover ?sslmode=require de la URL y manejarlo en la configuración
-  const dbUrl = process.env.DATABASE_URL.replace('?sslmode=require', '').replace('?sslmode=disable', '');
+  // Usar sslmode=allow que es menos estricto pero funciona con DigitalOcean
+  const dbUrl = process.env.DATABASE_URL
+    .replace('?sslmode=require', '?sslmode=allow')
+    .replace('?sslmode=disable', '?sslmode=allow');
   poolConfig = {
     connectionString: dbUrl,
-    ssl: { rejectUnauthorized: false },
+    ssl: false,
     application_name: 'botenginecorp',
     statement_timeout: 30000,
     query_timeout: 30000
