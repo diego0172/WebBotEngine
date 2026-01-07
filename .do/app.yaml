@@ -1,0 +1,31 @@
+name: botenginecorp
+services:
+- name: web
+  github:
+    repo: tu-usuario/tu-repo  # Cambiar a tu repositorio
+    branch: main
+  build_command: npm install
+  run_command: npm start
+  http_port: 3000
+  envs:
+  - key: NODE_ENV
+    value: production
+  - key: DATABASE_URL
+    scope: RUN_TIME
+    value: ${db.DATABASE_URL}
+  - key: JWT_SECRET
+    scope: RUN_TIME
+    value: tu-jwt-secret-super-seguro
+  - key: PAGGO_API_KEY
+    scope: RUN_TIME
+    value: ${db.PAGGO_API_KEY}
+  health_check:
+    http_path: /
+  http_port: 3000
+  instance_count: 1
+  instance_size_slug: basic-s
+
+databases:
+- name: db
+  engine: PG
+  version: "14"
