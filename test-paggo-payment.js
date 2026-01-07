@@ -39,7 +39,7 @@ async function testPaymentLink() {
   console.log('\n⏳ Esperando respuesta del servidor...\n');
   
   try {
-    const response = await fetch(`${BASE_URL}/api/transactions/create-link`, {
+    const response = await fetch(`${BASE_URL}/api/commerce/transactions/create-link`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

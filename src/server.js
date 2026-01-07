@@ -282,10 +282,10 @@ app.use(express.static(PUBLIC_DIR, {
 }));
 
 // ===== Rutas de Autenticación =====
-app.use('/api', authRoutes);
+app.use('/api/auth', authRoutes);
 
 // ===== Rutas de Comercio (API) =====
-app.use('/api', commerceRoutes);
+app.use('/api/commerce', commerceRoutes);
 
 // ===== Health Check =====
 app.get('/health', (req, res) => {
