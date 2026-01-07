@@ -18,19 +18,30 @@ try {
 }
 
 // Usar DATABASE_URL si está disponible, si no, construir desde variables individuales
-const poolConfig = process.env.DATABASE_URL 
-  ? {
-      connectionString: process.env.DATABASE_URL,
-      ssl: { rejectUnauthorized: false }
-    }
-  : {
-      host: process.env.DB_HOST || 'localhost',
-      port: parseInt(process.env.DB_PORT || '5432'),
-      database: process.env.DB_NAME || 'defaultdb',
-      user: process.env.DB_USER || 'postgres',
-      password: process.env.DB_PASSWORD,
-      ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false
-    };
+let poolConfig;
+
+if (process.env.DATABASE_URL) {
+  // Remover ?sslmode=require de la URL y manejarlo en la configuración
+  const dbUrl = process.env.DATABASE_URL.replace('?sslmode=require', '').replace('?sslmode=disable', '');
+  poolConfig = {
+    connectionString: dbUrl,
+    ssl: { rejectUnauthorized: false },
+    application_name: 'botenginecorp',
+    statement_timeout: 30000,
+    query_timeout: 30000
+  };
+} else {
+  poolConfig = {
+    host: process.env.DB_HOST || 'localhost',
+    port: parseInt(process.env.DB_PORT || '5432'),
+    database: process.env.DB_NAME || 'defaultdb',
+    user: process.env.DB_USER || 'postgres',
+    password: process.env.DB_PASSWORD,
+    ssl: false,
+    statement_timeout: 30000,
+    query_timeout: 30000
+  };
+}
 
 const pool = new Pool(poolConfig);
 
