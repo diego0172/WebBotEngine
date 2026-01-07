@@ -2136,7 +2136,7 @@
       }, 0);
 
       try {
-        const response = await fetch('/api/validate-coupon', {
+        const response = await fetch('/api/commerce/validate-coupon', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ code, totalAmount: subtotal })

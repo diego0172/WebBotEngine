@@ -1113,7 +1113,7 @@
         // Cargar cupones
         window.loadCoupons = async function loadCoupons() {
             try {
-                const response = await fetch('/api/coupons', {
+                const response = await fetch('/api/commerce/coupons', {
                     headers: getAuthHeaders()
                 });
                 const coupons = await response.json();
@@ -1179,7 +1179,7 @@
         // Editar cupón
         window.editarCupon = async function(couponId) {
             try {
-                const response = await fetch('/api/coupons', {
+                const response = await fetch('/api/commerce/coupons', {
                     headers: getAuthHeaders()
                 });
                 const coupons = await response.json();
@@ -1223,7 +1223,7 @@
             };
 
             try {
-                const url = editingCouponId ? `/api/coupons/${editingCouponId}` : '/api/coupons';
+                const url = editingCouponId ? `/api/commerce/coupons/${editingCouponId}` : '/api/commerce/coupons';
                 const method = editingCouponId ? 'PUT' : 'POST';
 
                 const response = await fetch(url, {
@@ -1252,7 +1252,7 @@
             if (!confirm('¿Estás seguro de que deseas eliminar este cupón?')) return;
 
             try {
-                const response = await fetch(`/api/coupons/${couponId}`, {
+                const response = await fetch(`/api/commerce/coupons/${couponId}`, {
                     method: 'DELETE',
                     headers: getAuthHeaders()
                 });
