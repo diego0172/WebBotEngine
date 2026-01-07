@@ -276,5 +276,89 @@ router.delete('/coupons/:id', verifyToken, async (req, res) => {
   }
 });
 
+// ============= PAGOS - PAGGO API =============
+
+// Crear enlace de pago con Paggo
+router.post('/transactions/create-link', async (req, res) => {
+  try {
+    const { concept, amount, customerName, email, metadata, orderId } = req.body;
+
+    // Validar datos requeridos
+    if (!concept || !amount || !email) {
+      return res.status(400).json({ error: 'Faltan datos requeridos: concept, amount, email' });
+    }
+
+    // Token de Paggo (guardar en .env en producción)
+    const PAGGO_TOKEN = process.env.PAGGO_TOKEN || 'pagg_92d7df9a00cc721f13786cd873508f6ef4e1158ab0c205fee2b5d407bf1e666f';
+
+    // Construir payload para Paggo
+    const paggoPayload = {
+      concept: concept,
+      amount: parseFloat(amount),
+      customerName: customerName || 'Cliente',
+      email: email,
+      metadata: metadata || {}
+    };
+
+    // Agregar URL de redirección si existe
+    if (metadata?.redirectUrl) {
+      paggoPayload.metadata.redirectUrl = metadata.redirectUrl;
+    } else {
+      paggoPayload.metadata.redirectUrl = process.env.APP_URL || 'https://botenginecorp.com';
+    }
+
+    // Realizar petición a Paggo
+    const response = await fetch('https://api.paggoapp.com/api/center/transactions/create-link', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${PAGGO_TOKEN}`
+      },
+      body: JSON.stringify(paggoPayload)
+    });
+
+    // Manejar respuesta de Paggo
+    if (!response.ok) {
+      const errorData = await response.text();
+      console.error('Error Paggo:', errorData);
+      return res.status(response.status).json({ 
+        error: 'Error al crear enlace de pago',
+        details: errorData 
+      });
+    }
+
+    const paymentData = await response.json();
+
+    // Guardar la transacción en la base de datos
+    if (orderId) {
+      try {
+        await pool.query(
+          `INSERT INTO orders (order_number, customer_name, email, total, status, payment_link) 
+           VALUES ($1, $2, $3, $4, $5, $6) 
+           ON CONFLICT (order_number) DO UPDATE SET payment_link=$6`,
+          [orderId, customerName || 'Cliente', email, amount, 'pending', paymentData.link || paymentData.checkout_url]
+        );
+      } catch (dbError) {
+        console.error('Error guardando en BD:', dbError);
+        // No bloqueamos la respuesta si hay error en BD
+      }
+    }
+
+    // Retornar el link de pago
+    res.json({
+      success: true,
+      link: paymentData.link || paymentData.checkout_url,
+      paymentData: paymentData
+    });
+
+  } catch (error) {
+    console.error('Error en crear-link de transacción:', error);
+    res.status(500).json({ 
+      error: 'Error al procesar la solicitud',
+      message: error.message 
+    });
+  }
+});
+
 export default router;
 

@@ -1780,47 +1780,59 @@
       // Descontar stock antes de procesar el pago
       descontarStock();
       
-      const paggoData = {
-        amount: Math.round(total * 100),
-        currency: 'GTQ',
-        description: descripcion || 'Compra en BotEngine',
-        reference: `botengine-${Date.now()}`,
-        customer: {
-          email: email
-        },
-        redirectUrl: window.location.href
+      // Generar ID de orden único
+      const orderId = `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      
+      // Datos para crear enlace de pago a través de nuestro servidor
+      const paymentRequest = {
+        concept: descripcion || 'Compra en BotEngine',
+        amount: total,
+        customerName: 'Cliente BotEngine',
+        email: email,
+        orderId: orderId,
+        metadata: {
+          redirectUrl: window.location.href,
+          custom: {
+            orderId: orderId,
+            totalAmount: total,
+            itemCount: cart.length,
+            timestamp: new Date().toISOString()
+          }
+        }
       };
       
       try {
-        const response = await fetch('https://api.paggoapp.com/v1/checkout/create', {
+        // Llamar a nuestra ruta del servidor
+        const response = await fetch('/api/transactions/create-link', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${PAGGO_API_KEY}`
+            'Content-Type': 'application/json'
           },
-          body: JSON.stringify(paggoData)
+          body: JSON.stringify(paymentRequest)
         });
         
-        if (response.ok) {
-          const data = await response.json();
-          if (data.checkout_url) {
-            // Limpiar carrito después de descuento exitoso
-            limpiarCarrito();
-            window.location.href = data.checkout_url;
-          } else {
-            const paggoCatalogUrl = `https://web.paggoapp.com/@botengine-Aux/catalogo`;
-            alert(`Te redireccionaremos a Paggo para completar el pago de Q ${total.toFixed(2)}.`);
-            limpiarCarrito();
-            window.location.href = paggoCatalogUrl;
-          }
+        const data = await response.json();
+        
+        if (response.ok && data.link) {
+          // Limpiar carrito después de crear enlace exitosamente
+          limpiarCarrito();
+          // Abrir automáticamente el link de pago
+          window.location.href = data.link;
+        } else if (response.ok && data.paymentData?.link) {
+          // Alternativa si la respuesta tiene estructura diferente
+          limpiarCarrito();
+          window.location.href = data.paymentData.link;
         } else {
+          // Fallback a WhatsApp si hay error
+          console.error('Error en respuesta de pago:', data);
           const items = cart.map(i => `• ${i.name} (${i.cantidad}x) = Q ${(i.price * i.cantidad).toFixed(2)}`).join('%0A');
           const mensaje = `Hola%2C%20quiero%20realizar%20la%20siguiente%20compra%3A%0A${items}%0A%0ATotal%3A%20Q%20${total.toFixed(2)}`;
           limpiarCarrito();
           window.location.href = `https://wa.me/50231239807?text=${mensaje}`;
         }
       } catch (error) {
-        console.error('Error en el pago:', error);
+        console.error('Error al crear enlace de pago:', error);
+        // Fallback a WhatsApp en caso de error
         const items = cart.map(i => `• ${i.name} (${i.cantidad}x) = Q ${(i.price * i.cantidad).toFixed(2)}`).join('%0A');
         const mensaje = `Hola%2C%20quiero%20realizar%20la%20siguiente%20compra%3A%0A${items}%0A%0ATotal%3A%20Q%20${total.toFixed(2)}`;
         limpiarCarrito();
