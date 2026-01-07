@@ -282,7 +282,7 @@ app.use(express.static(PUBLIC_DIR, {
 }));
 
 // ===== Rutas de Autenticación =====
-app.use('/api/auth', authRoutes);
+app.use('/api', authRoutes);
 
 // ===== Rutas de Comercio (API) =====
 app.use('/api/commerce', commerceRoutes);

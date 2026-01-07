@@ -1,6 +1,6 @@
 // Utilidades para sincronizar con API y localStorage como fallback
 
-const API_BASE = '/api';
+const API_BASE = '/api/commerce';
 
 class CommerceAPI {
   constructor() {
