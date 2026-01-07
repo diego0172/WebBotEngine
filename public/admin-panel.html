@@ -476,6 +476,16 @@
                     <label for="productPrice">Precio de Venta Final (Q) *</label>
                     <input type="number" id="productPrice" min="0" step="0.01" required>
                     <small style="color: #94a3b8;">Este será el precio que se mostrará en la tienda</small>
+                    
+                    <!-- Botones para agregar costos -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px;">
+                        <button type="button" id="btnAgregarPaggo" style="padding: 10px; background: linear-gradient(135deg, #f97316, #ea580c); border: none; color: white; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.9rem;">
+                            + Comisión Paggo (4.83%)
+                        </button>
+                        <button type="button" id="btnAgregarEnvio" style="padding: 10px; background: linear-gradient(135deg, #06b6d4, #0891b2); border: none; color: white; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.9rem;">
+                            + Envío (Q15)
+                        </button>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="productStock">Stock Disponible *</label>
@@ -1377,6 +1387,26 @@
         // Event listeners para calculadora
         document.getElementById('productCost').addEventListener('input', actualizarCalculadora);
         document.getElementById('productMargin').addEventListener('input', actualizarCalculadora);
+        
+        // Botones para agregar costos al precio final
+        document.getElementById('btnAgregarPaggo').addEventListener('click', (e) => {
+            e.preventDefault();
+            const priceInput = document.getElementById('productPrice');
+            const precioActual = parseFloat(priceInput.value) || 0;
+            if (precioActual > 0) {
+                const comision = precioActual * 0.0483;
+                const nuevoPrecio = precioActual + comision;
+                priceInput.value = nuevoPrecio.toFixed(2);
+            }
+        });
+        
+        document.getElementById('btnAgregarEnvio').addEventListener('click', (e) => {
+            e.preventDefault();
+            const priceInput = document.getElementById('productPrice');
+            const precioActual = parseFloat(priceInput.value) || 0;
+            const nuevoPrecio = precioActual + 15;
+            priceInput.value = nuevoPrecio.toFixed(2);
+        });
         
         // Botones de margen rápido
         document.querySelectorAll('.margin-btn').forEach(btn => {
