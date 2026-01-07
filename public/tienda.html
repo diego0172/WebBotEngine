@@ -1087,6 +1087,341 @@
         flex-direction: column-reverse;
       }
     }
+
+    /* Estilos para Modal de Producto Detallado */
+    .modal-producto {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .modal-contenido {
+      background: white;
+      border-radius: 12px;
+      max-width: 1000px;
+      width: 100%;
+      position: relative;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .btn-cerrar-modal {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 2rem;
+      cursor: pointer;
+      color: #666;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.2s;
+      z-index: 10;
+    }
+
+    .btn-cerrar-modal:hover {
+      background: #f0f0f0;
+      color: #000;
+    }
+
+    .modal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      padding: 40px;
+    }
+
+    .modal-imagen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f9f9f9;
+      border-radius: 8px;
+      min-height: 400px;
+      overflow: hidden;
+    }
+
+    .modal-imagen img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .modal-info {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .modal-categoria {
+      display: inline-block;
+      background: var(--primary-lighter);
+      color: var(--primary);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      width: fit-content;
+    }
+
+    #modalNombre {
+      font-size: 2rem;
+      color: var(--secondary);
+      margin: 0;
+    }
+
+    .modal-descripcion {
+      color: #666;
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+
+    .modal-precio-stock {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      padding: 20px;
+      background: var(--lighter);
+      border-radius: 8px;
+    }
+
+    .modal-precio, .modal-stock {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .modal-precio label, .modal-stock label {
+      font-weight: 600;
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .precio-grande {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    .stock-info {
+      font-size: 1.1rem;
+      color: var(--success);
+      font-weight: 600;
+    }
+
+    .stock-info.agotado {
+      color: var(--danger);
+    }
+
+    .modal-cantidad {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .modal-cantidad label {
+      font-weight: 600;
+      color: #666;
+    }
+
+    .cantidad-selector {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      width: fit-content;
+    }
+
+    .cantidad-selector button {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 10px 12px;
+      color: var(--primary);
+      transition: background 0.2s;
+    }
+
+    .cantidad-selector button:hover {
+      background: var(--lighter);
+    }
+
+    .cantidad-selector input {
+      border: none;
+      text-align: center;
+      font-weight: 600;
+      width: 50px;
+      font-size: 1rem;
+    }
+
+    .cantidad-selector input:focus {
+      outline: none;
+    }
+
+    .modal-acciones {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .btn-agregar-grande {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-agregar-grande:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    .btn-agregar-grande:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-compartir {
+      background: white;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-compartir:hover {
+      background: var(--primary-lighter);
+      transform: translateY(-2px);
+    }
+
+    .productos-relacionados {
+      margin-top: 30px;
+      padding-top: 30px;
+      border-top: 2px solid var(--border);
+    }
+
+    .productos-relacionados h3 {
+      margin: 0 0 20px 0;
+      color: var(--secondary);
+    }
+
+    .grid-relacionados {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 15px;
+    }
+
+    .producto-relacionado {
+      background: var(--lighter);
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+    }
+
+    .producto-relacionado:hover {
+      border-color: var(--primary);
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .producto-relacionado-img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      background: white;
+    }
+
+    .producto-relacionado-info {
+      padding: 12px;
+    }
+
+    .producto-relacionado-nombre {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--secondary);
+      margin: 0 0 8px 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .producto-relacionado-precio {
+      color: var(--primary);
+      font-weight: bold;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .modal-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 20px;
+      }
+
+      #modalNombre {
+        font-size: 1.5rem;
+      }
+
+      .modal-imagen {
+        min-height: 300px;
+      }
+
+      .modal-acciones {
+        grid-template-columns: 1fr;
+      }
+
+      .grid-relacionados {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      }
+    }
   </style>
 </head>
 <body>
@@ -1272,6 +1607,62 @@
     </div>
   </div>
 
+  <!-- Modal de Producto Detallado -->
+  <div id="modalProducto" class="modal-producto" style="display: none;">
+    <div class="modal-contenido">
+      <button class="btn-cerrar-modal" onclick="cerrarModalProducto()">✕</button>
+      
+      <div class="modal-grid">
+        <!-- Imagen Grande -->
+        <div class="modal-imagen">
+          <img id="modalImg" src="" alt="Producto">
+        </div>
+        
+        <!-- Información Detallada -->
+        <div class="modal-info">
+          <div class="modal-categoria" id="modalCategoria"></div>
+          <h1 id="modalNombre"></h1>
+          <p id="modalDescripcion" class="modal-descripcion"></p>
+          
+          <div class="modal-precio-stock">
+            <div class="modal-precio">
+              <label>Precio:</label>
+              <span id="modalPrecio" class="precio-grande">Q 0.00</span>
+            </div>
+            <div class="modal-stock">
+              <label>Stock:</label>
+              <span id="modalStock" class="stock-info">Disponible</span>
+            </div>
+          </div>
+          
+          <div class="modal-cantidad">
+            <label>Cantidad:</label>
+            <div class="cantidad-selector">
+              <button onclick="decrementarCantidad()">−</button>
+              <input type="number" id="cantidadModal" value="1" min="1">
+              <button onclick="incrementarCantidad()">+</button>
+            </div>
+          </div>
+          
+          <div class="modal-acciones">
+            <button class="btn-agregar-grande" onclick="agregarAlCarritoDesdeModal()">
+              <i class="fas fa-shopping-cart"></i> Agregar al Carrito
+            </button>
+            <button class="btn-compartir" onclick="compartirProducto()">
+              <i class="fas fa-share-alt"></i> Compartir
+            </button>
+          </div>
+          
+          <!-- Productos Relacionados -->
+          <div class="productos-relacionados">
+            <h3>Productos Relacionados</h3>
+            <div class="grid-relacionados" id="gridRelacionados"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Footer -->
   <footer class="footer" style="margin-top: 0;">
     <div class="container footer-content">
@@ -1322,6 +1713,13 @@
     window.iniciarPago = iniciarPago;
     window.mostrarNotificacion = mostrarNotificacion;
     window.filtrarYMostrarProductos = filtrarYMostrarProductos;
+    window.cambiarVista = cambiarVista;
+    window.abrirModalProducto = abrirModalProducto;
+    window.cerrarModalProducto = cerrarModalProducto;
+    window.agregarAlCarritoDesdeModal = agregarAlCarritoDesdeModal;
+    window.compartirProducto = compartirProducto;
+    window.incrementarCantidad = incrementarCantidad;
+    window.decrementarCantidad = decrementarCantidad;
 
     // Cargar productos
     async function cargarProductos() {
@@ -1468,13 +1866,13 @@
         const badgeStock = `<div class="badge-stock ${!hayStock ? 'agotado' : ''}">${hayStock ? `Stock: ${producto.stock}` : 'Agotado'}</div>`;
         
         card.innerHTML = `
-          <div class="producto-imagen">
+          <div class="producto-imagen" onclick="abrirModalProducto(${producto.id})" style="cursor: pointer;">
             ${imagenHtml}
             ${badgeStock}
           </div>
           <div class="producto-contenido">
             <div class="producto-categoria">${producto.category}</div>
-            <h3 class="producto-nombre">${producto.name}</h3>
+            <h3 class="producto-nombre" onclick="abrirModalProducto(${producto.id})" style="cursor: pointer;">${producto.name}</h3>
             <p class="producto-descripcion">${producto.description}</p>
             <div class="producto-precio">Q ${parseFloat(producto.price).toFixed(2)}</div>
             <div class="producto-acciones">
@@ -1983,6 +2381,160 @@
         option.textContent = categoria;
         selectCategoria.appendChild(option);
       });
+    }
+
+    // ===== FUNCIONES DEL MODAL DE PRODUCTO =====
+    
+    let productoActualModal = null;
+    
+    function abrirModalProducto(productoId) {
+      const producto = todosProductos.find(p => p.id === productoId);
+      if (!producto) return;
+      
+      productoActualModal = producto;
+      
+      // Llenar información del producto
+      document.getElementById('modalImg').src = producto.image || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"%3E%3Crect fill="%23f0f0f0" width="200" height="200"/%3E%3Ctext x="50%" y="50%" font-size="40" text-anchor="middle" dy=".3em" fill="%23999"%3E📦%3C/text%3E%3C/svg%3E';
+      document.getElementById('modalCategoria').textContent = producto.category;
+      document.getElementById('modalNombre').textContent = producto.name;
+      document.getElementById('modalDescripcion').textContent = producto.description || 'Producto de calidad premium para tu negocio.';
+      document.getElementById('modalPrecio').textContent = `Q ${parseFloat(producto.price).toFixed(2)}`;
+      
+      const stockInfo = document.getElementById('modalStock');
+      if (producto.stock > 0) {
+        stockInfo.textContent = `${producto.stock} disponibles`;
+        stockInfo.className = 'stock-info';
+      } else {
+        stockInfo.textContent = 'Agotado';
+        stockInfo.className = 'stock-info agotado';
+      }
+      
+      document.getElementById('cantidadModal').value = 1;
+      
+      // Cargar productos relacionados
+      cargarProductosRelacionados(producto);
+      
+      // Mostrar modal
+      document.getElementById('modalProducto').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function cerrarModalProducto() {
+      document.getElementById('modalProducto').style.display = 'none';
+      document.body.style.overflow = 'auto';
+      productoActualModal = null;
+    }
+    
+    function cargarProductosRelacionados(productoActual) {
+      const grid = document.getElementById('gridRelacionados');
+      grid.innerHTML = '';
+      
+      // Obtener productos de la misma categoría
+      const relacionados = todosProductos.filter(p => 
+        p.category === productoActual.category && p.id !== productoActual.id
+      ).slice(0, 4);
+      
+      if (relacionados.length === 0) {
+        grid.innerHTML = '<p style="grid-column: 1/-1; color: #999;">No hay productos relacionados</p>';
+        return;
+      }
+      
+      relacionados.forEach(producto => {
+        const card = document.createElement('div');
+        card.className = 'producto-relacionado';
+        card.onclick = () => {
+          abrirModalProducto(producto.id);
+        };
+        
+        const imagen = producto.image || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"%3E%3Crect fill="%23f0f0f0" width="200" height="200"/%3E%3Ctext x="50%" y="50%" font-size="40" text-anchor="middle" dy=".3em" fill="%23999"%3E📦%3C/text%3E%3C/svg%3E';
+        
+        card.innerHTML = `
+          <img src="${imagen}" alt="${producto.name}" class="producto-relacionado-img">
+          <div class="producto-relacionado-info">
+            <h4 class="producto-relacionado-nombre">${producto.name}</h4>
+            <div class="producto-relacionado-precio">Q ${parseFloat(producto.price).toFixed(2)}</div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+    
+    function incrementarCantidad() {
+      const input = document.getElementById('cantidadModal');
+      input.value = Math.min(parseInt(input.value) + 1, productoActualModal?.stock || 1);
+    }
+    
+    function decrementarCantidad() {
+      const input = document.getElementById('cantidadModal');
+      input.value = Math.max(parseInt(input.value) - 1, 1);
+    }
+    
+    function agregarAlCarritoDesdeModal() {
+      if (!productoActualModal) return;
+      
+      const cantidad = parseInt(document.getElementById('cantidadModal').value);
+      if (cantidad <= 0 || cantidad > productoActualModal.stock) {
+        mostrarNotificacion('Cantidad inválida', 'error');
+        return;
+      }
+      
+      // Buscar si el producto ya está en el carrito
+      const itemEnCarrito = cart.find(item => item.id === productoActualModal.id);
+      
+      if (itemEnCarrito) {
+        itemEnCarrito.cantidad += cantidad;
+      } else {
+        cart.push({
+          id: productoActualModal.id,
+          name: productoActualModal.name,
+          price: parseFloat(productoActualModal.price),
+          image: productoActualModal.image,
+          category: productoActualModal.category,
+          cantidad: cantidad
+        });
+      }
+      
+      localStorage.setItem('cart', JSON.stringify(cart));
+      actualizarCarrito();
+      mostrarNotificacion(`${productoActualModal.name} agregado al carrito`, 'success');
+      
+      // Cerrar modal después de agregar
+      setTimeout(() => cerrarModalProducto(), 500);
+    }
+    
+    function compartirProducto() {
+      if (!productoActualModal) return;
+      
+      const productName = productoActualModal.name;
+      const productUrl = window.location.href + '?product=' + productoActualModal.id;
+      const text = `Mira este producto: ${productName} - ${productUrl}`;
+      
+      // Intentar usar Share API si está disponible
+      if (navigator.share) {
+        navigator.share({
+          title: 'BotEngine - ' + productName,
+          text: 'Revisa este producto en nuestra tienda',
+          url: productUrl
+        }).catch(err => console.log('Error al compartir:', err));
+      } else {
+        // Fallback: copiar link al portapapeles
+        const url = productUrl;
+        navigator.clipboard.writeText(url).then(() => {
+          mostrarNotificacion('Enlace copiado al portapapeles', 'success');
+        }).catch(() => {
+          // Si falla clipboard, mostrar modal de compartir
+          const whatsappUrl = `https://wa.me/?text=Mira%20este%20producto%3A%20${encodeURIComponent(productName)}%20${encodeURIComponent(productUrl)}`;
+          const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(productUrl)}`;
+          const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent('Mira este producto: ' + productName)}&url=${encodeURIComponent(productUrl)}`;
+          
+          alert(`
+Comparte en:
+📱 WhatsApp: ${whatsappUrl}
+📘 Facebook: ${facebookUrl}
+🐦 Twitter: ${twitterUrl}
+          `);
+        });
+      }
     }
 
     // Cargar productos
