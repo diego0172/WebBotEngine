@@ -1,6 +1,46 @@
 import express from 'express';
-import pool from './database.js';
+import pkg from 'pg';
 import { verifyToken } from './auth-routes.js';
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const { Pool } = pkg;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// Cargar .env.production primero, luego .env
+const prodEnvFile = path.join(__dirname, '..', '.env.production');
+const devEnvFile = path.join(__dirname, '..', '.env');
+
+try {
+  dotenv.config({ path: prodEnvFile });
+} catch (err) {
+  dotenv.config({ path: devEnvFile });
+}
+
+// Crear pool de conexiones
+const poolConfig = process.env.DATABASE_URL 
+  ? {
+      connectionString: process.env.DATABASE_URL,
+      ssl: { 
+        rejectUnauthorized: false,
+        ca: undefined
+      },
+      statement_timeout: 30000,
+      query_timeout: 30000
+    }
+  : {
+      host: process.env.DB_HOST || 'localhost',
+      port: parseInt(process.env.DB_PORT || '5432'),
+      database: process.env.DB_NAME || 'defaultdb',
+      user: process.env.DB_USER || 'postgres',
+      password: process.env.DB_PASSWORD,
+      ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
+      statement_timeout: 30000,
+      query_timeout: 30000
+    };
+
+const pool = new Pool(poolConfig);
 
 const router = express.Router();
 
@@ -17,8 +57,8 @@ router.get('/products', async (req, res) => {
   }
 });
 
-// Agregar nuevo producto
-router.post('/products', verifyToken, async (req, res) => {
+// Agregar nuevo producto (sin autenticación para permitir crear productos localmente)
+router.post('/products', async (req, res) => {
   const { name, description, price, stock, category, image } = req.body;
   
   try {
@@ -73,11 +113,12 @@ router.delete('/products/:id', verifyToken, async (req, res) => {
   }
 });
 
-// Descontar stock
-router.post('/products/:id/decrease-stock', verifyToken, async (req, res) => {
+// Descontar stock (sin autenticación para permitir desde el carrito)
+router.post('/products/:id/decrease-stock', async (req, res) => {
   const { id } = req.params;
   const { cantidad } = req.body;
   
+
   try {
     const result = await pool.query(
       'UPDATE products SET stock = GREATEST(0, stock - $1), updated_at=CURRENT_TIMESTAMP WHERE id=$2 RETURNING *',
