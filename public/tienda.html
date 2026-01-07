@@ -1202,6 +1202,17 @@
     // Limpiar productos del localStorage para forzar recarga desde API
     localStorage.removeItem('products');
 
+    // Hacer funciones globales para que sean accesibles desde onclick en HTML
+    window.agregarAlCarrito = agregarAlCarrito;
+    window.actualizarCarrito = actualizarCarrito;
+    window.removerDelCarrito = removerDelCarrito;
+    window.actualizarCantidad = actualizarCantidad;
+    window.abrirCarrito = abrirCarrito;
+    window.cerrarCarrito = cerrarCarrito;
+    window.iniciarPago = iniciarPago;
+    window.mostrarNotificacion = mostrarNotificacion;
+    window.filtrarYMostrarProductos = filtrarYMostrarProductos;
+
     // Cargar productos
     async function cargarProductos() {
       try {

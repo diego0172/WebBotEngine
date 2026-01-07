@@ -42,18 +42,28 @@ self.addEventListener('fetch', (event) => {
   // Skip para requests de API
   if (event.request.url.includes('/api/')) return;
   
+  // Skip para recursos externos (CDN)
+  if (event.request.url.includes('cdnjs.cloudflare.com') || 
+      event.request.url.includes('cdn.') ||
+      event.request.url.includes('fonts.googleapis.com')) {
+    return;
+  }
+  
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
         // Return cached version or fetch from network
         return response || fetch(event.request).then((fetchResponse) => {
           // Cache successful responses
-          if (fetchResponse.status === 200) {
+          if (fetchResponse && fetchResponse.status === 200) {
             const responseClone = fetchResponse.clone();
             caches.open(CACHE_NAME)
               .then((cache) => cache.put(event.request, responseClone));
           }
           return fetchResponse;
+        }).catch(() => {
+          // Si falla el fetch, intentar desde cache
+          return caches.match(event.request);
         });
       })
       .catch(() => {
