@@ -21,10 +21,15 @@ try {
 let poolConfig;
 
 if (process.env.DATABASE_URL) {
-  // Usar sslmode=allow que es menos estricto pero funciona con DigitalOcean
-  const dbUrl = process.env.DATABASE_URL
-    .replace('?sslmode=require', '?sslmode=allow')
-    .replace('?sslmode=disable', '?sslmode=allow');
+  // Limpiar URL: remover todos los parámetros SSL
+  let dbUrl = process.env.DATABASE_URL
+    .replace('?sslmode=require', '')
+    .replace('?sslmode=disable', '')
+    .replace('?sslmode=allow', '');
+  
+  // Asegurar que la URL base sea limpia
+  dbUrl = dbUrl.split('?')[0];
+  
   poolConfig = {
     connectionString: dbUrl,
     ssl: false,
