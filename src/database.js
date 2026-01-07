@@ -21,11 +21,22 @@ try {
 let poolConfig;
 
 if (process.env.DATABASE_URL) {
-  // DigitalOcean puerto 25060 requiere SSL obligatoriamente
-  // Mantener la URL tal cual, pero deshabilitar validación de certificado
+  // DigitalOcean puerto 25060 requiere SSL con certificado CA
+  const fs = require('fs');
+  const caPath = '/opt/stack/web/ca-certificate.crt';
+  let ca = undefined;
+  
+  try {
+    if (require('fs').existsSync(caPath)) {
+      ca = require('fs').readFileSync(caPath, 'utf8');
+    }
+  } catch (err) {
+    console.warn('Certificado CA no encontrado, usando rejectUnauthorized: false');
+  }
+  
   poolConfig = {
     connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false },
+    ssl: ca ? { ca, rejectUnauthorized: true } : { rejectUnauthorized: false },
     application_name: 'botenginecorp',
     statement_timeout: 30000,
     query_timeout: 30000
