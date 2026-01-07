@@ -422,13 +422,67 @@
                     <label for="productDescription">Descripción *</label>
                     <textarea id="productDescription" required></textarea>
                 </div>
+
+                <!-- Calculadora de Precios -->
+                <div style="background: rgba(14, 165, 233, 0.1); border: 2px solid rgba(14, 165, 233, 0.3); border-radius: 10px; padding: 16px; margin: 20px 0;">
+                    <h3 style="margin: 0 0 16px 0; color: #0ea5e9; display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-calculator"></i> Calculadora de Precios
+                    </h3>
+                    
+                    <div class="form-group">
+                        <label for="productCost">Costo Estimado (Q) *</label>
+                        <input type="number" id="productCost" min="0" step="0.01" placeholder="ej: 120" required>
+                        <small style="color: #94a3b8;">Costo total puesto en tus manos</small>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+                        <div>
+                            <label>Margen Deseado (%)</label>
+                            <div style="display: flex; gap: 8px;">
+                                <button type="button" class="margin-btn" data-margin="50">50%</button>
+                                <button type="button" class="margin-btn" data-margin="55">55%</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label>O Ingresa Manual</label>
+                            <input type="number" id="productMargin" min="0" max="100" step="1" placeholder="50" value="50" style="padding: 8px; border: 1px solid rgba(148, 163, 184, 0.3); border-radius: 6px; color: #cbd5e1; background: rgba(15, 23, 42, 0.4);">
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(15, 23, 42, 0.6); padding: 12px; border-radius: 6px; margin-top: 12px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 0.9rem;">
+                            <div>
+                                <span style="color: #94a3b8;">Ganancia Bruta:</span><br>
+                                <span style="color: #10b981; font-weight: bold; font-size: 1.1rem;" id="gananciaDisplay">Q 0.00</span>
+                            </div>
+                            <div>
+                                <span style="color: #94a3b8;">Margen Real:</span><br>
+                                <span style="color: #10b981; font-weight: bold; font-size: 1.1rem;" id="margenRealDisplay">0%</span>
+                            </div>
+                        </div>
+                        <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(148, 163, 184, 0.2);">
+                            <span style="color: #94a3b8;">Precio de Venta Recomendado:</span><br>
+                            <span style="color: #0ea5e9; font-weight: bold; font-size: 1.3rem;" id="precioRecomendado">Q 0.00</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="form-group">
-                    <label for="productPrice">Precio (Quetzales) *</label>
+                    <label for="productPrice">Precio de Venta Final (Q) *</label>
                     <input type="number" id="productPrice" min="0" step="0.01" required>
+                    <small style="color: #94a3b8;">Este será el precio que se mostrará en la tienda</small>
                 </div>
                 <div class="form-group">
                     <label for="productStock">Stock Disponible *</label>
                     <input type="number" id="productStock" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="productStatus">Estado del Producto *</label>
+                    <select id="productStatus" required style="padding: 10px; border: 1px solid rgba(148, 163, 184, 0.3); border-radius: 6px; color: #cbd5e1; background: rgba(15, 23, 42, 0.4);">
+                        <option value="activo">Activo</option>
+                        <option value="inactivo">Inactivo</option>
+                        <option value="agotado">Agotado</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="productImage">Imagen del Producto *</label>
@@ -442,7 +496,7 @@
                 </div>
                 <div class="form-group">
                     <label for="productCategory">Categoría *</label>
-                    <input type="text" id="productCategory" placeholder="ej: Chatbots, Diseño Web" required>
+                    <input type="text" id="productCategory" placeholder="ej: Combos, Accesorios" required>
                 </div>
                 <div style="display: flex; gap: 10px; margin-top: 20px;">
                     <button type="submit" class="btn btn-primary" style="flex: 1;">
@@ -455,6 +509,27 @@
             </form>
         </div>
     </div>
+    
+    <style>
+        .margin-btn {
+            background: rgba(14, 165, 233, 0.2);
+            border: 1px solid rgba(14, 165, 233, 0.5);
+            color: #0ea5e9;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        
+        .margin-btn:hover {
+            background: rgba(14, 165, 233, 0.4);
+        }
+        
+        .margin-btn.active {
+            background: rgba(14, 165, 233, 0.8);
+        }
+    </style>
     
     <div class="save-notification" id="saveNotification">
         <i class="fas fa-check-circle" style="font-size: 1.5rem;"></i>
@@ -904,7 +979,14 @@
                         ? `<img src="${product.image}" alt="${product.name}">` 
                         : '<i class="fas fa-box" style="font-size: 3rem; color: #667eea;"></i>';
                 
+                    // Badge de estado
+                    const statusColor = product.status === 'activo' ? '#10b981' : product.status === 'agotado' ? '#ef4444' : '#94a3b8';
+                    const statusText = product.status === 'activo' ? '✓ Activo' : product.status === 'agotado' ? 'Agotado' : 'Inactivo';
+                
                 productCard.innerHTML = `
+                    <div style="position: absolute; top: 10px; right: 10px; background: ${statusColor}; color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">
+                        ${statusText}
+                    </div>
                     <div class="product-card-header">
                         <div class="product-card-image">
                             ${imageHtml}
@@ -918,15 +1000,29 @@
                         </div>
                     </div>
                     <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(148, 163, 184, 0.2);">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                            <span style="color: #94a3b8;">Precio:</span>
-                            <span style="color: #10b981; font-weight: bold; font-size: 1.1rem;">Q ${parseFloat(product.price).toFixed(2)}</span>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                            <div>
+                                <span style="color: #94a3b8; font-size: 0.85rem;">Precio Venta:</span><br>
+                                <span style="color: #10b981; font-weight: bold; font-size: 1rem;">Q ${parseFloat(product.price).toFixed(2)}</span>
+                            </div>
+                            <div>
+                                <span style="color: #94a3b8; font-size: 0.85rem;">Costo:</span><br>
+                                <span style="color: #94a3b8; font-weight: bold; font-size: 1rem;">Q ${parseFloat(product.cost || 0).toFixed(2)}</span>
+                            </div>
                         </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                            <span style="color: #94a3b8;">Stock:</span>
-                            <span style="color: ${product.stock > 10 ? '#0ea5e9' : product.stock > 0 ? '#f59e0b' : '#ef4444'}; font-weight: bold;">
-                                ${product.stock} unidades
-                            </span>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; padding: 12px; background: rgba(14, 165, 233, 0.1); border-radius: 6px;">
+                            <div>
+                                <span style="color: #94a3b8; font-size: 0.85rem;">Stock:</span><br>
+                                <span style="color: ${product.stock > 10 ? '#0ea5e9' : product.stock > 0 ? '#f59e0b' : '#ef4444'}; font-weight: bold;">
+                                    ${product.stock} unidades
+                                </span>
+                            </div>
+                            <div>
+                                <span style="color: #94a3b8; font-size: 0.85rem;">Ventas:</span><br>
+                                <span style="color: #0ea5e9; font-weight: bold;">
+                                    ${product.sales || 0} unidades
+                                </span>
+                            </div>
                         </div>
                         <div class="product-card-actions">
                             <button class="btn btn-primary" data-action="edit-product" data-product-id="${product.id}" style="padding: 10px 16px; font-size: 0.85rem; flex: 1;">
@@ -938,6 +1034,7 @@
                         </div>
                     </div>
                 `;
+                    productCard.style.position = 'relative';
                 productsList.appendChild(productCard);
                 });
 
@@ -1237,6 +1334,45 @@
             }
         }
         
+        // ===== CALCULADORA DE PRECIOS =====
+        function actualizarCalculadora() {
+            const costInput = document.getElementById('productCost');
+            const marginInput = document.getElementById('productMargin');
+            const priceInput = document.getElementById('productPrice');
+            
+            const costo = parseFloat(costInput.value) || 0;
+            const margen = parseInt(marginInput.value) || 50;
+            
+            if (costo > 0) {
+                const ganancia = (costo * margen) / 100;
+                const precioVenta = costo + ganancia;
+                const margenReal = (ganancia / precioVenta * 100).toFixed(1);
+                
+                document.getElementById('gananciaDisplay').textContent = `Q ${ganancia.toFixed(2)}`;
+                document.getElementById('margenRealDisplay').textContent = `${margenReal}%`;
+                document.getElementById('precioRecomendado').textContent = `Q ${precioVenta.toFixed(2)}`;
+                
+                // Auto-llenar el precio de venta
+                priceInput.value = precioVenta.toFixed(2);
+            }
+        }
+        
+        // Event listeners para calculadora
+        document.getElementById('productCost').addEventListener('input', actualizarCalculadora);
+        document.getElementById('productMargin').addEventListener('input', actualizarCalculadora);
+        
+        // Botones de margen rápido
+        document.querySelectorAll('.margin-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const margin = btn.getAttribute('data-margin');
+                document.getElementById('productMargin').value = margin;
+                document.querySelectorAll('.margin-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                actualizarCalculadora();
+            });
+        });
+        
         // Guardar producto
         document.getElementById('productForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -1252,7 +1388,9 @@
                 price: parseFloat(document.getElementById('productPrice').value),
                 stock: parseInt(document.getElementById('productStock').value),
                 image: currentImageBase64,
-                category: document.getElementById('productCategory').value
+                category: document.getElementById('productCategory').value,
+                cost: parseFloat(document.getElementById('productCost').value),
+                status: document.getElementById('productStatus').value || 'activo'
             };
             
             try {

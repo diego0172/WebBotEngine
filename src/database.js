@@ -58,10 +58,13 @@ export async function initializeDatabase() {
     await pool.query(`
       CREATE TABLE IF NOT EXISTS products (
         id SERIAL PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
+        name VARCHAR(255) NOT NULL UNIQUE,
         description TEXT,
         price DECIMAL(10, 2) NOT NULL,
+        cost DECIMAL(10, 2) DEFAULT 0,
         stock INTEGER NOT NULL DEFAULT 0,
+        sales INTEGER DEFAULT 0,
+        status VARCHAR(50) DEFAULT 'activo',
         category VARCHAR(100),
         image TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -73,10 +76,44 @@ export async function initializeDatabase() {
     await pool.query(`
       CREATE TABLE IF NOT EXISTS orders (
         id SERIAL PRIMARY KEY,
+        order_number VARCHAR(100),
+        customer_name VARCHAR(255),
         email VARCHAR(255) NOT NULL,
         items JSONB NOT NULL,
         total DECIMAL(10, 2) NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        status VARCHAR(50) DEFAULT 'pending',
+        payment_link TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(order_number)
+      )
+    `);
+
+    // Tabla de cupones
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS coupons (
+        id SERIAL PRIMARY KEY,
+        code VARCHAR(50) NOT NULL UNIQUE,
+        discount_type VARCHAR(20),
+        discount_value DECIMAL(10, 2),
+        max_uses INTEGER,
+        used_count INTEGER DEFAULT 0,
+        min_amount DECIMAL(10, 2),
+        active BOOLEAN DEFAULT true,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        expires_at TIMESTAMP
+      )
+    `);
+
+    // Tabla de usuarios admin
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS admin_users (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(100) NOT NULL UNIQUE,
+        password VARCHAR(255) NOT NULL,
+        email VARCHAR(255),
+        role VARCHAR(50) DEFAULT 'admin',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
 
