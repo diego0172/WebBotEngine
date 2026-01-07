@@ -469,6 +469,9 @@
         <button class="tab-btn" data-tab="tienda">
             <i class="fas fa-store"></i> Tienda
         </button>
+        <button class="tab-btn" data-tab="cupones">
+            <i class="fas fa-ticket-alt"></i> Cupones
+        </button>
     </div>
     
     <style>
@@ -688,6 +691,93 @@
         </div>
         </div>
         <!-- FIN TAB TIENDA -->
+
+        <!-- TAB CUPONES -->
+        <div class="tab-content" id="tab-cupones">
+            <div class="section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                    <h2 class="section-title">🎁 Gestión de Cupones de Descuento</h2>
+                    <button class="btn btn-primary" onclick="abrirModalCupon()">
+                        <i class="fas fa-plus"></i> Nuevo Cupón
+                    </button>
+                </div>
+
+                <div id="couponsList">
+                    <p style="color: #94a3b8; text-align: center;">Cargando cupones...</p>
+                </div>
+            </div>
+        </div>
+        <!-- FIN TAB CUPONES -->
+
+        <!-- Modal Cupones -->
+        <div id="couponModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 2000; align-items: center; justify-content: center;">
+            <div style="background: rgba(30, 41, 59, 0.95); border: 2px solid rgba(14, 165, 233, 0.3); border-radius: 16px; padding: 30px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 id="couponModalTitle">Nuevo Cupón</h3>
+                    <button onclick="cerrarModalCupon()" style="background: none; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer;">✕</button>
+                </div>
+
+                <form id="couponForm" onsubmit="guardarCupon(event)">
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label>Código del Cupón</label>
+                        <input type="text" id="couponCode" placeholder="Ej: BIENVENIDA2026" required style="width: 100%; padding: 10px; background: rgba(71, 85, 105, 0.3); border: 1px solid rgba(14, 165, 233, 0.3); border-radius: 8px; color: #f8fafc;">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label>Descripción</label>
+                        <input type="text" id="couponDescription" placeholder="Ej: Descuento de bienvenida 10%" style="width: 100%; padding: 10px; background: rgba(71, 85, 105, 0.3); border: 1px solid rgba(14, 165, 233, 0.3); border-radius: 8px; color: #f8fafc;">
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                        <div class="form-group">
+                            <label>Tipo de Descuento</label>
+                            <select id="couponType" required style="width: 100%; padding: 10px; background: rgba(71, 85, 105, 0.3); border: 1px solid rgba(14, 165, 233, 0.3); border-radius: 8px; color: #f8fafc;">
+                                <option value="percentage">Porcentaje (%)</option>
+                                <option value="fixed">Cantidad Fija (Q)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Valor</label>
+                            <input type="number" id="couponValue" placeholder="Ej: 10 o 50" step="0.01" required style="width: 100%; padding: 10px; background: rgba(71, 85, 105, 0.3); border: 1px solid rgba(14, 165, 233, 0.3); border-radius: 8px; color: #f8fafc;">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                        <div class="form-group">
+                            <label>Compra Mínima (Q)</label>
+                            <input type="number" id="couponMinPurchase" placeholder="0" step="0.01" min="0" style="width: 100%; padding: 10px; background: rgba(71, 85, 105, 0.3); border: 1px solid rgba(14, 165, 233, 0.3); border-radius: 8px; color: #f8fafc;">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Usos Máximos</label>
+                            <input type="number" id="couponMaxUses" placeholder="Dejar vacío para ilimitado" min="1" style="width: 100%; padding: 10px; background: rgba(71, 85, 105, 0.3); border: 1px solid rgba(14, 165, 233, 0.3); border-radius: 8px; color: #f8fafc;">
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label>Válido Hasta</label>
+                        <input type="datetime-local" id="couponValidUntil" required style="width: 100%; padding: 10px; background: rgba(71, 85, 105, 0.3); border: 1px solid rgba(14, 165, 233, 0.3); border-radius: 8px; color: #f8fafc;">
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                            <input type="checkbox" id="couponActive" checked>
+                            <span>Activo</span>
+                        </label>
+                    </div>
+
+                    <div style="display: flex; gap: 10px;">
+                        <button type="submit" class="btn btn-primary" style="flex: 1;">
+                            <i class="fas fa-save"></i> Guardar Cupón
+                        </button>
+                        <button type="button" onclick="cerrarModalCupon()" class="btn btn-secondary" style="flex: 1;">
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
     
     <script type="module">
@@ -889,20 +979,24 @@
                 const orderCard = document.createElement('div');
                 orderCard.className = 'order-card';
                 
-                const itemsHTML = order.items.map(item => `
+                const itemsHTML = order.items.map(item => {
+                  const subtotal = parseFloat(item.subtotal) || 0;
+                  return `
                     <div class="order-item">
                         <span>${item.nombre} (x${item.cantidad})</span>
-                        <span>Q ${item.subtotal.toFixed(2)}</span>
+                        <span>Q ${subtotal.toFixed(2)}</span>
                     </div>
-                `).join('');
+                  `;
+                }).join('');
                 
+                const total = parseFloat(order.total) || 0;
                 orderCard.innerHTML = `
                     <div class="order-header">
                         <div>
                             <div class="order-email"><i class="fas fa-envelope"></i> ${order.email}</div>
                             <div class="order-date"><i class="fas fa-clock"></i> ${order.fecha}</div>
                         </div>
-                        <div class="order-total">Q ${order.total.toFixed(2)}</div>
+                        <div class="order-total">Q ${total.toFixed(2)}</div>
                     </div>
                     <div class="order-items">
                         ${itemsHTML}
@@ -913,6 +1007,169 @@
             });
             } catch (error) {
                 console.error('Error cargando pedidos:', error);
+            }
+        }
+
+        // ===== CUPONES =====
+        let editingCouponId = null;
+
+        // Cargar cupones
+        async function loadCoupons() {
+            try {
+                const response = await fetch('/api/coupons', {
+                    headers: getAuthHeaders()
+                });
+                const coupons = await response.json();
+                const couponsList = document.getElementById('couponsList');
+                couponsList.innerHTML = '';
+
+                if (!coupons || coupons.length === 0) {
+                    couponsList.innerHTML = '<p style="color: #94a3b8; text-align: center;">No hay cupones creados aún</p>';
+                    return;
+                }
+
+                coupons.forEach(coupon => {
+                    const expirado = new Date(coupon.valid_until) < new Date();
+                    const couponCard = document.createElement('div');
+                    couponCard.style.cssText = 'background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(14, 165, 233, 0.2); border-radius: 12px; padding: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;';
+                    
+                    const tipoDescuento = coupon.discount_type === 'percentage' ? '%' : 'Q';
+                    couponCard.innerHTML = `
+                        <div style="flex: 1;">
+                            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
+                                <span style="background: rgba(14, 165, 233, 0.2); color: #0ea5e9; padding: 8px 12px; border-radius: 6px; font-weight: bold; font-size: 1.1rem;">${coupon.code}</span>
+                                <span style="color: #10b981; font-weight: 600;">-${coupon.discount_value}${tipoDescuento}</span>
+                                ${coupon.is_active ? '<span style="background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 4px 8px; border-radius: 4px; font-size: 0.85rem;">Activo</span>' : '<span style="background: rgba(239, 68, 68, 0.2); color: #ef4444; padding: 4px 8px; border-radius: 4px; font-size: 0.85rem;">Inactivo</span>'}
+                                ${expirado ? '<span style="background: rgba(239, 68, 68, 0.2); color: #ef4444; padding: 4px 8px; border-radius: 4px; font-size: 0.85rem;">Expirado</span>' : ''}
+                            </div>
+                            <p style="color: #cbd5e1; margin-bottom: 8px;">${coupon.description || 'Sin descripción'}</p>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; font-size: 0.85rem;">
+                                <div style="color: #94a3b8;">Min. compra: <span style="color: #f8fafc;">Q ${coupon.min_purchase || 0}</span></div>
+                                <div style="color: #94a3b8;">Usos: <span style="color: #f8fafc;">${coupon.current_uses}${coupon.max_uses ? '/' + coupon.max_uses : '/∞'}</span></div>
+                                <div style="color: #94a3b8;">Válido hasta: <span style="color: #f8fafc;">${new Date(coupon.valid_until).toLocaleDateString('es-ES')}</span></div>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 8px; margin-left: 15px;">
+                            <button onclick="editarCupon(${coupon.id})" class="btn btn-primary" style="padding: 8px 12px; font-size: 0.85rem;">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="eliminarCupon(${coupon.id})" class="btn-delete" style="padding: 8px 12px;">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                    couponsList.appendChild(couponCard);
+                });
+            } catch (error) {
+                console.error('Error cargando cupones:', error);
+            }
+        }
+
+        // Abrir modal cupón
+        function abrirModalCupon() {
+            editingCouponId = null;
+            document.getElementById('couponModalTitle').textContent = 'Nuevo Cupón';
+            document.getElementById('couponForm').reset();
+            document.getElementById('couponActive').checked = true;
+            document.getElementById('couponModal').style.display = 'flex';
+        }
+
+        // Cerrar modal cupón
+        function cerrarModalCupon() {
+            document.getElementById('couponModal').style.display = 'none';
+        }
+
+        // Editar cupón
+        async function editarCupon(couponId) {
+            try {
+                const response = await fetch('/api/coupons', {
+                    headers: getAuthHeaders()
+                });
+                const coupons = await response.json();
+                const coupon = coupons.find(c => c.id === couponId);
+
+                if (!coupon) return;
+
+                editingCouponId = couponId;
+                document.getElementById('couponModalTitle').textContent = 'Editar Cupón';
+                document.getElementById('couponCode').value = coupon.code;
+                document.getElementById('couponDescription').value = coupon.description || '';
+                document.getElementById('couponType').value = coupon.discount_type;
+                document.getElementById('couponValue').value = coupon.discount_value;
+                document.getElementById('couponMinPurchase').value = coupon.min_purchase || 0;
+                document.getElementById('couponMaxUses').value = coupon.max_uses || '';
+                document.getElementById('couponActive').checked = coupon.is_active;
+
+                // Convertir a datetime-local
+                const date = new Date(coupon.valid_until);
+                document.getElementById('couponValidUntil').value = date.toISOString().slice(0, 16);
+
+                document.getElementById('couponModal').style.display = 'flex';
+            } catch (error) {
+                console.error('Error editando cupón:', error);
+            }
+        }
+
+        // Guardar cupón
+        async function guardarCupon(event) {
+            event.preventDefault();
+
+            const couponData = {
+                code: document.getElementById('couponCode').value.toUpperCase(),
+                description: document.getElementById('couponDescription').value,
+                discount_type: document.getElementById('couponType').value,
+                discount_value: parseFloat(document.getElementById('couponValue').value),
+                min_purchase: parseFloat(document.getElementById('couponMinPurchase').value) || 0,
+                max_uses: document.getElementById('couponMaxUses').value ? parseInt(document.getElementById('couponMaxUses').value) : null,
+                valid_until: document.getElementById('couponValidUntil').value,
+                is_active: document.getElementById('couponActive').checked
+            };
+
+            try {
+                const url = editingCouponId ? `/api/coupons/${editingCouponId}` : '/api/coupons';
+                const method = editingCouponId ? 'PUT' : 'POST';
+
+                const response = await fetch(url, {
+                    method: method,
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify(couponData)
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    alert('Error: ' + (error.error || 'No se pudo guardar el cupón'));
+                    return;
+                }
+
+                alert(editingCouponId ? 'Cupón actualizado' : 'Cupón creado');
+                cerrarModalCupon();
+                loadCoupons();
+            } catch (error) {
+                console.error('Error guardando cupón:', error);
+                alert('Error al guardar el cupón');
+            }
+        }
+
+        // Eliminar cupón
+        async function eliminarCupon(couponId) {
+            if (!confirm('¿Estás seguro de que deseas eliminar este cupón?')) return;
+
+            try {
+                const response = await fetch(`/api/coupons/${couponId}`, {
+                    method: 'DELETE',
+                    headers: getAuthHeaders()
+                });
+
+                if (!response.ok) {
+                    alert('Error al eliminar el cupón');
+                    return;
+                }
+
+                alert('Cupón eliminado');
+                loadCoupons();
+            } catch (error) {
+                console.error('Error eliminando cupón:', error);
+                alert('Error al eliminar el cupón');
             }
         }
         
@@ -1063,6 +1320,7 @@
         // Cargar datos al iniciar
         loadData();
         loadOrders();
+        loadCoupons();
         
         // Auto-guardar cada 30 segundos
         setInterval(() => {
