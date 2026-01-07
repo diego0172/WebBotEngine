@@ -1,50 +1,6 @@
 import express from 'express';
-import pkg from 'pg';
 import { verifyToken } from './auth-routes.js';
-import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const { Pool } = pkg;
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-// Cargar .env.production primero, luego .env
-const prodEnvFile = path.join(__dirname, '..', '.env.production');
-const devEnvFile = path.join(__dirname, '..', '.env');
-
-try {
-  dotenv.config({ path: prodEnvFile });
-} catch (err) {
-  dotenv.config({ path: devEnvFile });
-}
-
-// Crear pool de conexiones
-let poolConfig;
-
-if (process.env.DATABASE_URL) {
-  // Remover ?sslmode=require de la URL y manejarlo en la configuración
-  const dbUrl = process.env.DATABASE_URL.replace('?sslmode=require', '').replace('?sslmode=disable', '');
-  poolConfig = {
-    connectionString: dbUrl,
-    ssl: { rejectUnauthorized: false },
-    application_name: 'botenginecorp',
-    statement_timeout: 30000,
-    query_timeout: 30000
-  };
-} else {
-  poolConfig = {
-    host: process.env.DB_HOST || 'localhost',
-    port: parseInt(process.env.DB_PORT || '5432'),
-    database: process.env.DB_NAME || 'defaultdb',
-    user: process.env.DB_USER || 'postgres',
-    password: process.env.DB_PASSWORD,
-    ssl: false,
-    statement_timeout: 30000,
-    query_timeout: 30000
-  };
-}
-
-const pool = new Pool(poolConfig);
+import pool from './database.js';
 
 const router = express.Router();
 
