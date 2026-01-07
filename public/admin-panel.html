@@ -697,7 +697,7 @@
             <div class="section">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
                     <h2 class="section-title">🎁 Gestión de Cupones de Descuento</h2>
-                    <button class="btn btn-primary" onclick="abrirModalCupon()">
+                    <button class="btn btn-primary" onclick="window.abrirModalCupon()">
                         <i class="fas fa-plus"></i> Nuevo Cupón
                     </button>
                 </div>
@@ -714,10 +714,10 @@
             <div style="background: rgba(30, 41, 59, 0.95); border: 2px solid rgba(14, 165, 233, 0.3); border-radius: 16px; padding: 30px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                     <h3 id="couponModalTitle">Nuevo Cupón</h3>
-                    <button onclick="cerrarModalCupon()" style="background: none; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer;">✕</button>
+                    <button onclick="window.cerrarModalCupon()" style="background: none; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer;">✕</button>
                 </div>
 
-                <form id="couponForm" onsubmit="guardarCupon(event)">
+                <form id="couponForm" onsubmit="window.guardarCupon(event)">
                     <div class="form-group" style="margin-bottom: 15px;">
                         <label>Código del Cupón</label>
                         <input type="text" id="couponCode" placeholder="Ej: BIENVENIDA2026" required style="width: 100%; padding: 10px; background: rgba(71, 85, 105, 0.3); border: 1px solid rgba(14, 165, 233, 0.3); border-radius: 8px; color: #f8fafc;">
@@ -771,7 +771,7 @@
                         <button type="submit" class="btn btn-primary" style="flex: 1;">
                             <i class="fas fa-save"></i> Guardar Cupón
                         </button>
-                        <button type="button" onclick="cerrarModalCupon()" class="btn btn-secondary" style="flex: 1;">
+                        <button type="button" onclick="window.cerrarModalCupon()" class="btn btn-secondary" style="flex: 1;">
                             Cancelar
                         </button>
                     </div>
@@ -1014,7 +1014,7 @@
         let editingCouponId = null;
 
         // Cargar cupones
-        async function loadCoupons() {
+        window.loadCoupons = async function loadCoupons() {
             try {
                 const response = await fetch('/api/coupons', {
                     headers: getAuthHeaders()
@@ -1050,10 +1050,10 @@
                             </div>
                         </div>
                         <div style="display: flex; gap: 8px; margin-left: 15px;">
-                            <button onclick="editarCupon(${coupon.id})" class="btn btn-primary" style="padding: 8px 12px; font-size: 0.85rem;">
+                            <button onclick="window.editarCupon(${coupon.id})" class="btn btn-primary" style="padding: 8px 12px; font-size: 0.85rem;">
                                 <i class="fas fa-edit"></i>
                             </button>
-                            <button onclick="eliminarCupon(${coupon.id})" class="btn-delete" style="padding: 8px 12px;">
+                            <button onclick="window.eliminarCupon(${coupon.id})" class="btn-delete" style="padding: 8px 12px;">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
@@ -1066,7 +1066,7 @@
         }
 
         // Abrir modal cupón
-        function abrirModalCupon() {
+        window.abrirModalCupon = function() {
             editingCouponId = null;
             document.getElementById('couponModalTitle').textContent = 'Nuevo Cupón';
             document.getElementById('couponForm').reset();
@@ -1075,12 +1075,12 @@
         }
 
         // Cerrar modal cupón
-        function cerrarModalCupon() {
+        window.cerrarModalCupon = function() {
             document.getElementById('couponModal').style.display = 'none';
         }
 
         // Editar cupón
-        async function editarCupon(couponId) {
+        window.editarCupon = async function(couponId) {
             try {
                 const response = await fetch('/api/coupons', {
                     headers: getAuthHeaders()
@@ -1111,7 +1111,7 @@
         }
 
         // Guardar cupón
-        async function guardarCupon(event) {
+        window.guardarCupon = async function(event) {
             event.preventDefault();
 
             const couponData = {
@@ -1142,8 +1142,8 @@
                 }
 
                 alert(editingCouponId ? 'Cupón actualizado' : 'Cupón creado');
-                cerrarModalCupon();
-                loadCoupons();
+                window.cerrarModalCupon();
+                window.loadCoupons();
             } catch (error) {
                 console.error('Error guardando cupón:', error);
                 alert('Error al guardar el cupón');
@@ -1151,7 +1151,7 @@
         }
 
         // Eliminar cupón
-        async function eliminarCupon(couponId) {
+        window.eliminarCupon = async function(couponId) {
             if (!confirm('¿Estás seguro de que deseas eliminar este cupón?')) return;
 
             try {
@@ -1166,7 +1166,7 @@
                 }
 
                 alert('Cupón eliminado');
-                loadCoupons();
+                window.loadCoupons();
             } catch (error) {
                 console.error('Error eliminando cupón:', error);
                 alert('Error al eliminar el cupón');
@@ -1320,7 +1320,7 @@
         // Cargar datos al iniciar
         loadData();
         loadOrders();
-        loadCoupons();
+        window.loadCoupons();
         
         // Auto-guardar cada 30 segundos
         setInterval(() => {
