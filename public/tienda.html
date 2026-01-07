@@ -695,12 +695,14 @@
     .cart-item-qty {
       width: 60px;
       padding: 8px 10px;
-      border: 2px solid var(--border);
+      border: 2px solid var(--primary);
       border-radius: 6px;
       text-align: center;
-      font-weight: 600;
+      font-weight: 700;
       transition: all 0.3s ease;
       background: white;
+      color: var(--primary);
+      font-size: 1rem;
     }
 
     .cart-item-qty:focus {
@@ -741,6 +743,94 @@
       font-weight: 700;
       color: var(--primary);
       margin-bottom: 20px;
+    }
+
+    /* Estilos para cupones */
+    .coupon-section {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(37, 99, 235, 0.05) 100%);
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      border: 2px solid rgba(37, 99, 235, 0.2);
+    }
+
+    .coupon-input-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .coupon-input {
+      flex: 1;
+      padding: 10px 14px;
+      border: 2px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+    }
+
+    .coupon-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .btn-apply-coupon {
+      padding: 10px 20px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .btn-apply-coupon:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    .coupon-message {
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .coupon-message.success {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+      border: 1px solid var(--success);
+    }
+
+    .coupon-message.error {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--danger);
+      border: 1px solid var(--danger);
+    }
+
+    .discount-display {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      margin: 10px 0;
+      border-top: 1px solid rgba(37, 99, 235, 0.2);
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    .discount-display .remove-coupon {
+      background: none;
+      border: none;
+      color: var(--danger);
+      cursor: pointer;
+      font-size: 0.85rem;
+      padding: 0;
     }
     .cart-summary {
       background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%);
@@ -1150,8 +1240,27 @@
       </div>
       
       <div id="cartActions" style="display: none;">
+        <!-- Sección de cupones -->
+        <div class="coupon-section">
+          <h4 style="margin: 0 0 10px 0; color: var(--primary);">🎁 Aplicar Cupón</h4>
+          <div id="couponMessage"></div>
+          <div id="discountDisplay"></div>
+          <div class="coupon-input-group">
+            <input type="text" id="couponCode" class="coupon-input" placeholder="Ingresa tu código de descuento">
+            <button class="btn-apply-coupon" onclick="window.aplicarCupon()">Aplicar</button>
+          </div>
+        </div>
+
         <div class="cart-total">
-          Total: <span id="cartTotalPrice">Q 0.00</span>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span>Subtotal:</span>
+            <span id="cartSubtotalPrice">Q 0.00</span>
+          </div>
+          <div id="cartDiscountDisplay"></div>
+          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(37, 99, 235, 0.2); padding-top: 10px; margin-top: 10px;">
+            <span>Total:</span>
+            <span id="cartTotalPrice">Q 0.00</span>
+          </div>
         </div>
         <div class="cart-actions">
           <button class="btn-pagar" id="pagarBtn" onclick="iniciarPago()">
@@ -1198,6 +1307,7 @@
     let cart = [];
     let todosProductos = [];
     let vistaActual = 'normal';
+    let appliedCoupon = null; // Cupón aplicado actualmente
 
     // Limpiar productos del localStorage para forzar recarga desde API
     localStorage.removeItem('products');
@@ -1472,23 +1582,24 @@
       if (cart.length === 0) {
         cartItems.innerHTML = '<div class="cart-empty">Tu carrito está vacío</div>';
         cartActions.style.display = 'none';
+        appliedCoupon = null;
         return;
       }
       
       let html = '';
-      let total = 0;
+      let subtotal = 0;
       
       cart.forEach(item => {
         const precio = parseFloat(item.price) || 0;
         const cantidad = parseInt(item.cantidad) || 1;
-        const subtotal = precio * cantidad;
-        total += subtotal;
+        const itemsubtotal = precio * cantidad;
+        subtotal += itemsubtotal;
         
         html += `
           <div class="cart-item">
             <div class="cart-item-info">
               <div class="cart-item-name">${item.name}</div>
-              <div class="cart-item-price">Q ${precio.toFixed(2)} x ${cantidad} = Q ${subtotal.toFixed(2)}</div>
+              <div class="cart-item-price">Q ${precio.toFixed(2)} x ${cantidad} = Q ${itemsubtotal.toFixed(2)}</div>
             </div>
             <div class="cart-item-actions">
               <input type="number" class="cart-item-qty" value="${cantidad}" min="1" 
@@ -1502,8 +1613,78 @@
       });
       
       cartItems.innerHTML = html;
-      document.getElementById('cartTotalPrice').textContent = `Q ${total.toFixed(2)}`;
+      document.getElementById('cartSubtotalPrice').textContent = `Q ${subtotal.toFixed(2)}`;
+      
+      // Calcular total con descuento
+      let total = subtotal;
+      let discountDisplay = '';
+      if (appliedCoupon) {
+        discountDisplay = `
+          <div class="discount-display">
+            <span>Descuento (${appliedCoupon.code}): -Q ${appliedCoupon.discountAmount.toFixed(2)}</span>
+            <button class="remove-coupon" onclick="window.removerCupon()">Quitar</button>
+          </div>
+        `;
+        total = subtotal - appliedCoupon.discountAmount;
+      }
+      document.getElementById('cartDiscountDisplay').innerHTML = discountDisplay;
+      document.getElementById('cartTotalPrice').textContent = `Q ${Math.max(0, total).toFixed(2)}`;
       cartActions.style.display = 'block';
+    }
+
+    // Función para aplicar cupón
+    window.aplicarCupon = async function() {
+      const code = document.getElementById('couponCode').value.trim();
+      if (!code) {
+        mostrarMensajeCupon('Ingresa un código de cupón', 'error');
+        return;
+      }
+
+      const subtotal = cart.reduce((sum, item) => {
+        return sum + (parseFloat(item.price) * parseInt(item.cantidad));
+      }, 0);
+
+      try {
+        const response = await fetch('/api/validate-coupon', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code, totalAmount: subtotal })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          mostrarMensajeCupon(data.error || 'Cupón inválido', 'error');
+          return;
+        }
+
+        appliedCoupon = data.coupon;
+        mostrarMensajeCupon(`✓ Cupón aplicado: -Q ${appliedCoupon.discountAmount.toFixed(2)}`, 'success');
+        document.getElementById('couponCode').value = '';
+        mostrarCarrito();
+      } catch (error) {
+        console.error('Error validando cupón:', error);
+        mostrarMensajeCupon('Error al validar el cupón', 'error');
+      }
+    };
+
+    window.removerCupon = function() {
+      appliedCoupon = null;
+      document.getElementById('couponCode').value = '';
+      document.getElementById('couponMessage').innerHTML = '';
+      mostrarCarrito();
+    };
+
+    function mostrarMensajeCupon(mensaje, tipo) {
+      const messageEl = document.getElementById('couponMessage');
+      messageEl.className = `coupon-message ${tipo}`;
+      messageEl.textContent = mensaje;
+      
+      if (tipo === 'success') {
+        setTimeout(() => {
+          messageEl.innerHTML = '';
+        }, 3000);
+      }
     }
 
     function actualizarCantidad(productoId, nuevaCantidad) {

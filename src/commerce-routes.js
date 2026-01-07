@@ -138,4 +138,143 @@ router.get('/orders/:email', async (req, res) => {
   }
 });
 
+// ============= CUPONES =============
+
+// Validar cupón (sin autenticación para permitir desde el carrito)
+router.post('/validate-coupon', async (req, res) => {
+  const { code, totalAmount } = req.body;
+  
+  if (!code) {
+    return res.status(400).json({ error: 'Código de cupón requerido' });
+  }
+
+  try {
+    const result = await pool.query(
+      `SELECT * FROM coupons 
+       WHERE code = $1 
+       AND is_active = true 
+       AND valid_from <= CURRENT_TIMESTAMP 
+       AND valid_until >= CURRENT_TIMESTAMP
+       AND (max_uses IS NULL OR current_uses < max_uses)`,
+      [code.toUpperCase()]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(400).json({ error: 'Cupón inválido, expirado o agotado' });
+    }
+
+    const coupon = result.rows[0];
+
+    // Validar compra mínima
+    if (totalAmount < coupon.min_purchase) {
+      return res.status(400).json({ 
+        error: `Compra mínima requerida: Q ${coupon.min_purchase.toFixed(2)}` 
+      });
+    }
+
+    // Calcular descuento
+    let discountAmount = 0;
+    if (coupon.discount_type === 'percentage') {
+      discountAmount = (totalAmount * coupon.discount_value) / 100;
+    } else {
+      discountAmount = coupon.discount_value;
+    }
+
+    res.json({
+      valid: true,
+      coupon: {
+        id: coupon.id,
+        code: coupon.code,
+        description: coupon.description,
+        discount_type: coupon.discount_type,
+        discount_value: coupon.discount_value,
+        discountAmount: Math.min(discountAmount, totalAmount)
+      }
+    });
+  } catch (error) {
+    console.error('Error validando cupón:', error);
+    res.status(500).json({ error: 'Error validando cupón' });
+  }
+});
+
+// Obtener cupones (admin)
+router.get('/coupons', verifyToken, async (req, res) => {
+  try {
+    const result = await pool.query(
+      'SELECT id, code, description, discount_type, discount_value, min_purchase, max_uses, current_uses, valid_from, valid_until, is_active, created_at FROM coupons ORDER BY created_at DESC'
+    );
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error obteniendo cupones:', error);
+    res.status(500).json({ error: 'Error obteniendo cupones' });
+  }
+});
+
+// Crear cupón (admin)
+router.post('/coupons', verifyToken, async (req, res) => {
+  const { code, description, discount_type, discount_value, min_purchase, max_uses, valid_until } = req.body;
+
+  if (!code || !discount_type || !discount_value || !valid_until) {
+    return res.status(400).json({ error: 'Campos requeridos faltantes' });
+  }
+
+  try {
+    const result = await pool.query(
+      `INSERT INTO coupons (code, description, discount_type, discount_value, min_purchase, max_uses, valid_until, created_by)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
+      [code.toUpperCase(), description, discount_type, discount_value, min_purchase || 0, max_uses, valid_until, req.user?.email || 'admin']
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (error) {
+    if (error.code === '23505') {
+      return res.status(400).json({ error: 'Este código de cupón ya existe' });
+    }
+    console.error('Error creando cupón:', error);
+    res.status(500).json({ error: 'Error creando cupón' });
+  }
+});
+
+// Actualizar cupón (admin)
+router.put('/coupons/:id', verifyToken, async (req, res) => {
+  const { id } = req.params;
+  const { code, description, discount_type, discount_value, min_purchase, max_uses, valid_until, is_active } = req.body;
+
+  try {
+    const result = await pool.query(
+      `UPDATE coupons 
+       SET code=$1, description=$2, discount_type=$3, discount_value=$4, min_purchase=$5, max_uses=$6, valid_until=$7, is_active=$8
+       WHERE id=$9 RETURNING *`,
+      [code?.toUpperCase() || code, description, discount_type, discount_value, min_purchase, max_uses, valid_until, is_active, id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Cupón no encontrado' });
+    }
+
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error('Error actualizando cupón:', error);
+    res.status(500).json({ error: 'Error actualizando cupón' });
+  }
+});
+
+// Eliminar cupón (admin)
+router.delete('/coupons/:id', verifyToken, async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const result = await pool.query('DELETE FROM coupons WHERE id=$1 RETURNING *', [id]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Cupón no encontrado' });
+    }
+
+    res.json({ message: 'Cupón eliminado', coupon: result.rows[0] });
+  } catch (error) {
+    console.error('Error eliminando cupón:', error);
+    res.status(500).json({ error: 'Error eliminando cupón' });
+  }
+});
+
 export default router;
+
