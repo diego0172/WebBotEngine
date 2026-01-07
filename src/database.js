@@ -3,6 +3,7 @@ const { Pool } = pkg;
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import fs from 'fs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -22,13 +23,12 @@ let poolConfig;
 
 if (process.env.DATABASE_URL) {
   // DigitalOcean puerto 25060 requiere SSL con certificado CA
-  const fs = require('fs');
   const caPath = '/opt/stack/web/ca-certificate.crt';
   let ca = undefined;
   
   try {
-    if (require('fs').existsSync(caPath)) {
-      ca = require('fs').readFileSync(caPath, 'utf8');
+    if (fs.existsSync(caPath)) {
+      ca = fs.readFileSync(caPath, 'utf8');
     }
   } catch (err) {
     console.warn('Certificado CA no encontrado, usando rejectUnauthorized: false');
