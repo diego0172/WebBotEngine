@@ -1323,7 +1323,7 @@
                 document.getElementById('productStock').value = product.stock;
                 document.getElementById('productCategory').value = product.category;
                 document.getElementById('productStatus').value = product.status || 'activo';
-                document.getElementById('productMargin').value = 50;
+                document.getElementById('productMargin').value = product.margin || 50;
                 document.getElementById('productImage').value = '';
                 
                 // Mostrar preview si existe imagen
@@ -1431,6 +1431,7 @@
                 image: currentImageBase64,
                 category: document.getElementById('productCategory').value,
                 cost: parseFloat(document.getElementById('productCost').value),
+                margin: parseInt(document.getElementById('productMargin').value) || 50,
                 status: document.getElementById('productStatus').value || 'activo'
             };
             
@@ -1489,8 +1490,8 @@
             }
         });
         
-        // Cerrar modal al hacer click fuera
-        document.getElementById('productModal').addEventListener('click', (e) => {
+        // Cerrar modal al hacer click en el fondo (solo el overlay)
+        document.getElementById('productModal').addEventListener('mousedown', (e) => {
             if (e.target.id === 'productModal') {
                 closeProductModal();
             }

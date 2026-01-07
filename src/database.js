@@ -62,6 +62,7 @@ export async function initializeDatabase() {
         description TEXT,
         price DECIMAL(10, 2) NOT NULL,
         cost DECIMAL(10, 2) DEFAULT 0,
+        margin INTEGER DEFAULT 50,
         stock INTEGER NOT NULL DEFAULT 0,
         sales INTEGER DEFAULT 0,
         status VARCHAR(50) DEFAULT 'activo',
