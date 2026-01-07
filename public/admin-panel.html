@@ -944,14 +944,14 @@
                 // Agregar event listeners a los botones dinámicos
                 productsList.querySelectorAll('[data-action="edit-product"]').forEach(btn => {
                     btn.addEventListener('click', function() {
-                        const productId = this.getAttribute('data-product-id');
+                        const productId = parseInt(this.getAttribute('data-product-id'));
                         editProduct(productId);
                     });
                 });
 
                 productsList.querySelectorAll('[data-action="delete-product"]').forEach(btn => {
                     btn.addEventListener('click', function() {
-                        const productId = this.getAttribute('data-product-id');
+                        const productId = parseInt(this.getAttribute('data-product-id'));
                         deleteProduct(productId);
                     });
                 });
