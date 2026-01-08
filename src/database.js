@@ -68,6 +68,7 @@ export async function initializeDatabase() {
         status VARCHAR(50) DEFAULT 'activo',
         category VARCHAR(100),
         image TEXT,
+        images JSONB DEFAULT '[]',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )

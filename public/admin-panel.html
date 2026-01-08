@@ -500,13 +500,13 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="productImage">Imagen del Producto *</label>
+                    <label for="productImage">Imágenes del Producto (múltiples) *</label>
                     <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                        <input type="file" id="productImage" accept="image/*" style="flex: 1; padding: 10px; border: 2px solid rgba(148, 163, 184, 0.2); border-radius: 10px; color: #cbd5e1;">
+                        <input type="file" id="productImage" accept="image/*" multiple style="flex: 1; padding: 10px; border: 2px solid rgba(148, 163, 184, 0.2); border-radius: 10px; color: #cbd5e1;">
                         <button type="button" class="btn btn-secondary" data-action="clear-image" style="padding: 8px 16px;">Limpiar</button>
                     </div>
-                    <div id="imagePreview" style="width: 100%; height: 150px; background: rgba(15, 23, 42, 0.6); border: 2px dashed rgba(148, 163, 184, 0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 0.9rem;">
-                        Preview de la imagen
+                    <div id="imagePreview" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; width: 100%; min-height: 120px; background: rgba(15, 23, 42, 0.6); border: 2px dashed rgba(148, 163, 184, 0.2); border-radius: 8px; padding: 10px; align-content: start;">
+                        <div style="grid-column: 1/-1; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 0.9rem; min-height: 120px;">Preview de imágenes</div>
                     </div>
                 </div>
                 <div class="form-group">
@@ -939,25 +939,46 @@
             throw new Error('No autorizado');
         }
         
-        // Manejar carga de imagen
+        // Manejar carga de múltiples imágenes
+        let currentImagesBase64 = [];
         document.getElementById('productImage').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
+            const files = e.target.files;
+            currentImagesBase64 = [];
+            
+            if (files.length === 0) {
+                document.getElementById('imagePreview').innerHTML = 'Preview de imágenes';
+                return;
+            }
+            
+            let loadedCount = 0;
+            document.getElementById('imagePreview').innerHTML = '';
+            
+            for (let file of files) {
                 const reader = new FileReader();
                 reader.onload = function(event) {
-                    currentImageBase64 = event.target.result;
-                    // Mostrar preview
+                    currentImagesBase64.push(event.target.result);
+                    loadedCount++;
+                    
+                    // Mostrar preview de todas
                     const preview = document.getElementById('imagePreview');
-                    preview.innerHTML = `<img src="${currentImageBase64}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">`;
+                    const imgContainer = document.createElement('div');
+                    imgContainer.style.cssText = 'position: relative; cursor: zoom-in;';
+                    imgContainer.innerHTML = `
+                        <img src="${event.target.result}" 
+                             style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px; transition: transform 0.3s ease;" 
+                             onmouseover="this.style.transform='scale(1.5)'; this.style.zIndex='10'; this.style.position='relative';"
+                             onmouseout="this.style.transform='scale(1)'; this.style.zIndex='1';">
+                    `;
+                    preview.appendChild(imgContainer);
                 };
                 reader.readAsDataURL(file);
             }
         });
         
         function limpiarImagen() {
-            currentImageBase64 = null;
+            currentImagesBase64 = [];
             document.getElementById('productImage').value = '';
-            document.getElementById('imagePreview').innerHTML = 'Preview de la imagen';
+            document.getElementById('imagePreview').innerHTML = 'Preview de imágenes';
         }
         
         // Cargar datos guardados
@@ -1418,8 +1439,8 @@
         document.getElementById('productForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            if (!currentImageBase64 && !editingProductId) {
-                alert('Por favor selecciona una imagen para el producto');
+            if (currentImagesBase64.length === 0 && !editingProductId) {
+                alert('Por favor selecciona al menos una imagen para el producto');
                 return;
             }
             
@@ -1428,7 +1449,8 @@
                 description: document.getElementById('productDescription').value,
                 price: parseFloat(document.getElementById('productPrice').value),
                 stock: parseInt(document.getElementById('productStock').value),
-                image: currentImageBase64,
+                image: currentImagesBase64[0] || null,
+                images: currentImagesBase64.map((img, idx) => ({ url: img, alt: `${document.getElementById('productName').value} ${idx + 1}` })),
                 category: document.getElementById('productCategory').value,
                 cost: parseFloat(document.getElementById('productCost').value),
                 margin: parseInt(document.getElementById('productMargin').value) || 50,

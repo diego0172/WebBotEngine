@@ -1521,7 +1521,7 @@
   <!-- Header -->
   <header class="header">
     <div class="container nav">
-      <span class="brand">BotEngine</span>
+      <a href="index.html" class="brand" style="text-decoration: none; color: inherit; cursor: pointer;">BotEngine</a>
 
       <button class="menu-toggle" aria-expanded="false" aria-controls="site-menu" aria-label="Abrir menú">
         <span class="menu-bar"></span>
@@ -1786,6 +1786,15 @@
 
   <script type="module">
     import { commerceAPI } from './js/commerce-api.js';
+    
+    // Limpiar caché al cargar tienda
+    if ('caches' in window) {
+      caches.keys().then(cacheNames => {
+        cacheNames.forEach(cacheName => {
+          caches.delete(cacheName);
+        });
+      });
+    }
     
     const PAGGO_API_KEY = 'pagg_92d7df9a00cc721f13786cd873508f6ef4e1158ab0c205fee2b5d407bf1e666f';
     let cart = [];
