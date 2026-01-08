@@ -1829,6 +1829,7 @@
         let productos = await commerceAPI.getProducts();
         
         todosProductos = productos;
+        cargarCategorias();
         filtrarYMostrarProductos();
       } catch (error) {
         console.error('Error cargando productos:', error);
@@ -2580,9 +2581,8 @@ Comparte en:
       }
     }
 
-    // Cargar productos
+    // Cargar productos al iniciar
     cargarProductos();
-    cargarCategorias();
   </script>
 </body>
 </html>
