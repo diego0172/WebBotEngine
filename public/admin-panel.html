@@ -1490,12 +1490,8 @@
             }
         });
         
-        // Cerrar modal al hacer click en el fondo (solo el overlay)
-        document.getElementById('productModal').addEventListener('mousedown', (e) => {
-            if (e.target.id === 'productModal') {
-                closeProductModal();
-            }
-        });
+        // NO cerrar modal al hacer click fuera - solo con botón de cerrar
+        // Modal se cierra solo con el botón X
         
         // Cargar datos al iniciar
         loadData();
