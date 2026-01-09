@@ -1802,6 +1802,28 @@
     let vistaActual = 'normal';
     let appliedCoupon = null; // Cupón aplicado actualmente
 
+    // ===== LIMPIEZA DE CACHE CORRUPTO =====
+    // Función para limpiar localStorage corrupto
+    function limpiarLocalStorageCorrupto() {
+      const keysToCheck = ['products', 'cart', 'ordersCache'];
+      
+      for (const key of keysToCheck) {
+        try {
+          const valor = localStorage.getItem(key);
+          if (valor) {
+            // Intentar parsear como JSON
+            JSON.parse(valor);
+          }
+        } catch (error) {
+          console.warn(`localStorage "${key}" está corrupto, eliminando...`, error.message);
+          localStorage.removeItem(key);
+        }
+      }
+    }
+
+    // Ejecutar limpieza al cargar
+    limpiarLocalStorageCorrupto();
+
     // Limpiar productos del localStorage para forzar recarga desde API
     localStorage.removeItem('products');
 

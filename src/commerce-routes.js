@@ -4,6 +4,15 @@ import pool from './database.js';
 
 const router = express.Router();
 
+// ===== Middleware para garantizar JSON en todas las respuestas =====
+router.use((req, res, next) => {
+  res.set('Content-Type', 'application/json; charset=utf-8');
+  res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.set('Pragma', 'no-cache');
+  res.set('Expires', '0');
+  next();
+});
+
 // ============= PRODUCTOS =============
 
 // Obtener todos los productos
@@ -13,7 +22,7 @@ router.get('/products', async (req, res) => {
     res.json(result.rows);
   } catch (error) {
     console.error('Error obteniendo productos:', error);
-    res.status(500).json({ error: 'Error obteniendo productos' });
+    res.status(500).json({ error: 'Error obteniendo productos', details: error.message });
   }
 });
 
@@ -29,7 +38,7 @@ router.post('/products', async (req, res) => {
     res.status(201).json(result.rows[0]);
   } catch (error) {
     console.error('Error creando producto:', error);
-    res.status(500).json({ error: 'Error creando producto' });
+    res.status(500).json({ error: 'Error creando producto', details: error.message });
   }
 });
 

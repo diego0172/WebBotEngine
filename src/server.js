@@ -186,6 +186,11 @@ app.use((req, res, next) => {
     res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.set('Pragma', 'no-cache');
     res.set('Expires', '0');
+  } else if (req.path.startsWith('/api')) {
+    // Nunca cachear respuestas API
+    res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
   }
   
   // Headers de performance
@@ -193,6 +198,20 @@ app.use((req, res, next) => {
   res.set('X-Frame-Options', 'DENY');
   res.set('X-XSS-Protection', '1; mode=block');
   
+  next();
+});
+
+// ===== Middleware para garantizar respuestas JSON en API =====
+app.use('/api', (req, res, next) => {
+  // Asegurar que las respuestas API sean siempre JSON, nunca HTML
+  const originalJson = res.json.bind(res);
+  res.json = function(data) {
+    res.set('Content-Type', 'application/json');
+    res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
+    return originalJson(data);
+  };
   next();
 });
 
@@ -296,14 +315,27 @@ app.get('/health', (req, res) => {
   });
 });
 
-// ===== SPA fallback =====
+// ===== SPA fallback - SOLO para rutas que no sean API =====
 app.get("*", (req, res) => {
+  // No servir index.html para rutas API que no fueron encontradas
+  if (req.path.startsWith('/api')) {
+    return res.status(404).json({ error: 'Ruta API no encontrada' });
+  }
   res.sendFile(path.join(PUBLIC_DIR, "index.html"));
 });
 
 // ===== Error handling =====
 app.use((err, req, res, next) => {
   console.error('Error:', err);
+  
+  // Asegurar que siempre se devuelva JSON para rutas API
+  if (req.path.startsWith('/api')) {
+    return res.status(500).json({ 
+      error: isDev ? err.message : 'Error interno del servidor',
+      ok: false
+    });
+  }
+  
   res.status(500).json({ 
     ok: false, 
     error: isDev ? err.message : 'Error interno del servidor' 

@@ -32,20 +32,49 @@ class CommerceAPI {
   async getProducts() {
     try {
       if (!this.isOnline) {
-        return JSON.parse(localStorage.getItem('products')) || [];
+        const cached = localStorage.getItem('products');
+        return cached ? JSON.parse(cached) : [];
       }
       
       const response = await fetch(`${API_BASE}/products`, {
-        headers: this.getHeaders()
+        headers: this.getHeaders(),
+        cache: 'no-cache' // Asegurar que no use caché del navegador
       });
-      if (!response.ok) throw new Error('Error obteniendo productos');
       
-      const products = await response.json();
-      localStorage.setItem('products', JSON.stringify(products));
-      return products;
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: Error obteniendo productos`);
+      }
+      
+      // Validar content-type ANTES de intentar parsear
+      const contentType = response.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        console.error(`Respuesta con content-type inválido: ${contentType}`);
+        throw new Error(`Respuesta no JSON: ${contentType}`);
+      }
+      
+      // Intentar parsear la respuesta como JSON
+      let products;
+      try {
+        products = await response.json();
+      } catch (parseError) {
+        console.error('Error parseando JSON:', parseError);
+        // Si el JSON no es válido, usar localStorage como fallback
+        const cached = localStorage.getItem('products');
+        return cached ? JSON.parse(cached) : [];
+      }
+      
+      // Solo cachear si es un array válido
+      if (Array.isArray(products)) {
+        localStorage.setItem('products', JSON.stringify(products));
+        return products;
+      } else {
+        throw new Error('Respuesta de productos no es un array válido');
+      }
+      
     } catch (error) {
-      console.warn('Error obteniendo productos de API, usando localStorage:', error);
-      return JSON.parse(localStorage.getItem('products')) || [];
+      console.warn('Error obteniendo productos de API, usando localStorage:', error.message);
+      const cached = localStorage.getItem('products');
+      return cached ? JSON.parse(cached) : [];
     }
   }
 
