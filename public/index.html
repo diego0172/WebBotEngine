@@ -494,7 +494,10 @@
         
         grid.innerHTML = '';
         
-        clientes.forEach((cliente, index) => {
+        // Limitar a 4 clientes máximo
+        const clientesLimitados = clientes.slice(0, 4);
+        
+        clientesLimitados.forEach((cliente, index) => {
           const delay = (index + 1) * 200;
           const article = document.createElement('article');
           article.className = 'cliente-card reveal';
@@ -565,7 +568,10 @@
         
         grid.innerHTML = '';
         
-        testimonios.forEach((t, index) => {
+        // Limitar a 3 testimonios máximo
+        const testimoniosLimitados = testimonios.slice(0, 3);
+        
+        testimoniosLimitados.forEach((t, index) => {
           const delay = (index + 1) * 200;
           const article = document.createElement('article');
           article.className = 'testimonio-card reveal';

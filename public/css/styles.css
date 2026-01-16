@@ -514,9 +514,9 @@ h1{
 
 .clientes-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 32px;
-  max-width: 1200px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
   margin: 0 auto;
 }
 
@@ -540,7 +540,7 @@ h1{
 .cliente-preview {
   position: relative;
   width: 100%;
-  height: 220px;
+  height: 160px;
   overflow: hidden;
   background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
 }
@@ -584,21 +584,21 @@ h1{
 }
 
 .cliente-info {
-  padding: 24px;
+  padding: 16px;
 }
 
 .cliente-info h3 {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--text);
-  margin: 0 0 12px 0;
+  margin: 0 0 8px 0;
 }
 
 .cliente-info p {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text-secondary);
-  line-height: 1.6;
-  margin: 0 0 16px 0;
+  line-height: 1.5;
+  margin: 0 0 12px 0;
 }
 
 .cliente-link {
@@ -666,17 +666,17 @@ h1{
 
 .testimonios-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 30px;
-  max-width: 1200px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
   margin: 0 auto;
 }
 
 .testimonio-card {
   background: rgba(15, 23, 42, 0.6);
   border: 2px solid rgba(148, 163, 184, 0.2);
-  border-radius: 16px;
-  padding: 30px;
+  border-radius: 12px;
+  padding: 20px;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
@@ -702,19 +702,19 @@ h1{
 .testimonio-header {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-bottom: 20px;
+  gap: 12px;
+  margin-bottom: 14px;
   position: relative;
   z-index: 1;
 }
 
 .testimonio-foto {
-  width: 60px;
-  height: 60px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #0ea5e9;
-  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+  border: 2px solid #0ea5e9;
+  box-shadow: 0 2px 8px rgba(14, 165, 233, 0.3);
 }
 
 .testimonio-info h4 {
