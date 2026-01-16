@@ -360,6 +360,11 @@ class CommerceAPI {
       return cached ? JSON.parse(cached) : [];
     }
   }
+  
+  // Alias para compatibilidad
+  async getProyectosDemo() {
+    return this.getDemos();
+  }
 
   async getAllDemos() {
     try {

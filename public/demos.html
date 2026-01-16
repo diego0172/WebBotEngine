@@ -1,96 +1,113 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="js">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galería de Proyectos Demo - BotEngine</title>
-    <meta name="description" content="Explora ejemplos de sitios web que creamos: peluquerías, restaurantes, tiendas y más. Conoce nuestras capacidades.">
+    <title>Proyectos Demo - BotEngine Corp</title>
+    <meta name="description" content="Explora nuestra galería de proyectos demo: chatbots inteligentes, sitios web modernos y soluciones de automatización.">
     
     <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
     <style>
-        .demos-hero {
-            padding: 100px 20px 60px;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            text-align: center;
+        body {
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
         }
         
-        .demos-hero h1 {
-            font-size: 3rem;
+        .demos-header {
+            padding: 120px 20px 40px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(139, 92, 246, 0.1));
+        }
+        
+        .demos-header h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
             margin: 0 0 16px 0;
             background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            font-weight: 800;
         }
         
-        .demos-hero p {
-            font-size: 1.2rem;
+        .demos-header p {
+            font-size: 1.25rem;
             color: #94a3b8;
             max-width: 700px;
-            margin: 0 auto 40px;
+            margin: 0 auto;
+            line-height: 1.6;
         }
         
-        .filter-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            justify-content: center;
-            margin: 40px 0;
-        }
-        
-        .filter-btn {
-            padding: 10px 20px;
-            border-radius: 20px;
-            border: 2px solid rgba(14, 165, 233, 0.3);
-            background: rgba(14, 165, 233, 0.1);
-            color: #0ea5e9;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .filter-btn:hover, .filter-btn.active {
-            background: rgba(14, 165, 233, 0.3);
-            border-color: #0ea5e9;
-        }
-        
-        .demos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 32px;
-            max-width: 1400px;
+        .demos-main {
+            max-width: 1200px;
             margin: 0 auto;
             padding: 60px 20px;
         }
         
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(148, 163, 184, 0.1);
+            color: #cbd5e1;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            border: 2px solid rgba(148, 163, 184, 0.3);
+            transition: all 0.3s ease;
+            margin-bottom: 40px;
+        }
+        
+        .back-btn:hover {
+            background: rgba(148, 163, 184, 0.2);
+            border-color: #0ea5e9;
+            color: #0ea5e9;
+        }
+        
+        .demos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+        
         .demo-card {
-            background: rgba(30, 41, 59, 0.8);
-            border: 1px solid rgba(14, 165, 233, 0.2);
+            background: rgba(30, 41, 59, 0.6);
+            border: 2px solid rgba(148, 163, 184, 0.2);
             border-radius: 16px;
             overflow: hidden;
             transition: all 0.3s ease;
-            cursor: pointer;
+            position: relative;
         }
         
         .demo-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 20px 40px rgba(14, 165, 233, 0.3);
-            border-color: #0ea5e9;
+            border-color: rgba(14, 165, 233, 0.6);
         }
         
-        .demo-card.destacado {
-            border-color: #f59e0b;
-            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.2);
+        .demo-card.destacado::before {
+            content: '⭐ Destacado';
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
         }
         
         .demo-preview {
             position: relative;
-            height: 250px;
-            overflow: hidden;
+            height: 200px;
             background: linear-gradient(135deg, #1e293b, #334155);
+            overflow: hidden;
         }
         
         .demo-preview img {
@@ -104,42 +121,50 @@
             transform: scale(1.1);
         }
         
-        .demo-badge {
+        .demo-overlay {
             position: absolute;
-            top: 12px;
-            right: 12px;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
+            inset: 0;
+            background: rgba(14, 165, 233, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .demo-card:hover .demo-overlay {
+            opacity: 1;
+        }
+        
+        .demo-overlay-content {
+            text-align: center;
+            color: white;
+        }
+        
+        .demo-overlay-content i {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+        
+        .demo-overlay-content span {
+            display: block;
+            font-size: 18px;
             font-weight: 600;
-            z-index: 10;
         }
         
-        .demo-badge.destacado {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
-        }
-        
-        .demo-badge.categoria {
-            top: 12px;
-            left: 12px;
-            right: auto;
-            background: rgba(139, 92, 246, 0.9);
-            color: white;
-        }
-        
-        .demo-info {
+        .demo-content {
             padding: 24px;
         }
         
-        .demo-info h3 {
-            font-size: 1.4rem;
+        .demo-content h3 {
+            font-size: 1.5rem;
             color: #f8fafc;
             margin: 0 0 12px 0;
+            font-weight: 700;
         }
         
-        .demo-info p {
-            color: #94a3b8;
+        .demo-content p {
+            color: #cbd5e1;
             line-height: 1.6;
             margin: 0 0 16px 0;
         }
@@ -151,58 +176,54 @@
             margin-bottom: 16px;
         }
         
-        .tech-tag {
-            padding: 4px 10px;
-            background: rgba(14, 165, 233, 0.1);
-            border: 1px solid rgba(14, 165, 233, 0.3);
-            border-radius: 12px;
-            font-size: 0.8rem;
+        .demo-tech-tag {
+            background: rgba(14, 165, 233, 0.15);
             color: #0ea5e9;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid rgba(14, 165, 233, 0.3);
+        }
+        
+        .demo-category {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #94a3b8;
+            font-size: 14px;
+            margin-bottom: 16px;
         }
         
         .demo-link {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 10px 20px;
-            background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
             color: white;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
+            padding: 12px 24px;
+            border-radius: 8px;
+    
+    <!-- Header -->
+    <header class="demos-header">
+        <h1>🚀 Proyectos Demo</h1>
+        <p>Explora ejemplos de chatbots, sitios web y soluciones de automatización que hemos desarrollado</p>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="demos-main">
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            Volver al Inicio
+        </a>
         
-        .demo-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(14, 165, 233, 0.4);
-        }
-        
-        .no-demos {
-            text-align: center;
-            padding: 80px 20px;
-            color: #64748b;
-        }
-        
-        .no-demos i {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            opacity: 0.5;
-        }
-        
-        @media (max-width: 768px) {
-            .demos-hero h1 {
-                font-size: 2rem;
-            }
-            
-            .demos-grid {
-                grid-template-columns: 1fr;
-                padding: 40px 20px;
-            }
-        }
-    </style>
-</head>
-<body>
+        <div class="demos-grid" id="demosGrid">
+            <div class="empty-state">
+                <i class="fas fa-spinner fa-spin"></i>
+                <h3>Cargando proyectos...</h3>
+            </div>
+        </div>
+    </main
     <!-- Header -->
     <header class="header">
         <div class="container nav">
@@ -271,158 +292,80 @@
                             categoria: 'Peluquería',
                             tecnologias: 'HTML5, CSS3, JavaScript, Sistema de Reservas',
                             destacado: true,
-                            activo: true
-                        },
-                        {
-                            id: 2,
-                            nombre: 'Restaurante Gourmet',
-                            descripcion: 'Menú digital interactivo, sistema de pedidos en línea y reservaciones de mesas',
-                            url: '#demo-restaurante',
-                            imagen_url: 'img/demo-restaurante-gourmet.svg',
-                            categoria: 'Restaurante',
-                            tecnologias: 'React, Node.js, Sistema de Pagos',
-                            destacado: true,
-                            activo: true
-                        },
-                        {
-                            id: 3,
-                            nombre: 'Gimnasio Fitness Pro',
-                            descripcion: 'Plataforma de membresías, clases virtuales y seguimiento de progreso',
-                            url: '#demo-gimnasio',
-                            imagen_url: 'img/demo-gimnasio.svg',
-                            categoria: 'Deportes',
-                            tecnologias: 'Vue.js, Firebase, Streaming',
-                            destacado: false,
-                            activo: true
-                        },
-                        {
-                            id: 4,
-                            nombre: 'Consultorio Dental',
-                            descripcion: 'Agenda de citas médicas, historial de pacientes y recordatorios automáticos',
-                            url: '#demo-dental',
-                            imagen_url: 'img/demo-dental.svg',
-                            categoria: 'Salud',
-                            tecnologias: 'Angular, PostgreSQL, WhatsApp API',
-                            destacado: false,
-                            activo: true
-                        }
-                    ];
-                }
-                const grid = document.getElementById('demosGrid');
+    
+    <!-- Script de carga -->
+    <script type="module">
+        import { commerceAPI } from './js/commerce-api.js?v=2026-01-15-3';
+        
+        async function cargarDemos() {
+            const grid = document.getElementById('demosGrid');
+            
+            try {
+                const demos = await commerceAPI.getProyectosDemo();
                 
-                if (!todosLosDemos || todosLosDemos.length === 0) {
+                if (!demos || demos.length === 0) {
                     grid.innerHTML = `
-                        <div class="no-demos" style="grid-column: 1/-1;">
-                            <i class="fas fa-flask"></i>
-                            <h3>Próximamente agregaremos proyectos demo</h3>
-                            <p>Estamos preparando ejemplos increíbles para mostrarte</p>
+                        <div class="empty-state">
+                            <i class="fas fa-box-open"></i>
+                            <h3>No hay proyectos disponibles</h3>
+                            <p>Próximamente agregaremos más demos</p>
                         </div>
                     `;
                     return;
                 }
                 
-                // Crear filtros de categorías
-                crearFiltros(todosLosDemos);
-                
-                // Mostrar demos
-                mostrarDemos(todosLosDemos);
+                grid.innerHTML = demos.map(demo => {
+                    const tecnologias = demo.tecnologias 
+                        ? (Array.isArray(demo.tecnologias) ? demo.tecnologias : demo.tecnologias.split(',').map(t => t.trim()))
+                        : [];
+                    
+                    return `
+                        <article class="demo-card ${demo.destacado ? 'destacado' : ''}">
+                            <div class="demo-preview">
+                                <img src="${demo.imagen_preview || demo.imagen_url || 'img/robot.png'}" 
+                                     alt="${demo.nombre || demo.titulo}" 
+                                     onerror="this.src='img/robot.png'">
+                                <div class="demo-overlay">
+                                    <div class="demo-overlay-content">
+                                        <i class="fas fa-eye"></i>
+                                        <span>Ver Demo</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="demo-content">
+                                <h3>${demo.nombre || demo.titulo}</h3>
+                                ${demo.categoria ? `
+                                    <div class="demo-category">
+                                        <i class="fas fa-folder"></i>
+                                        ${demo.categoria}
+                                    </div>
+                                ` : ''}
+                                <p>${demo.descripcion || 'Proyecto demo de ejemplo'}</p>
+                                ${tecnologias.length > 0 ? `
+                                    <div class="demo-tech">
+                                        ${tecnologias.map(tech => `<span class="demo-tech-tag">${tech}</span>`).join('')}
+                                    </div>
+                                ` : ''}
+                                ${demo.url || demo.url_demo ? `
+                                    <a href="${demo.url || demo.url_demo}" target="_blank" rel="noopener" class="demo-link">
+                                        Ver Proyecto <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                ` : ''}
+                            </div>
+                        </article>
+                    `;
+                }).join('');
                 
             } catch (error) {
                 console.error('Error cargando demos:', error);
-                const grid = document.getElementById('demosGrid');
                 grid.innerHTML = `
-                    <div class="no-demos" style="grid-column: 1/-1; color: #ef4444;">
+                    <div class="empty-state">
                         <i class="fas fa-exclamation-triangle"></i>
-                        <h3>Error al cargar demos</h3>
-                        <p>Por favor, intenta más tarde</p>
+                        <h3>Error al cargar proyectos</h3>
+                        <p>Por favor, intenta recargar la página</p>
                     </div>
                 `;
             }
         }
         
-        function crearFiltros(demos) {
-            const categorias = [...new Set(demos.map(d => d.categoria))].sort();
-            const filterButtons = document.getElementById('filterButtons');
-            
-            categorias.forEach(cat => {
-                const btn = document.createElement('button');
-                btn.className = 'filter-btn';
-                btn.setAttribute('data-filter', cat);
-                btn.innerHTML = `<i class="fas fa-tag"></i> ${cat}`;
-                btn.addEventListener('click', () => filtrarDemos(cat));
-                filterButtons.appendChild(btn);
-            });
-        }
-        
-        function filtrarDemos(categoria) {
-            filtroActual = categoria;
-            
-            // Actualizar botones activos
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            document.querySelector(`[data-filter="${categoria}"]`).classList.add('active');
-            
-            // Filtrar y mostrar
-            const demosFiltrados = categoria === 'todos' 
-                ? todosLosDemos 
-                : todosLosDemos.filter(d => d.categoria === categoria);
-            
-            mostrarDemos(demosFiltrados);
-        }
-        
-        function mostrarDemos(demos) {
-            const grid = document.getElementById('demosGrid');
-            grid.innerHTML = '';
-            
-            if (demos.length === 0) {
-                grid.innerHTML = `
-                    <div class="no-demos" style="grid-column: 1/-1;">
-                        <i class="fas fa-search"></i>
-                        <h3>No hay demos en esta categoría</h3>
-                        <p>Prueba con otra categoría</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            demos.forEach(demo => {
-                const card = document.createElement('article');
-                card.className = `demo-card ${demo.destacado ? 'destacado' : ''}`;
-                
-                const techs = demo.tecnologias ? demo.tecnologias.split(',').map(t => t.trim()) : [];
-                const techHTML = techs.length > 0 ? `
-                    <div class="demo-tech">
-                        ${techs.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
-                    </div>
-                ` : '';
-                
-                card.innerHTML = `
-                    <div class="demo-preview">
-                        ${demo.destacado ? '<div class="demo-badge destacado"><i class="fas fa-star"></i> Destacado</div>' : ''}
-                        <div class="demo-badge categoria">${demo.categoria}</div>
-                        <img src="${demo.imagen_url}" alt="${demo.nombre}" onerror="this.src='img/robot.png'">
-                    </div>
-                    <div class="demo-info">
-                        <h3>${demo.nombre}</h3>
-                        <p>${demo.descripcion}</p>
-                        ${techHTML}
-                        <a href="${demo.url}" class="demo-link" ${demo.url.startsWith('http') ? 'target="_blank" rel="noopener noreferrer"' : ''}>
-                            <i class="fas fa-external-link-alt"></i> Ver Demo
-                        </a>
-                    </div>
-                `;
-                
-                grid.appendChild(card);
-            });
-        }
-        
-        // Cargar demos al inicio
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', cargarDemos);
-        } else {
-            cargarDemos();
-        }
-    </script>
-</body>
-</html>
+        // Cargar al iniciar
