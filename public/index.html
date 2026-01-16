@@ -475,76 +475,45 @@
   
   <!-- Cargar clientes dinámicamente -->
   <script type="module">
-    import { commerceAPI } from './js/commerce-api.js?v=2026-01-15-2';
+    import { commerceAPI } from './js/commerce-api.js?v=2026-01-15-3';
     
     async function cargarClientes() {
+      const grid = document.getElementById('clientesGrid');
+      const seccion = document.getElementById('clientes');
+      
       try {
-        console.log('🔄 Cargando clientes...');
         const clientes = await commerceAPI.getClientes();
-        console.log('✅ Clientes recibidos:', clientes.length, clientes);
-        
-        const grid = document.getElementById('clientesGrid');
-        const seccionClientes = document.getElementById('clientes');
         
         if (!clientes || clientes.length === 0) {
-          console.log('❌ No hay clientes, ocultando sección');
-          seccionClientes.style.display = 'none';
+          seccion.style.display = 'none';
           return;
         }
         
-        console.log('✅ Mostrando sección de clientes');
-        // Mostrar la sección si hay clientes
-        seccionClientes.style.display = 'block';
-        
-        grid.innerHTML = '';
-        
-        // Limitar a 4 clientes máximo
-        const clientesLimitados = clientes.slice(0, 4);
-        
-        clientesLimitados.forEach((cliente, index) => {
-          const delay = (index + 1) * 200;
-          const article = document.createElement('article');
-          article.className = 'cliente-card reveal';
-          article.setAttribute('data-from', 'bottom');
-          article.setAttribute('style', `--delay:${delay}ms`);
-          
-          article.innerHTML = `
+        grid.innerHTML = clientes.slice(0, 4).map((c, i) => `
+          <article class="cliente-card" style="animation-delay: ${(i+1)*0.1}s">
             <div class="cliente-preview">
-              <img src="${cliente.imagen_url}" alt="${cliente.nombre}" loading="lazy" width="400" height="300"
-                   onerror="this.src='img/robot.png'">
+              <img src="${c.imagen_url || 'img/robot.png'}" alt="${c.nombre}" loading="lazy" onerror="this.src='img/robot.png'">
               <div class="cliente-overlay">
                 <i class="fas fa-external-link-alt"></i>
                 <span>Ver sitio</span>
               </div>
             </div>
             <div class="cliente-info">
-              <h3>${cliente.nombre}</h3>
-              <p>${cliente.descripcion}</p>
-              <a href="${cliente.url}" target="_blank" rel="noopener noreferrer" class="cliente-link">
+              <h3>${c.nombre}</h3>
+              <p>${c.descripcion || ''}</p>
+              <a href="${c.url}" target="_blank" rel="noopener" class="cliente-link">
                 Visitar sitio <i class="fas fa-arrow-right"></i>
               </a>
             </div>
-          `;
-          
-          grid.appendChild(article);
-        });
+          </article>
+        `).join('');
         
-        // Reiniciar animaciones de reveal si es necesario
-        if (window.initRevealAnimations) {
-          window.initRevealAnimations();
-        }
       } catch (error) {
-        console.error('❌ Error cargando clientes:', error);
-        // Ocultar la sección si hay error
-        const seccionClientes = document.getElementById('clientes');
-        if (seccionClientes) {
-          seccionClientes.style.display = 'none';
-        }
+        console.error('Error:', error);
+        seccion.style.display = 'none';
       }
     }
     
-    // Cargar clientes cuando el DOM esté listo
-    console.log('📋 Preparando carga de clientes, estado DOM:', document.readyState);
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', cargarClientes);
     } else {
@@ -554,121 +523,46 @@
   
   <!-- Script para cargar testimonios -->
   <script type="module">
-    import { commerceAPI } from './js/commerce-api.js?v=2026-01-15-2';
+    import { commerceAPI } from './js/commerce-api.js?v=2026-01-15-3';
     
     async function cargarTestimonios() {
+      const grid = document.getElementById('testimoniosGrid');
+      const seccion = document.getElementById('testimonios');
+      
       try {
         const testimonios = await commerceAPI.getTestimoniosDestacados();
-        const grid = document.getElementById('testimoniosGrid');
-        const seccionTestimonios = document.getElementById('testimonios');
         
         if (!testimonios || testimonios.length === 0) {
-          // Ocultar completamente la sección si no hay testimonios
-          seccionTestimonios.style.display = 'none';
+          seccion.style.display = 'none';
           return;
         }
         
-        // Mostrar la sección si hay testimonios
-        seccionTestimonios.style.display = 'block';
-        
-        grid.innerHTML = '';
-        
-        // Limitar a 3 testimonios máximo
-        const testimoniosLimitados = testimonios.slice(0, 3);
-        
-        testimoniosLimitados.forEach((t, index) => {
-          const delay = (index + 1) * 200;
-          const article = document.createElement('article');
-          article.className = 'testimonio-card reveal';
-          article.setAttribute('data-from', 'bottom');
-          article.setAttribute('style', `--delay:${delay}ms`);
-          
-          const estrellas = '★'.repeat(t.calificacion || 5) + '☆'.repeat(5 - (t.calificacion || 5));
-          
-          article.innerHTML = `
+        grid.innerHTML = testimonios.slice(0, 3).map((t, i) => `
+          <article class="testimonio-card" style="animation-delay: ${(i+1)*0.1}s">
             ${t.destacado ? '<div class="testimonio-destacado"><i class="fas fa-star"></i> Destacado</div>' : ''}
             <div class="testimonio-header">
-              <img src="${t.foto_url || 'img/avatar-default.svg'}" 
-                   alt="${t.nombre_cliente}" 
-                   class="testimonio-foto"
-                   onerror="this.src='img/avatar-default.svg'">
+              <img src="${t.foto_url || 'img/avatar-default.svg'}" alt="${t.nombre_cliente}" class="testimonio-foto" onerror="this.src='img/avatar-default.svg'">
               <div class="testimonio-info">
                 <h4>
                   ${t.nombre_cliente}
-                  ${t.verificado ? '<i class="fas fa-check-circle testimonio-verificado" title="Testimonio verificado"></i>' : ''}
+                  ${t.verificado ? '<i class="fas fa-check-circle testimonio-verificado"></i>' : ''}
                 </h4>
                 ${t.empresa ? `<p class="testimonio-empresa"><i class="fas fa-building"></i> ${t.empresa}</p>` : ''}
                 ${t.cargo ? `<p class="testimonio-cargo">${t.cargo}</p>` : ''}
               </div>
             </div>
-            <div class="testimonio-estrellas">${estrellas}</div>
+            <div class="testimonio-estrellas">${'★'.repeat(t.calificacion || 5)}${'☆'.repeat(5 - (t.calificacion || 5))}</div>
             <p class="testimonio-texto">"${t.testimonio}"</p>
-            ${t.proyecto_relacionado ? `
-              <div class="testimonio-proyecto">
-                <i class="fas fa-project-diagram"></i>
-                <span>${t.proyecto_relacionado}</span>
-              </div>
-            ` : ''}
-          `;
-          
-          grid.appendChild(article);
-        });
+            ${t.proyecto_relacionado ? `<div class="testimonio-proyecto"><i class="fas fa-project-diagram"></i><span>${t.proyecto_relacionado}</span></div>` : ''}
+          </article>
+        `).join('');
         
-        // Agregar Schema.org para SEO de reseñas
-        if (testimonios.length > 0) {
-          const totalCalificacion = testimonios.reduce((sum, t) => sum + (t.calificacion || 5), 0);
-          const promedioCalificacion = (totalCalificacion / testimonios.length).toFixed(1);
-          
-          const schemaReviews = {
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            "name": "BotEngine Corp",
-            "aggregateRating": {
-              "@type": "AggregateRating",
-              "ratingValue": promedioCalificacion,
-              "reviewCount": testimonios.length,
-              "bestRating": "5",
-              "worstRating": "1"
-            },
-            "review": testimonios.map(t => ({
-              "@type": "Review",
-              "author": {
-                "@type": "Person",
-                "name": t.nombre_cliente
-              },
-              "datePublished": t.fecha_testimonio || new Date().toISOString().split('T')[0],
-              "reviewBody": t.testimonio,
-              "reviewRating": {
-                "@type": "Rating",
-                "ratingValue": t.calificacion || 5,
-                "bestRating": "5",
-                "worstRating": "1"
-              }
-            }))
-          };
-          
-          // Insertar schema en el head
-          const script = document.createElement('script');
-          script.type = 'application/ld+json';
-          script.textContent = JSON.stringify(schemaReviews);
-          document.head.appendChild(script);
-        }
-        
-        // Reiniciar animaciones de reveal si es necesario
-        if (window.initRevealAnimations) {
-          window.initRevealAnimations();
-        }
       } catch (error) {
-        console.error('Error cargando testimonios:', error);
-        // Ocultar la sección si hay error
-        const seccionTestimonios = document.getElementById('testimonios');
-        if (seccionTestimonios) {
-          seccionTestimonios.style.display = 'none';
-        }
+        console.error('Error:', error);
+        seccion.style.display = 'none';
       }
     }
     
-    // Cargar testimonios cuando el DOM esté listo
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', cargarTestimonios);
     } else {
