@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gym Fitness Pro - Demo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.9), rgba(220, 38, 38, 0.9)), 
+                        url('img/gym-hero.jpg') center/cover;
+            padding: 120px 20px 80px;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+        }
+        
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            opacity: 0.95;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 16px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            box-shadow: 0 10px 30px rgba(239, 68, 68, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(239, 68, 68, 0.6);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid white;
+        }
+        
+        .btn-secondary:hover {
+            background: white;
+            color: #1a1a2e;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            background: linear-gradient(135deg, #ef4444, #f97316);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .plan-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .plan-card:hover {
+            transform: translateY(-10px);
+            border-color: #ef4444;
+            box-shadow: 0 20px 40px rgba(239, 68, 68, 0.3);
+        }
+        
+        .plan-card.featured {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.2));
+            border-color: #ef4444;
+            transform: scale(1.05);
+        }
+        
+        .plan-name {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #ef4444;
+        }
+        
+        .plan-price {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+        
+        .plan-price span {
+            font-size: 1.2rem;
+            opacity: 0.7;
+        }
+        
+        .plan-features {
+            list-style: none;
+            margin: 30px 0;
+            text-align: left;
+        }
+        
+        .plan-features li {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .plan-features i {
+            color: #ef4444;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .service-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .service-card:hover {
+            background: rgba(239, 68, 68, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        .service-icon {
+            font-size: 3rem;
+            color: #ef4444;
+            margin-bottom: 20px;
+        }
+        
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            margin-bottom: 40px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .hero { padding: 80px 20px 60px; }
+            .cta-buttons { flex-direction: column; }
+            .plan-card.featured { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <a href="demos.html" class="back-link" style="position: fixed; top: 20px; left: 20px; z-index: 100;">
+        <i class="fas fa-arrow-left"></i> Volver a Demos
+    </a>
+    
+    <section class="hero">
+        <h1>💪 Gym Fitness Pro</h1>
+        <p>Transforma tu cuerpo, transforma tu vida</p>
+        <div class="cta-buttons">
+            <a href="#planes" class="btn btn-primary">
+                <i class="fas fa-dumbbell"></i> Ver Planes
+            </a>
+            <a href="#contacto" class="btn btn-secondary">
+                <i class="fas fa-phone"></i> Prueba Gratis
+            </a>
+        </div>
+    </section>
+    
+    <div class="container">
+        <h2 class="section-title">Nuestros Servicios</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-dumbbell"></i>
+                </div>
+                <h3>Musculación</h3>
+                <p>Equipamiento de última generación para desarrollar tu fuerza</p>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-running"></i>
+                </div>
+                <h3>Cardio</h3>
+                <p>Zona cardio completa con caminadoras, elípticas y bicicletas</p>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>Clases Grupales</h3>
+                <p>Yoga, Zumba, Spinning, CrossFit y más</p>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <h3>Entrenador Personal</h3>
+                <p>Planes personalizados con seguimiento individual</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container" id="planes">
+        <h2 class="section-title">Planes de Membresía</h2>
+        <div class="plans-grid">
+            <div class="plan-card">
+                <h3 class="plan-name">Básico</h3>
+                <div class="plan-price">Q299<span>/mes</span></div>
+                <ul class="plan-features">
+                    <li><i class="fas fa-check"></i> Acceso al gimnasio</li>
+                    <li><i class="fas fa-check"></i> Zona de pesas</li>
+                    <li><i class="fas fa-check"></i> Zona cardio</li>
+                    <li><i class="fas fa-check"></i> Duchas y lockers</li>
+                </ul>
+                <a href="#contacto" class="btn btn-secondary">Elegir Plan</a>
+            </div>
+            
+            <div class="plan-card featured">
+                <h3 class="plan-name">Premium ⭐</h3>
+                <div class="plan-price">Q499<span>/mes</span></div>
+                <ul class="plan-features">
+                    <li><i class="fas fa-check"></i> Todo lo del plan Básico</li>
+                    <li><i class="fas fa-check"></i> Clases grupales ilimitadas</li>
+                    <li><i class="fas fa-check"></i> Acceso a zona funcional</li>
+                    <li><i class="fas fa-check"></i> Nutrición básica</li>
+                    <li><i class="fas fa-check"></i> 2 sesiones con entrenador</li>
+                </ul>
+                <a href="#contacto" class="btn btn-primary">Elegir Plan</a>
+            </div>
+            
+            <div class="plan-card">
+                <h3 class="plan-name">VIP</h3>
+                <div class="plan-price">Q799<span>/mes</span></div>
+                <ul class="plan-features">
+                    <li><i class="fas fa-check"></i> Todo lo del plan Premium</li>
+                    <li><i class="fas fa-check"></i> Entrenador personal 3x semana</li>
+                    <li><i class="fas fa-check"></i> Plan nutricional completo</li>
+                    <li><i class="fas fa-check"></i> Acceso 24/7</li>
+                    <li><i class="fas fa-check"></i> Toalla y bebida incluida</li>
+                    <li><i class="fas fa-check"></i> Zona VIP exclusiva</li>
+                </ul>
+                <a href="#contacto" class="btn btn-secondary">Elegir Plan</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container" id="contacto" style="text-align: center; padding: 60px 20px;">
+        <h2 class="section-title">¿Listo para empezar?</h2>
+        <p style="font-size: 1.2rem; margin-bottom: 30px; opacity: 0.9;">
+            Obtén tu primera semana GRATIS sin compromiso
+        </p>
+        <div class="cta-buttons">
+            <a href="https://wa.me/50212345678?text=Hola, quiero información sobre Gym Fitness Pro" class="btn btn-primary">
+                <i class="fab fa-whatsapp"></i> Contactar por WhatsApp
+            </a>
+            <a href="tel:+50212345678" class="btn btn-secondary">
+                <i class="fas fa-phone"></i> Llamar Ahora
+            </a>
+        </div>
+    </div>
+</body>
+</html>
