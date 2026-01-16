@@ -479,16 +479,20 @@
     
     async function cargarClientes() {
       try {
+        console.log('🔄 Cargando clientes...');
         const clientes = await commerceAPI.getClientes();
+        console.log('✅ Clientes recibidos:', clientes.length, clientes);
+        
         const grid = document.getElementById('clientesGrid');
         const seccionClientes = document.getElementById('clientes');
         
         if (!clientes || clientes.length === 0) {
-          // Ocultar completamente la sección si no hay clientes
+          console.log('❌ No hay clientes, ocultando sección');
           seccionClientes.style.display = 'none';
           return;
         }
         
+        console.log('✅ Mostrando sección de clientes');
         // Mostrar la sección si hay clientes
         seccionClientes.style.display = 'block';
         
@@ -530,7 +534,7 @@
           window.initRevealAnimations();
         }
       } catch (error) {
-        console.error('Error cargando clientes:', error);
+        console.error('❌ Error cargando clientes:', error);
         // Ocultar la sección si hay error
         const seccionClientes = document.getElementById('clientes');
         if (seccionClientes) {
@@ -540,6 +544,7 @@
     }
     
     // Cargar clientes cuando el DOM esté listo
+    console.log('📋 Preparando carga de clientes, estado DOM:', document.readyState);
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', cargarClientes);
     } else {
