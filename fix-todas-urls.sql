@@ -39,76 +39,53 @@ DELETE FROM proyectos_demo WHERE url LIKE 'https://ejemplo.com%';
 -- PROYECTOS DEMO - Configurar correctamente
 -- ========================================
 
--- Asegurarse de que solo queden estos 4 demos con URLs correctas
--- Si existen, actualizar. Si no, insertar.
-
--- Demo 1: Gym Fitness Pro
-INSERT INTO proyectos_demo (nombre, descripcion, url, imagen_url, tecnologias, categoria, destacado, activo, orden)
-VALUES 
-  ('Gym Fitness Pro', 
-   'Sitio web completo para gimnasio con planes de membresía, clases grupales y entrenamiento personalizado',
-   'demo-gym.html',
-   'img/demo-gimnasio.svg',
-   'HTML5, CSS3, JavaScript, Responsive',
-   'Deportes',
-   true,
-   true,
-   1)
-ON CONFLICT (nombre) DO UPDATE SET
+-- Primero actualizar los que ya existen
+UPDATE proyectos_demo SET 
+  descripcion = 'Sitio web completo para gimnasio con planes de membresía, clases grupales y entrenamiento personalizado',
   url = 'demo-gym.html',
+  imagen_url = 'img/demo-gimnasio.svg',
+  tecnologias = 'HTML5, CSS3, JavaScript, Responsive',
+  categoria = 'Deportes',
   destacado = true,
-  orden = 1;
+  activo = true,
+  orden = 1
+WHERE nombre LIKE '%Gym%' OR nombre LIKE '%Gimnasio%';
 
--- Demo 2: Chatbot Restaurante  
-INSERT INTO proyectos_demo (nombre, descripcion, url, imagen_url, tecnologias, categoria, destacado, activo, orden)
-VALUES 
-  ('Chatbot Restaurante',
-   'Chatbot inteligente para tomar pedidos, reservas y consultas 24/7',
-   'demo-generator.html',
-   'img/demo-restaurante-gourmet.svg',
-   'JavaScript, AI, NLP',
-   'Gastronomía',
-   true,
-   true,
-   2)
-ON CONFLICT (nombre) DO UPDATE SET
+UPDATE proyectos_demo SET 
+  nombre = 'Chatbot Restaurante',
+  descripcion = 'Chatbot inteligente para tomar pedidos, reservas y consultas 24/7',
   url = 'demo-generator.html',
+  imagen_url = 'img/demo-restaurante-gourmet.svg',
+  tecnologias = 'JavaScript, AI, NLP',
+  categoria = 'Gastronomía',
   destacado = true,
-  orden = 2;
+  activo = true,
+  orden = 2
+WHERE nombre LIKE '%Chatbot%Restaurante%';
 
--- Demo 3: Tienda Online
-INSERT INTO proyectos_demo (nombre, descripcion, url, imagen_url, tecnologias, categoria, destacado, activo, orden)
-VALUES 
-  ('Tienda Online',
-   'E-commerce con carrito de compras y sistema de pagos integrado',
-   'tienda.html',
-   'img/robot.png',
-   'React, Node.js, PostgreSQL',
-   'Comercio',
-   false,
-   true,
-   3)
-ON CONFLICT (nombre) DO UPDATE SET
+UPDATE proyectos_demo SET 
+  nombre = 'Tienda Online',
+  descripcion = 'E-commerce con carrito de compras y sistema de pagos integrado',
   url = 'tienda.html',
+  imagen_url = 'img/robot.png',
+  tecnologias = 'React, Node.js, PostgreSQL',
+  categoria = 'Comercio',
   destacado = false,
-  orden = 3;
+  activo = true,
+  orden = 3
+WHERE nombre LIKE '%commerce%';
 
--- Demo 4: Clínica Dental
-INSERT INTO proyectos_demo (nombre, descripcion, url, imagen_url, tecnologias, categoria, destacado, activo, orden)
-VALUES 
-  ('Clínica Dental',
-   'Sistema de gestión de citas médicas con recordatorios automáticos',
-   'demo-generator.html',
-   'img/demo-dental.svg',
-   'Vue.js, Express, Calendar API',
-   'Salud',
-   false,
-   true,
-   4)
-ON CONFLICT (nombre) DO UPDATE SET
+UPDATE proyectos_demo SET 
+  nombre = 'Clínica Dental',
+  descripcion = 'Sistema de gestión de citas médicas con recordatorios automáticos',
   url = 'demo-generator.html',
+  imagen_url = 'img/demo-dental.svg',
+  tecnologias = 'Vue.js, Express, Calendar API',
+  categoria = 'Salud',
   destacado = false,
-  orden = 4;
+  activo = true,
+  orden = 4
+WHERE nombre LIKE '%Citas%' OR nombre LIKE '%Dental%';
 
 -- ========================================
 -- VERIFICACIÓN FINAL
