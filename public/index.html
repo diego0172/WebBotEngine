@@ -76,6 +76,8 @@
       </button>
 
       <nav id="site-menu" class="menu" aria-label="Navegación principal">
+        <a href="#clientes">Nuestros Clientes</a>
+        <a href="demos.html">Proyectos Demo</a>
         <a href="#services">Nuestros Servicios</a>
         <a href="#proceso">Nuestros Procesos</a>
         <a href="tienda.html" class="btn-bot" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white;">🛍️ Tienda</a>
@@ -121,6 +123,22 @@
 
   <div class="strip" aria-hidden="true"></div>
 
+  <!-- Sección de Clientes -->
+  <section id="clientes" class="clientes-section">
+    <div class="container">
+      <h2 class="section-title reveal" data-from="top" style="--delay:200ms">Nuestros Clientes</h2>
+      <p class="section-subtitle reveal" data-from="top" style="--delay:400ms">Sitios web que hemos creado para diferentes industrias</p>
+      
+      <div class="clientes-grid" id="clientesGrid">
+        <!-- Los clientes se cargarán dinámicamente desde la base de datos -->
+        <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">
+          <i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i>
+          <p style="margin-top: 16px;">Cargando proyectos...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Servicios -->
   <section id="services" class="services" data-services>
     <div class="container services-grid">
@@ -158,6 +176,27 @@
         <h3>Automatización de procesos</h3>
         <p>Integramos herramientas para ahorrar tiempo en agendamiento, recordatorios y seguimiento.</p>
       </article>
+    </div>
+  </section>
+
+  <!-- Testimonios -->
+  <section id="testimonios" class="testimonios-section">
+    <div class="container">
+      <h2 class="section-title reveal" data-from="top" style="--delay:200ms">
+        <i class="fas fa-star" style="color: #f59e0b;"></i>
+        Lo que dicen nuestros clientes
+      </h2>
+      <p class="section-subtitle reveal" data-from="top" style="--delay:400ms">
+        Casos de éxito reales y testimonios verificados
+      </p>
+      
+      <div class="testimonios-grid" id="testimoniosGrid">
+        <!-- Los testimonios se cargarán dinámicamente -->
+        <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">
+          <i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i>
+          <p style="margin-top: 16px;">Cargando testimonios...</p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -441,6 +480,202 @@
   <script src="js/chatbot-ai.js"></script>
   <script src="js/demo-auto.js" defer></script>
   <script src="js/chat-launcher.js" defer></script>
+  
+  <!-- Cargar clientes dinámicamente -->
+  <script type="module">
+    import { commerceAPI } from './js/commerce-api.js';
+    
+    async function cargarClientes() {
+      try {
+        const clientes = await commerceAPI.getClientes();
+        const grid = document.getElementById('clientesGrid');
+        
+        if (!clientes || clientes.length === 0) {
+          grid.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">
+              <i class="fas fa-info-circle" style="font-size: 2rem;"></i>
+              <p style="margin-top: 16px;">Próximamente agregaremos proyectos de nuestros clientes</p>
+            </div>
+          `;
+          return;
+        }
+        
+        grid.innerHTML = '';
+        
+        clientes.forEach((cliente, index) => {
+          const delay = (index + 1) * 200;
+          const article = document.createElement('article');
+          article.className = 'cliente-card reveal';
+          article.setAttribute('data-from', 'bottom');
+          article.setAttribute('style', `--delay:${delay}ms`);
+          
+          article.innerHTML = `
+            <div class="cliente-preview">
+              <img src="${cliente.imagen_url}" alt="${cliente.nombre}" loading="lazy" width="400" height="300"
+                   onerror="this.src='img/robot.png'">
+              <div class="cliente-overlay">
+                <i class="fas fa-external-link-alt"></i>
+                <span>Ver sitio</span>
+              </div>
+            </div>
+            <div class="cliente-info">
+              <h3>${cliente.nombre}</h3>
+              <p>${cliente.descripcion}</p>
+              <a href="${cliente.url}" target="_blank" rel="noopener noreferrer" class="cliente-link">
+                Visitar sitio <i class="fas fa-arrow-right"></i>
+              </a>
+            </div>
+          `;
+          
+          grid.appendChild(article);
+        });
+        
+        // Reiniciar animaciones de reveal si es necesario
+        if (window.initRevealAnimations) {
+          window.initRevealAnimations();
+        }
+      } catch (error) {
+        console.error('Error cargando clientes:', error);
+        const grid = document.getElementById('clientesGrid');
+        grid.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #ef4444;">
+            <i class="fas fa-exclamation-triangle" style="font-size: 2rem;"></i>
+            <p style="margin-top: 16px;">Error al cargar proyectos. Por favor, intenta más tarde.</p>
+          </div>
+        `;
+      }
+    }
+    
+    // Cargar clientes cuando el DOM esté listo
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', cargarClientes);
+    } else {
+      cargarClientes();
+    }
+  </script>
+  
+  <!-- Script para cargar testimonios -->
+  <script type="module">
+    import { commerceAPI } from './js/commerce-api.js';
+    
+    async function cargarTestimonios() {
+      try {
+        const testimonios = await commerceAPI.getTestimoniosDestacados();
+        const grid = document.getElementById('testimoniosGrid');
+        
+        if (!testimonios || testimonios.length === 0) {
+          grid.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">
+              <i class="fas fa-info-circle" style="font-size: 2rem;"></i>
+              <p style="margin-top: 16px;">Próximamente agregaremos testimonios de nuestros clientes</p>
+            </div>
+          `;
+          return;
+        }
+        
+        grid.innerHTML = '';
+        
+        testimonios.forEach((t, index) => {
+          const delay = (index + 1) * 200;
+          const article = document.createElement('article');
+          article.className = 'testimonio-card reveal';
+          article.setAttribute('data-from', 'bottom');
+          article.setAttribute('style', `--delay:${delay}ms`);
+          
+          const estrellas = '★'.repeat(t.calificacion || 5) + '☆'.repeat(5 - (t.calificacion || 5));
+          
+          article.innerHTML = `
+            ${t.destacado ? '<div class="testimonio-destacado"><i class="fas fa-star"></i> Destacado</div>' : ''}
+            <div class="testimonio-header">
+              <img src="${t.foto_url || 'img/avatar-default.svg'}" 
+                   alt="${t.nombre_cliente}" 
+                   class="testimonio-foto"
+                   onerror="this.src='img/avatar-default.svg'">
+              <div class="testimonio-info">
+                <h4>
+                  ${t.nombre_cliente}
+                  ${t.verificado ? '<i class="fas fa-check-circle testimonio-verificado" title="Testimonio verificado"></i>' : ''}
+                </h4>
+                ${t.empresa ? `<p class="testimonio-empresa"><i class="fas fa-building"></i> ${t.empresa}</p>` : ''}
+                ${t.cargo ? `<p class="testimonio-cargo">${t.cargo}</p>` : ''}
+              </div>
+            </div>
+            <div class="testimonio-estrellas">${estrellas}</div>
+            <p class="testimonio-texto">"${t.testimonio}"</p>
+            ${t.proyecto_relacionado ? `
+              <div class="testimonio-proyecto">
+                <i class="fas fa-project-diagram"></i>
+                <span>${t.proyecto_relacionado}</span>
+              </div>
+            ` : ''}
+          `;
+          
+          grid.appendChild(article);
+        });
+        
+        // Agregar Schema.org para SEO de reseñas
+        if (testimonios.length > 0) {
+          const totalCalificacion = testimonios.reduce((sum, t) => sum + (t.calificacion || 5), 0);
+          const promedioCalificacion = (totalCalificacion / testimonios.length).toFixed(1);
+          
+          const schemaReviews = {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "BotEngine Corp",
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": promedioCalificacion,
+              "reviewCount": testimonios.length,
+              "bestRating": "5",
+              "worstRating": "1"
+            },
+            "review": testimonios.map(t => ({
+              "@type": "Review",
+              "author": {
+                "@type": "Person",
+                "name": t.nombre_cliente
+              },
+              "datePublished": t.fecha_testimonio || new Date().toISOString().split('T')[0],
+              "reviewBody": t.testimonio,
+              "reviewRating": {
+                "@type": "Rating",
+                "ratingValue": t.calificacion || 5,
+                "bestRating": "5",
+                "worstRating": "1"
+              }
+            }))
+          };
+          
+          // Insertar schema en el head
+          const script = document.createElement('script');
+          script.type = 'application/ld+json';
+          script.textContent = JSON.stringify(schemaReviews);
+          document.head.appendChild(script);
+        }
+        
+        // Reiniciar animaciones de reveal si es necesario
+        if (window.initRevealAnimations) {
+          window.initRevealAnimations();
+        }
+      } catch (error) {
+        console.error('Error cargando testimonios:', error);
+        const grid = document.getElementById('testimoniosGrid');
+        grid.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #ef4444;">
+            <i class="fas fa-exclamation-triangle" style="font-size: 2rem;"></i>
+            <p style="margin-top: 16px;">Error al cargar testimonios. Por favor, intenta más tarde.</p>
+          </div>
+        `;
+      }
+    }
+    
+    // Cargar testimonios cuando el DOM esté listo
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', cargarTestimonios);
+    } else {
+      cargarTestimonios();
+    }
+  </script>
   
   <!-- Service Worker for caching (optional) -->
   <script>

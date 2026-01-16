@@ -546,6 +546,253 @@
         }
     </style>
     
+    <!-- Modal para agregar/editar clientes -->
+    <div id="clientModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="clientModalTitle">Nuevo Cliente</h2>
+                <button class="close-btn" data-action="close-client-modal">&times;</button>
+            </div>
+            <form id="clientForm">
+                <input type="hidden" id="clientId">
+                <div class="form-group">
+                    <label for="clientName">Nombre del Proyecto *</label>
+                    <input type="text" id="clientName" required placeholder="ej: Restaurante El Buen Sabor">
+                </div>
+                <div class="form-group">
+                    <label for="clientDescription">Descripción *</label>
+                    <textarea id="clientDescription" required placeholder="Breve descripción del proyecto"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="clientUrl">URL del Sitio Web *</label>
+                    <input type="url" id="clientUrl" required placeholder="https://ejemplo.com">
+                    <small style="color: #94a3b8;">URL completa del sitio web del cliente</small>
+                </div>
+                <div class="form-group">
+                    <label for="clientImageUrl">URL de la Imagen *</label>
+                    <input type="text" id="clientImageUrl" required placeholder="img/cliente-ejemplo.jpg">
+                    <small style="color: #94a3b8;">Ruta relativa o URL completa de la imagen</small>
+                </div>
+                <div style="background: rgba(14, 165, 233, 0.1); border: 2px solid rgba(14, 165, 233, 0.3); border-radius: 10px; padding: 16px; margin: 20px 0;">
+                    <h4 style="margin: 0 0 12px 0; color: #0ea5e9;">
+                        <i class="fas fa-image"></i> Subir Imagen
+                    </h4>
+                    <input type="file" id="clientImageFile" accept="image/*" style="width: 100%; padding: 10px; border: 2px solid rgba(148, 163, 184, 0.2); border-radius: 10px; color: #cbd5e1; margin-bottom: 10px;">
+                    <div id="clientImagePreview" style="width: 100%; min-height: 200px; background: rgba(15, 23, 42, 0.6); border: 2px dashed rgba(148, 163, 184, 0.2); border-radius: 8px; padding: 10px; display: flex; align-items: center; justify-content: center; color: #94a3b8;">
+                        Vista previa de la imagen
+                    </div>
+                    <small style="color: #94a3b8; display: block; margin-top: 8px;">
+                        <i class="fas fa-info-circle"></i> Tamaño recomendado: 800x600px (relación 4:3)
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="clientOrder">Orden de Visualización</label>
+                    <input type="number" id="clientOrder" min="0" value="0" placeholder="0">
+                    <small style="color: #94a3b8;">Menor número aparece primero</small>
+                </div>
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="clientActive" checked style="width: 20px; height: 20px;">
+                        <span>Cliente Activo (mostrar en la página)</span>
+                    </label>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">
+                        <i class="fas fa-save"></i> Guardar Cliente
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-action="close-client-modal" style="flex: 1;">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal para agregar/editar demos -->
+    <div id="demoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="demoModalTitle">Nuevo Proyecto Demo</h2>
+                <button class="close-btn" data-action="close-demo-modal">&times;</button>
+            </div>
+            <form id="demoForm">
+                <input type="hidden" id="demoId">
+                <div class="form-group">
+                    <label for="demoName">Nombre del Proyecto *</label>
+                    <input type="text" id="demoName" required placeholder="ej: Peluquería Estilo Moderno">
+                </div>
+                <div class="form-group">
+                    <label for="demoDescription">Descripción *</label>
+                    <textarea id="demoDescription" required placeholder="Describe las características principales de este demo" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="demoUrl">URL del Demo *</label>
+                    <input type="text" id="demoUrl" required placeholder="https://ejemplo.com o #demo-peluqueria">
+                    <small style="color: #94a3b8;">URL completa o ancla interna (#demo-nombre)</small>
+                </div>
+                <div class="form-group">
+                    <label for="demoCategory">Categoría *</label>
+                    <select id="demoCategory" required style="padding: 10px; border: 1px solid rgba(148, 163, 184, 0.3); border-radius: 6px; color: #cbd5e1; background: rgba(15, 23, 42, 0.4); width: 100%;">
+                        <option value="">Selecciona una categoría</option>
+                        <option value="Peluquería">Peluquería / Salón de Belleza</option>
+                        <option value="Restaurante">Restaurante / Café</option>
+                        <option value="Tienda">Tienda / E-commerce</option>
+                        <option value="Salud">Clínica / Consultorio Médico</option>
+                        <option value="Deportes">Gimnasio / Centro Deportivo</option>
+                        <option value="Servicios">Servicios Profesionales</option>
+                        <option value="Educación">Escuela / Academia</option>
+                        <option value="Inmobiliaria">Bienes Raíces</option>
+                        <option value="Eventos">Eventos / Catering</option>
+                        <option value="Automotriz">Taller / Automotriz</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="demoImageUrl">URL de la Imagen *</label>
+                    <input type="text" id="demoImageUrl" required placeholder="img/demo-peluqueria.jpg">
+                    <small style="color: #94a3b8;">Ruta relativa o URL completa de la imagen</small>
+                </div>
+                <div style="background: rgba(14, 165, 233, 0.1); border: 2px solid rgba(14, 165, 233, 0.3); border-radius: 10px; padding: 16px; margin: 20px 0;">
+                    <h4 style="margin: 0 0 12px 0; color: #0ea5e9;">
+                        <i class="fas fa-image"></i> Subir Imagen
+                    </h4>
+                    <input type="file" id="demoImageFile" accept="image/*" style="width: 100%; padding: 10px; border: 2px solid rgba(148, 163, 184, 0.2); border-radius: 10px; color: #cbd5e1; margin-bottom: 10px;">
+                    <div id="demoImagePreview" style="width: 100%; min-height: 200px; background: rgba(15, 23, 42, 0.6); border: 2px dashed rgba(148, 163, 184, 0.2); border-radius: 8px; padding: 10px; display: flex; align-items: center; justify-content: center; color: #94a3b8;">
+                        Vista previa de la imagen
+                    </div>
+                    <small style="color: #94a3b8; display: block; margin-top: 8px;">
+                        <i class="fas fa-info-circle"></i> Tamaño recomendado: 800x600px o 1200x800px
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="demoTecnologias">Tecnologías Usadas (opcional)</label>
+                    <input type="text" id="demoTecnologias" placeholder="ej: React, Node.js, MongoDB">
+                    <small style="color: #94a3b8;">Separa con comas las tecnologías utilizadas</small>
+                </div>
+                <div class="form-group">
+                    <label for="demoOrder">Orden de Visualización</label>
+                    <input type="number" id="demoOrder" min="0" value="0" placeholder="0">
+                    <small style="color: #94a3b8;">Menor número aparece primero</small>
+                </div>
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; margin-bottom: 12px;">
+                        <input type="checkbox" id="demoDestacado" style="width: 20px; height: 20px;">
+                        <span><i class="fas fa-star" style="color: #f59e0b;"></i> Destacar este demo (aparecerá primero)</span>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="demoActive" checked style="width: 20px; height: 20px;">
+                        <span>Demo Activo (mostrar en la galería)</span>
+                    </label>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">
+                        <i class="fas fa-save"></i> Guardar Demo
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-action="close-demo-modal" style="flex: 1;">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal Testimonio -->
+    <div id="testimonioModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <h3 style="color: #0ea5e9; margin-bottom: 30px; display: flex; align-items: center; gap: 12px;">
+                <i class="fas fa-star"></i>
+                <span id="testimonioModalTitle">Agregar Testimonio</span>
+            </h3>
+            <form id="testimonioForm">
+                <input type="hidden" id="testimonioId">
+                
+                <div class="form-group">
+                    <label for="testimonioNombre">Nombre del Cliente *</label>
+                    <input type="text" id="testimonioNombre" required placeholder="Ej: María González">
+                </div>
+                
+                <div class="form-group">
+                    <label for="testimonioEmpresa">Empresa</label>
+                    <input type="text" id="testimonioEmpresa" placeholder="Ej: Café Aromático">
+                </div>
+                
+                <div class="form-group">
+                    <label for="testimonioCargo">Cargo</label>
+                    <input type="text" id="testimonioCargo" placeholder="Ej: Gerente General">
+                </div>
+                
+                <div class="form-group">
+                    <label for="testimonioTexto">Testimonio *</label>
+                    <textarea id="testimonioTexto" required placeholder="Escribe el testimonio del cliente..." style="min-height: 120px;"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="testimonioCalificacion">Calificación (1-5 estrellas) *</label>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <input type="number" id="testimonioCalificacion" min="1" max="5" value="5" required style="width: 100px;">
+                        <div id="starsPreview" style="color: #f59e0b; font-size: 1.5rem;">
+                            ★★★★★
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="testimonioProyecto">Proyecto Relacionado</label>
+                    <input type="text" id="testimonioProyecto" placeholder="Ej: Chatbot para Restaurante">
+                </div>
+                
+                <div class="form-group">
+                    <label for="testimonioFoto">Foto del Cliente (URL o subir archivo)</label>
+                    <input type="text" id="testimonioFoto" placeholder="URL de la foto o deja vacío para usar imagen por defecto">
+                    <input type="file" id="testimonioFotoFile" accept="image/*" style="margin-top: 10px;">
+                    <div id="testimonioFotoPreview" style="margin-top: 10px; max-width: 100px; max-height: 100px;"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="testimonioFecha">Fecha del Testimonio</label>
+                    <input type="date" id="testimonioFecha">
+                </div>
+                
+                <div class="form-group">
+                    <label for="testimonioOrden">Orden de aparición</label>
+                    <input type="number" id="testimonioOrden" value="0" min="0">
+                </div>
+                
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="testimonioDestacado" style="width: 20px; height: 20px;">
+                        <span><i class="fas fa-star" style="color: #f59e0b;"></i> Destacar (aparecerá primero)</span>
+                    </label>
+                </div>
+                
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="testimonioVerificado" style="width: 20px; height: 20px;">
+                        <span><i class="fas fa-check-circle" style="color: #10b981;"></i> Verificado (testimonio auténtico)</span>
+                    </label>
+                </div>
+                
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="testimonioActive" checked style="width: 20px; height: 20px;">
+                        <span>Activo (mostrar públicamente)</span>
+                    </label>
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">
+                        <i class="fas fa-save"></i> Guardar Testimonio
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-action="close-testimonio-modal" style="flex: 1;">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
     <div class="save-notification" id="saveNotification">
         <i class="fas fa-check-circle" style="font-size: 1.5rem;"></i>
         <span>Cambios guardados exitosamente</span>
@@ -555,6 +802,15 @@
     <div style="background: rgba(30, 41, 59, 0.9); border-bottom: 2px solid rgba(14, 165, 233, 0.2); padding: 0 40px; display: flex; gap: 30px; margin-top: 20px;">
         <button class="tab-btn active" data-tab="frontal">
             <i class="fas fa-home"></i> Frontal
+        </button>
+        <button class="tab-btn" data-tab="clientes">
+            <i class="fas fa-briefcase"></i> Clientes
+        </button>
+        <button class="tab-btn" data-tab="demos">
+            <i class="fas fa-flask"></i> Demos
+        </button>
+        <button class="tab-btn" data-tab="testimonios">
+            <i class="fas fa-star"></i> Testimonios
         </button>
         <button class="tab-btn" data-tab="tienda">
             <i class="fas fa-store"></i> Tienda
@@ -687,6 +943,80 @@
         </div>
         </div>
         <!-- FIN TAB FRONTAL -->
+        
+        <!-- TAB CLIENTES -->
+        <div class="tab-content" id="tab-clientes">
+        <div class="section">
+            <h2 class="section-title">
+                <i class="fas fa-briefcase"></i>
+                Gestión de Clientes (Portafolio)
+            </h2>
+            <p style="color: #94a3b8; margin-bottom: 20px;">
+                <i class="fas fa-info-circle"></i> 
+                Administra los proyectos que se muestran en la sección "Nuestros Clientes" de la página principal
+            </p>
+            
+            <div style="margin-bottom: 30px;">
+                <button class="btn btn-primary" id="addClientBtn" style="margin-bottom: 20px;">
+                    <i class="fas fa-plus"></i> Agregar Nuevo Cliente
+                </button>
+            </div>
+            
+            <div id="clientesList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+                <!-- Los clientes se cargarán aquí dinámicamente -->
+            </div>
+        </div>
+        </div>
+        <!-- FIN TAB CLIENTES -->
+        
+        <!-- TAB DEMOS -->
+        <div class="tab-content" id="tab-demos">
+        <div class="section">
+            <h2 class="section-title">
+                <i class="fas fa-flask"></i>
+                Proyectos Demo / Ejemplos
+            </h2>
+            <p style="color: #94a3b8; margin-bottom: 20px;">
+                <i class="fas fa-info-circle"></i> 
+                Gestiona proyectos de ejemplo que muestran tu trabajo (aunque no sean de clientes reales)
+            </p>
+            
+            <div style="margin-bottom: 30px;">
+                <button class="btn btn-primary" id="addDemoBtn" style="margin-bottom: 20px;">
+                    <i class="fas fa-plus"></i> Agregar Nuevo Demo
+                </button>
+            </div>
+            
+            <div id="demosList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+                <!-- Los demos se cargarán aquí dinámicamente -->
+            </div>
+        </div>
+        </div>
+        <!-- FIN TAB DEMOS -->
+        
+        <!-- TAB TESTIMONIOS -->
+        <div class="tab-content" id="tab-testimonios">
+        <div class="section">
+            <h2 class="section-title">
+                <i class="fas fa-star"></i>
+                Gestión de Testimonios y Reseñas
+            </h2>
+            <p style="color: #94a3b8; margin-bottom: 20px;">
+                <i class="fas fa-info-circle"></i> 
+                Administra las reseñas y testimonios de tus clientes para mostrar credibilidad y casos de éxito.
+            </p>
+            
+            <button onclick="openTestimonioModal()" class="btn-primary" style="margin-bottom: 30px;">
+                <i class="fas fa-plus-circle"></i>
+                Agregar Testimonio
+            </button>
+
+            <div id="testimoniosList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px;">
+                <!-- Los testimonios se cargarán aquí dinámicamente -->
+            </div>
+        </div>
+        </div>
+        <!-- FIN TAB TESTIMONIOS -->
         
         <!-- TAB TIENDA -->
         <div class="tab-content" id="tab-tienda">
@@ -887,6 +1217,20 @@
             
             // Activar botón
             document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+            
+            // Cargar datos específicos del tab
+            if (tabName === 'clientes') {
+                loadClientes();
+            } else if (tabName === 'demos') {
+                loadDemos();
+            } else if (tabName === 'testimonios') {
+                loadTestimonios();
+            } else if (tabName === 'tienda') {
+                loadProducts();
+                loadOrders();
+            } else if (tabName === 'cupones') {
+                if (window.loadCoupons) window.loadCoupons();
+            }
         }
 
         // Event listeners para tabs
@@ -1143,11 +1487,470 @@
             }
         }
 
+        // ===== CLIENTES (PORTAFOLIO) =====
+        let editingClientId = null;
+
+        // Cargar clientes
+        async function loadClientes() {
+            try {
+                const clientes = await commerceAPI.getAllClientes();
+                const clientesList = document.getElementById('clientesList');
+                clientesList.innerHTML = '';
+                
+                if (clientes.length === 0) {
+                    clientesList.innerHTML = '<p style="color: #94a3b8; text-align: center; grid-column: 1/-1;">No hay clientes agregados aún</p>';
+                    return;
+                }
+                
+                clientes.forEach(cliente => {
+                    const clientCard = document.createElement('div');
+                    clientCard.style.cssText = `
+                        background: rgba(30, 41, 59, 0.8);
+                        border: 1px solid rgba(14, 165, 233, 0.2);
+                        border-radius: 12px;
+                        overflow: hidden;
+                        transition: all 0.3s ease;
+                    `;
+                    
+                    const activeClass = cliente.activo ? '#10b981' : '#ef4444';
+                    const activeText = cliente.activo ? '✓ Activo' : '✗ Inactivo';
+                    
+                    clientCard.innerHTML = `
+                        <div style="position: absolute; top: 10px; right: 10px; background: ${activeClass}; color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; z-index: 10;">
+                            ${activeText}
+                        </div>
+                        <div style="height: 180px; overflow: hidden; background: linear-gradient(135deg, #1e293b, #334155);">
+                            <img src="${cliente.imagen_url}" alt="${cliente.nombre}" 
+                                 style="width: 100%; height: 100%; object-fit: cover;"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center; color: #64748b; font-size: 3rem;">
+                                <i class="fas fa-image"></i>
+                            </div>
+                        </div>
+                        <div style="padding: 16px;">
+                            <h3 style="color: #f8fafc; margin: 0 0 8px 0; font-size: 1.1rem;">${cliente.nombre}</h3>
+                            <p style="color: #94a3b8; margin: 0 0 12px 0; font-size: 0.9rem; line-height: 1.4;">${cliente.descripcion}</p>
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                                <i class="fas fa-link" style="color: #0ea5e9; font-size: 0.9rem;"></i>
+                                <a href="${cliente.url}" target="_blank" style="color: #0ea5e9; text-decoration: none; font-size: 0.85rem; word-break: break-all;">
+                                    ${cliente.url}
+                                </a>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px; color: #64748b; font-size: 0.85rem;">
+                                <i class="fas fa-sort-numeric-down"></i>
+                                <span>Orden: ${cliente.orden}</span>
+                            </div>
+                            <div style="display: flex; gap: 8px;">
+                                <button onclick="editCliente(${cliente.id})" class="btn btn-secondary" style="flex: 1; padding: 8px;">
+                                    <i class="fas fa-edit"></i> Editar
+                                </button>
+                                <button onclick="deleteCliente(${cliente.id})" class="btn" style="flex: 1; padding: 8px; background: linear-gradient(135deg, #ef4444, #dc2626); border-color: transparent; color: white;">
+                                    <i class="fas fa-trash"></i> Eliminar
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    clientesList.appendChild(clientCard);
+                });
+            } catch (error) {
+                console.error('Error cargando clientes:', error);
+            }
+        }
+
+        // Editar cliente
+        async function editCliente(id) {
+            try {
+                const clientes = await commerceAPI.getAllClientes();
+                const cliente = clientes.find(c => c.id === id);
+                
+                if (!cliente) {
+                    alert('Cliente no encontrado');
+                    return;
+                }
+                
+                editingClientId = id;
+                document.getElementById('clientModalTitle').textContent = 'Editar Cliente';
+                document.getElementById('clientId').value = cliente.id;
+                document.getElementById('clientName').value = cliente.nombre;
+                document.getElementById('clientDescription').value = cliente.descripcion;
+                document.getElementById('clientUrl').value = cliente.url;
+                document.getElementById('clientImageUrl').value = cliente.imagen_url;
+                document.getElementById('clientOrder').value = cliente.orden;
+                document.getElementById('clientActive').checked = cliente.activo;
+                
+                // Mostrar preview de imagen
+                const preview = document.getElementById('clientImagePreview');
+                preview.innerHTML = `<img src="${cliente.imagen_url}" style="max-width: 100%; max-height: 200px; object-fit: contain;">`;
+                
+                document.getElementById('clientModal').classList.add('active');
+            } catch (error) {
+                console.error('Error al editar cliente:', error);
+                alert('Error al cargar datos del cliente');
+            }
+        }
+
+        // Eliminar cliente
+        async function deleteCliente(id) {
+            if (!confirm('¿Estás seguro de eliminar este cliente?')) return;
+            
+            try {
+                await commerceAPI.deleteCliente(id);
+                await loadClientes();
+                showNotification('Cliente eliminado correctamente');
+            } catch (error) {
+                console.error('Error eliminando cliente:', error);
+                alert('Error al eliminar cliente');
+            }
+        }
+
+        // Función auxiliar para cargar tabs
+        window.editCliente = editCliente;
+        window.deleteCliente = deleteCliente;
+
+        // ===== PROYECTOS DEMO =====
+        let editingDemoId = null;
+
+        // Cargar demos
+        async function loadDemos() {
+            try {
+                const demos = await commerceAPI.getAllDemos();
+                const demosList = document.getElementById('demosList');
+                demosList.innerHTML = '';
+                
+                if (demos.length === 0) {
+                    demosList.innerHTML = '<p style="color: #94a3b8; text-align: center; grid-column: 1/-1;">No hay demos agregados aún</p>';
+                    return;
+                }
+                
+                demos.forEach(demo => {
+                    const demoCard = document.createElement('div');
+                    demoCard.style.cssText = `
+                        background: rgba(30, 41, 59, 0.8);
+                        border: 1px solid rgba(14, 165, 233, 0.2);
+                        border-radius: 12px;
+                        overflow: hidden;
+                        transition: all 0.3s ease;
+                        position: relative;
+                    `;
+                    
+                    const activeClass = demo.activo ? '#10b981' : '#ef4444';
+                    const activeText = demo.activo ? '✓ Activo' : '✗ Inactivo';
+                    const destacadoBadge = demo.destacado ? '<div style="position: absolute; top: 10px; left: 10px; background: #f59e0b; color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; z-index: 10;"><i class="fas fa-star"></i> Destacado</div>' : '';
+                    
+                    demoCard.innerHTML = `
+                        ${destacadoBadge}
+                        <div style="position: absolute; top: 10px; right: 10px; background: ${activeClass}; color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; z-index: 10;">
+                            ${activeText}
+                        </div>
+                        <div style="height: 180px; overflow: hidden; background: linear-gradient(135deg, #1e293b, #334155);">
+                            <img src="${demo.imagen_url}" alt="${demo.nombre}" 
+                                 style="width: 100%; height: 100%; object-fit: cover;"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center; color: #64748b; font-size: 3rem;">
+                                <i class="fas fa-flask"></i>
+                            </div>
+                        </div>
+                        <div style="padding: 16px;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                <span style="background: rgba(139, 92, 246, 0.2); color: #a78bfa; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600;">
+                                    ${demo.categoria}
+                                </span>
+                            </div>
+                            <h3 style="color: #f8fafc; margin: 0 0 8px 0; font-size: 1.1rem;">${demo.nombre}</h3>
+                            <p style="color: #94a3b8; margin: 0 0 12px 0; font-size: 0.9rem; line-height: 1.4;">${demo.descripcion}</p>
+                            ${demo.tecnologias ? `
+                                <div style="margin-bottom: 12px; color: #64748b; font-size: 0.8rem;">
+                                    <i class="fas fa-code"></i> ${demo.tecnologias}
+                                </div>
+                            ` : ''}
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                                <i class="fas fa-link" style="color: #0ea5e9; font-size: 0.9rem;"></i>
+                                <span style="color: #0ea5e9; font-size: 0.85rem; word-break: break-all;">
+                                    ${demo.url}
+                                </span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px; color: #64748b; font-size: 0.85rem;">
+                                <i class="fas fa-sort-numeric-down"></i>
+                                <span>Orden: ${demo.orden}</span>
+                            </div>
+                            <div style="display: flex; gap: 8px;">
+                                <button onclick="editDemo(${demo.id})" class="btn btn-secondary" style="flex: 1; padding: 8px;">
+                                    <i class="fas fa-edit"></i> Editar
+                                </button>
+                                <button onclick="deleteDemo(${demo.id})" class="btn" style="flex: 1; padding: 8px; background: linear-gradient(135deg, #ef4444, #dc2626); border-color: transparent; color: white;">
+                                    <i class="fas fa-trash"></i> Eliminar
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    demosList.appendChild(demoCard);
+                });
+            } catch (error) {
+                console.error('Error cargando demos:', error);
+            }
+        }
+
+        // Editar demo
+        async function editDemo(id) {
+            try {
+                const demos = await commerceAPI.getAllDemos();
+                const demo = demos.find(d => d.id === id);
+                
+                if (!demo) {
+                    alert('Demo no encontrado');
+                    return;
+                }
+                
+                editingDemoId = id;
+                document.getElementById('demoModalTitle').textContent = 'Editar Demo';
+                document.getElementById('demoId').value = demo.id;
+                document.getElementById('demoName').value = demo.nombre;
+                document.getElementById('demoDescription').value = demo.descripcion;
+                document.getElementById('demoUrl').value = demo.url;
+                document.getElementById('demoCategory').value = demo.categoria;
+                document.getElementById('demoImageUrl').value = demo.imagen_url;
+                document.getElementById('demoTecnologias').value = demo.tecnologias || '';
+                document.getElementById('demoOrder').value = demo.orden;
+                document.getElementById('demoDestacado').checked = demo.destacado;
+                document.getElementById('demoActive').checked = demo.activo;
+                
+                // Mostrar preview de imagen
+                const preview = document.getElementById('demoImagePreview');
+                preview.innerHTML = `<img src="${demo.imagen_url}" style="max-width: 100%; max-height: 200px; object-fit: contain;">`;
+                
+                document.getElementById('demoModal').classList.add('active');
+            } catch (error) {
+                console.error('Error al editar demo:', error);
+                alert('Error al cargar datos del demo');
+            }
+        }
+
+        // Eliminar demo
+        async function deleteDemo(id) {
+            if (!confirm('¿Estás seguro de eliminar este demo?')) return;
+            
+            try {
+                await commerceAPI.deleteDemo(id);
+                await loadDemos();
+                showNotification('Demo eliminado correctamente');
+            } catch (error) {
+                console.error('Error eliminando demo:', error);
+                alert('Error al eliminar demo');
+            }
+        }
+
+        // Función auxiliar para cargar tabs
+        window.editDemo = editDemo;
+        window.deleteDemo = deleteDemo;
+
+        // ===== TESTIMONIOS =====
+        let editingTestimonioId = null;
+
+        // Cargar testimonios
+        async function loadTestimonios() {
+            try {
+                const testimonios = await commerceAPI.getAllTestimonios();
+                const container = document.getElementById('testimoniosList');
+                
+                if (!testimonios || testimonios.length === 0) {
+                    container.innerHTML = '<p style="color: #94a3b8; grid-column: 1/-1;">No hay testimonios. Agrega el primer testimonio.</p>';
+                    return;
+                }
+                
+                container.innerHTML = testimonios.map(t => `
+                    <div style="background: rgba(15, 23, 42, 0.6); border: 2px solid rgba(148, 163, 184, 0.2); border-radius: 12px; padding: 20px;">
+                        <div style="display: flex; align-items: start; gap: 15px; margin-bottom: 15px;">
+                            <img src="${t.foto_url || 'img/avatar-default.svg'}" 
+                                 alt="${t.nombre_cliente}" 
+                                 style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid #0ea5e9;">
+                            <div style="flex: 1;">
+                                <h3 style="color: #f8fafc; margin: 0 0 5px 0; font-size: 1.1rem;">
+                                    ${t.nombre_cliente}
+                                    ${t.verificado ? '<i class="fas fa-check-circle" style="color: #10b981; font-size: 0.9rem;" title="Verificado"></i>' : ''}
+                                </h3>
+                                <div style="color: #94a3b8; font-size: 0.9rem;">
+                                    ${t.empresa ? `<div><i class="fas fa-building"></i> ${t.empresa}</div>` : ''}
+                                    ${t.cargo ? `<div><i class="fas fa-user-tie"></i> ${t.cargo}</div>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: 15px;">
+                            <div style="color: #f59e0b; margin-bottom: 8px; font-size: 1.2rem;">
+                                ${'★'.repeat(t.calificacion || 5)}${'☆'.repeat(5 - (t.calificacion || 5))}
+                            </div>
+                            <p style="color: #cbd5e1; font-style: italic; line-height: 1.6; margin: 0;">
+                                "${t.testimonio.substring(0, 150)}${t.testimonio.length > 150 ? '...' : ''}"
+                            </p>
+                        </div>
+                        
+                        ${t.proyecto_relacionado ? `
+                            <div style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 15px;">
+                                <i class="fas fa-project-diagram"></i> ${t.proyecto_relacionado}
+                            </div>
+                        ` : ''}
+                        
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;">
+                            ${t.destacado ? '<span style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem;"><i class="fas fa-star"></i> Destacado</span>' : ''}
+                            ${t.activo ? '<span style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem;"><i class="fas fa-check"></i> Activo</span>' : '<span style="background: #64748b; color: white; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem;"><i class="fas fa-times"></i> Inactivo</span>'}
+                        </div>
+                        
+                        <div style="display: flex; gap: 10px;">
+                            <button onclick="editTestimonio(${t.id})" class="btn btn-primary" style="flex: 1;">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+                            <button onclick="deleteTestimonio(${t.id})" class="btn btn-danger" style="flex: 1;">
+                                <i class="fas fa-trash"></i> Eliminar
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error cargando testimonios:', error);
+                document.getElementById('testimoniosList').innerHTML = '<p style="color: #ef4444;">Error al cargar testimonios</p>';
+            }
+        }
+
+        // Abrir modal de testimonio
+        window.openTestimonioModal = function(id = null) {
+            editingTestimonioId = id;
+            const modal = document.getElementById('testimonioModal');
+            const title = document.getElementById('testimonioModalTitle');
+            const form = document.getElementById('testimonioForm');
+            
+            form.reset();
+            
+            if (id) {
+                title.textContent = 'Editar Testimonio';
+                loadTestimonioData(id);
+            } else {
+                title.textContent = 'Agregar Testimonio';
+                document.getElementById('testimonioFecha').valueAsDate = new Date();
+            }
+            
+            modal.style.display = 'flex';
+        }
+
+        // Cargar datos de testimonio
+        async function loadTestimonioData(id) {
+            try {
+                const testimonios = await commerceAPI.getAllTestimonios();
+                const testimonio = testimonios.find(t => t.id === id);
+                
+                if (testimonio) {
+                    document.getElementById('testimonioId').value = testimonio.id;
+                    document.getElementById('testimonioNombre').value = testimonio.nombre_cliente;
+                    document.getElementById('testimonioEmpresa').value = testimonio.empresa || '';
+                    document.getElementById('testimonioCargo').value = testimonio.cargo || '';
+                    document.getElementById('testimonioTexto').value = testimonio.testimonio;
+                    document.getElementById('testimonioCalificacion').value = testimonio.calificacion || 5;
+                    document.getElementById('testimonioProyecto').value = testimonio.proyecto_relacionado || '';
+                    document.getElementById('testimonioFoto').value = testimonio.foto_url || '';
+                    
+                    if (testimonio.fecha_testimonio) {
+                        document.getElementById('testimonioFecha').value = testimonio.fecha_testimonio.split('T')[0];
+                    }
+                    
+                    document.getElementById('testimonioOrden').value = testimonio.orden || 0;
+                    document.getElementById('testimonioDestacado').checked = testimonio.destacado || false;
+                    document.getElementById('testimonioVerificado').checked = testimonio.verificado || false;
+                    document.getElementById('testimonioActive').checked = testimonio.activo !== false;
+                    
+                    updateStarsPreview(testimonio.calificacion || 5);
+                }
+            } catch (error) {
+                console.error('Error cargando datos del testimonio:', error);
+            }
+        }
+
+        // Actualizar preview de estrellas
+        function updateStarsPreview(rating) {
+            const preview = document.getElementById('starsPreview');
+            if (preview) {
+                preview.innerHTML = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+            }
+        }
+
+        // Event listener para calificación
+        document.addEventListener('DOMContentLoaded', () => {
+            const calificacionInput = document.getElementById('testimonioCalificacion');
+            if (calificacionInput) {
+                calificacionInput.addEventListener('input', (e) => {
+                    updateStarsPreview(parseInt(e.target.value) || 5);
+                });
+            }
+        });
+
+        // Manejar envío de formulario
+        document.getElementById('testimonioForm')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const testimonioData = {
+                nombre_cliente: document.getElementById('testimonioNombre').value.trim(),
+                empresa: document.getElementById('testimonioEmpresa').value.trim(),
+                cargo: document.getElementById('testimonioCargo').value.trim(),
+                testimonio: document.getElementById('testimonioTexto').value.trim(),
+                calificacion: parseInt(document.getElementById('testimonioCalificacion').value),
+                proyecto_relacionado: document.getElementById('testimonioProyecto').value.trim(),
+                foto_url: document.getElementById('testimonioFoto').value.trim() || 'img/avatar-default.svg',
+                fecha_testimonio: document.getElementById('testimonioFecha').value || new Date().toISOString().split('T')[0],
+                orden: parseInt(document.getElementById('testimonioOrden').value) || 0,
+                destacado: document.getElementById('testimonioDestacado').checked,
+                verificado: document.getElementById('testimonioVerificado').checked,
+                activo: document.getElementById('testimonioActive').checked
+            };
+            
+            try {
+                if (editingTestimonioId) {
+                    await commerceAPI.updateTestimonio(editingTestimonioId, testimonioData);
+                    showNotification('Testimonio actualizado correctamente');
+                } else {
+                    await commerceAPI.createTestimonio(testimonioData);
+                    showNotification('Testimonio creado correctamente');
+                }
+                
+                document.getElementById('testimonioModal').style.display = 'none';
+                await loadTestimonios();
+            } catch (error) {
+                console.error('Error guardando testimonio:', error);
+                alert('Error al guardar el testimonio');
+            }
+        });
+
+        // Editar testimonio
+        window.editTestimonio = async function(id) {
+            openTestimonioModal(id);
+        }
+
+        // Eliminar testimonio
+        window.deleteTestimonio = async function(id) {
+            if (!confirm('¿Estás seguro de eliminar este testimonio?')) return;
+            
+            try {
+                await commerceAPI.deleteTestimonio(id);
+                await loadTestimonios();
+                showNotification('Testimonio eliminado correctamente');
+            } catch (error) {
+                console.error('Error eliminando testimonio:', error);
+                alert('Error al eliminar testimonio');
+            }
+        }
+
+        // Cerrar modal
+        document.querySelectorAll('[data-action="close-testimonio-modal"]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.getElementById('testimonioModal').style.display = 'none';
+            });
+        });
+
         // ===== CUPONES =====
         let editingCouponId = null;
 
         // Cargar cupones
         window.loadCoupons = async function loadCoupons() {
+
             try {
                 const response = await fetch('/api/commerce/coupons', {
                     headers: getAuthHeaders()
@@ -1305,6 +2108,150 @@
                 alert('Error al eliminar el cupón');
             }
         }
+        
+        // Abrir modal para nuevo cliente
+        document.getElementById('addClientBtn').addEventListener('click', () => {
+            editingClientId = null;
+            document.getElementById('clientModalTitle').textContent = 'Nuevo Cliente';
+            document.getElementById('clientForm').reset();
+            document.getElementById('clientActive').checked = true;
+            document.getElementById('clientOrder').value = 0;
+            document.getElementById('clientImagePreview').innerHTML = 'Vista previa de la imagen';
+            document.getElementById('clientModal').classList.add('active');
+        });
+        
+        // Cerrar modal de clientes
+        function closeClientModal() {
+            document.getElementById('clientModal').classList.remove('active');
+            document.getElementById('clientForm').reset();
+            document.getElementById('clientImagePreview').innerHTML = 'Vista previa de la imagen';
+            editingClientId = null;
+        }
+        
+        // Cerrar modal con botones
+        document.querySelectorAll('[data-action="close-client-modal"]').forEach(btn => {
+            btn.addEventListener('click', closeClientModal);
+        });
+        
+        // Preview de imagen de cliente
+        document.getElementById('clientImageFile').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const preview = document.getElementById('clientImagePreview');
+                    preview.innerHTML = `<img src="${e.target.result}" style="max-width: 100%; max-height: 200px; object-fit: contain;">`;
+                    // Actualizar también el campo de URL con el nombre del archivo
+                    document.getElementById('clientImageUrl').value = `img/${file.name}`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Guardar cliente (crear o actualizar)
+        document.getElementById('clientForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const clienteData = {
+                nombre: document.getElementById('clientName').value,
+                descripcion: document.getElementById('clientDescription').value,
+                url: document.getElementById('clientUrl').value,
+                imagen_url: document.getElementById('clientImageUrl').value,
+                orden: parseInt(document.getElementById('clientOrder').value) || 0,
+                activo: document.getElementById('clientActive').checked
+            };
+            
+            try {
+                if (editingClientId) {
+                    await commerceAPI.updateCliente(editingClientId, clienteData);
+                    showNotification('Cliente actualizado correctamente');
+                } else {
+                    await commerceAPI.createCliente(clienteData);
+                    showNotification('Cliente creado correctamente');
+                }
+                
+                closeClientModal();
+                await loadClientes();
+            } catch (error) {
+                console.error('Error guardando cliente:', error);
+                alert('Error al guardar cliente: ' + error.message);
+            }
+        });
+        
+        // ===== EVENT LISTENERS DEMOS =====
+        
+        // Abrir modal para nuevo demo
+        document.getElementById('addDemoBtn').addEventListener('click', () => {
+            editingDemoId = null;
+            document.getElementById('demoModalTitle').textContent = 'Nuevo Proyecto Demo';
+            document.getElementById('demoForm').reset();
+            document.getElementById('demoActive').checked = true;
+            document.getElementById('demoDestacado').checked = false;
+            document.getElementById('demoOrder').value = 0;
+            document.getElementById('demoImagePreview').innerHTML = 'Vista previa de la imagen';
+            document.getElementById('demoModal').classList.add('active');
+        });
+        
+        // Cerrar modal de demos
+        function closeDemoModal() {
+            document.getElementById('demoModal').classList.remove('active');
+            document.getElementById('demoForm').reset();
+            document.getElementById('demoImagePreview').innerHTML = 'Vista previa de la imagen';
+            editingDemoId = null;
+        }
+        
+        // Cerrar modal con botones
+        document.querySelectorAll('[data-action="close-demo-modal"]').forEach(btn => {
+            btn.addEventListener('click', closeDemoModal);
+        });
+        
+        // Preview de imagen de demo
+        document.getElementById('demoImageFile').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const preview = document.getElementById('demoImagePreview');
+                    preview.innerHTML = `<img src="${e.target.result}" style="max-width: 100%; max-height: 200px; object-fit: contain;">`;
+                    // Actualizar también el campo de URL con el nombre del archivo
+                    document.getElementById('demoImageUrl').value = `img/${file.name}`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Guardar demo (crear o actualizar)
+        document.getElementById('demoForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const demoData = {
+                nombre: document.getElementById('demoName').value,
+                descripcion: document.getElementById('demoDescription').value,
+                url: document.getElementById('demoUrl').value,
+                imagen_url: document.getElementById('demoImageUrl').value,
+                categoria: document.getElementById('demoCategory').value,
+                tecnologias: document.getElementById('demoTecnologias').value || null,
+                destacado: document.getElementById('demoDestacado').checked,
+                orden: parseInt(document.getElementById('demoOrder').value) || 0,
+                activo: document.getElementById('demoActive').checked
+            };
+            
+            try {
+                if (editingDemoId) {
+                    await commerceAPI.updateDemo(editingDemoId, demoData);
+                    showNotification('Demo actualizado correctamente');
+                } else {
+                    await commerceAPI.createDemo(demoData);
+                    showNotification('Demo creado correctamente');
+                }
+                
+                closeDemoModal();
+                await loadDemos();
+            } catch (error) {
+                console.error('Error guardando demo:', error);
+                alert('Error al guardar demo: ' + error.message);
+            }
+        });
         
         // Abrir modal para nuevo producto
         document.getElementById('addProductBtn').addEventListener('click', () => {

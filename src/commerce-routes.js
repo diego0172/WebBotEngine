@@ -369,5 +369,350 @@ router.post('/transactions/create-link', async (req, res) => {
   }
 });
 
-export default router;
+// ============= GESTIÓN DE CLIENTES (PORTAFOLIO) =============
 
+// Obtener todos los clientes activos (para mostrar en la página principal)
+router.get('/clientes', async (req, res) => {
+  try {
+    const result = await pool.query(
+      'SELECT * FROM clientes WHERE activo = true ORDER BY orden ASC'
+    );
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error obteniendo clientes:', error);
+    res.status(500).json({ error: 'Error obteniendo clientes' });
+  }
+});
+
+// Obtener todos los clientes (incluyendo inactivos) - Solo para admin
+router.get('/clientes/all', verifyToken, async (req, res) => {
+  try {
+    const result = await pool.query(
+      'SELECT * FROM clientes ORDER BY orden ASC, id DESC'
+    );
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error obteniendo todos los clientes:', error);
+    res.status(500).json({ error: 'Error obteniendo clientes' });
+  }
+});
+
+// Crear nuevo cliente - Solo para admin
+router.post('/clientes', verifyToken, async (req, res) => {
+  try {
+    const { nombre, descripcion, url, imagen_url, orden, activo } = req.body;
+    
+    if (!nombre || !descripcion || !url || !imagen_url) {
+      return res.status(400).json({ error: 'Faltan datos requeridos' });
+    }
+
+    const result = await pool.query(
+      `INSERT INTO clientes (nombre, descripcion, url, imagen_url, orden, activo) 
+       VALUES ($1, $2, $3, $4, $5, $6) 
+       RETURNING *`,
+      [nombre, descripcion, url, imagen_url, orden || 0, activo !== false]
+    );
+
+    res.json({ message: 'Cliente creado', cliente: result.rows[0] });
+  } catch (error) {
+    console.error('Error creando cliente:', error);
+    res.status(500).json({ error: 'Error creando cliente' });
+  }
+});
+
+// Actualizar cliente - Solo para admin
+router.put('/clientes/:id', verifyToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { nombre, descripcion, url, imagen_url, orden, activo } = req.body;
+
+    const result = await pool.query(
+      `UPDATE clientes 
+       SET nombre = $1, descripcion = $2, url = $3, imagen_url = $4, orden = $5, activo = $6
+       WHERE id = $7 
+       RETURNING *`,
+      [nombre, descripcion, url, imagen_url, orden, activo, id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Cliente no encontrado' });
+    }
+
+    res.json({ message: 'Cliente actualizado', cliente: result.rows[0] });
+  } catch (error) {
+    console.error('Error actualizando cliente:', error);
+    res.status(500).json({ error: 'Error actualizando cliente' });
+  }
+});
+
+// Eliminar cliente - Solo para admin
+router.delete('/clientes/:id', verifyToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const result = await pool.query(
+      'DELETE FROM clientes WHERE id = $1 RETURNING *',
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Cliente no encontrado' });
+    }
+
+    res.json({ message: 'Cliente eliminado', cliente: result.rows[0] });
+  } catch (error) {
+    console.error('Error eliminando cliente:', error);
+    res.status(500).json({ error: 'Error eliminando cliente' });
+  }
+});
+
+// ============= PROYECTOS DEMO =============
+
+// Obtener todos los demos activos (para mostrar en la galería pública)
+router.get('/demos', async (req, res) => {
+  try {
+    const result = await pool.query(
+      'SELECT * FROM proyectos_demo WHERE activo = true ORDER BY destacado DESC, orden ASC'
+    );
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error obteniendo demos:', error);
+    res.status(500).json({ error: 'Error obteniendo demos' });
+  }
+});
+
+// Obtener todos los demos (incluyendo inactivos) - Solo para admin
+router.get('/demos/all', verifyToken, async (req, res) => {
+  try {
+    const result = await pool.query(
+      'SELECT * FROM proyectos_demo ORDER BY destacado DESC, orden ASC, id DESC'
+    );
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error obteniendo todos los demos:', error);
+    res.status(500).json({ error: 'Error obteniendo demos' });
+  }
+});
+
+// Obtener demos por categoría
+router.get('/demos/categoria/:categoria', async (req, res) => {
+  try {
+    const { categoria } = req.params;
+    const result = await pool.query(
+      'SELECT * FROM proyectos_demo WHERE categoria = $1 AND activo = true ORDER BY orden ASC',
+      [categoria]
+    );
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error obteniendo demos por categoría:', error);
+    res.status(500).json({ error: 'Error obteniendo demos' });
+  }
+});
+
+// Crear nuevo demo - Solo para admin
+router.post('/demos', verifyToken, async (req, res) => {
+  try {
+    const { nombre, descripcion, url, imagen_url, categoria, tecnologias, destacado, orden, activo } = req.body;
+    
+    if (!nombre || !descripcion || !url || !imagen_url || !categoria) {
+      return res.status(400).json({ error: 'Faltan datos requeridos' });
+    }
+
+    const result = await pool.query(
+      `INSERT INTO proyectos_demo (nombre, descripcion, url, imagen_url, categoria, tecnologias, destacado, orden, activo) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
+       RETURNING *`,
+      [nombre, descripcion, url, imagen_url, categoria, tecnologias || null, destacado || false, orden || 0, activo !== false]
+    );
+
+    res.json({ message: 'Demo creado', demo: result.rows[0] });
+  } catch (error) {
+    console.error('Error creando demo:', error);
+    res.status(500).json({ error: 'Error creando demo' });
+  }
+});
+
+// Actualizar demo - Solo para admin
+router.put('/demos/:id', verifyToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { nombre, descripcion, url, imagen_url, categoria, tecnologias, destacado, orden, activo } = req.body;
+
+    const result = await pool.query(
+      `UPDATE proyectos_demo 
+       SET nombre = $1, descripcion = $2, url = $3, imagen_url = $4, categoria = $5, 
+           tecnologias = $6, destacado = $7, orden = $8, activo = $9
+       WHERE id = $10 
+       RETURNING *`,
+      [nombre, descripcion, url, imagen_url, categoria, tecnologias, destacado, orden, activo, id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Demo no encontrado' });
+    }
+
+    res.json({ message: 'Demo actualizado', demo: result.rows[0] });
+  } catch (error) {
+    console.error('Error actualizando demo:', error);
+    res.status(500).json({ error: 'Error actualizando demo' });
+  }
+});
+
+// Eliminar demo - Solo para admin
+router.delete('/demos/:id', verifyToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const result = await pool.query(
+      'DELETE FROM proyectos_demo WHERE id = $1 RETURNING *',
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Demo no encontrado' });
+    }
+
+    res.json({ message: 'Demo eliminado', demo: result.rows[0] });
+  } catch (error) {
+    console.error('Error eliminando demo:', error);
+    res.status(500).json({ error: 'Error eliminando demo' });
+  }
+});
+
+// ============= TESTIMONIOS =============
+
+// Obtener testimonios públicos (solo activos)
+router.get('/testimonios', async (req, res) => {
+  try {
+    const result = await pool.query(
+      'SELECT * FROM testimonios WHERE activo = true ORDER BY destacado DESC, orden ASC, calificacion DESC'
+    );
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error obteniendo testimonios:', error);
+    res.status(500).json({ error: 'Error obteniendo testimonios' });
+  }
+});
+
+// Obtener todos los testimonios (admin)
+router.get('/testimonios/all', verifyToken, async (req, res) => {
+  try {
+    const result = await pool.query(
+      'SELECT * FROM testimonios ORDER BY destacado DESC, orden ASC'
+    );
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error obteniendo todos los testimonios:', error);
+    res.status(500).json({ error: 'Error obteniendo testimonios' });
+  }
+});
+
+// Obtener testimonios destacados
+router.get('/testimonios/destacados', async (req, res) => {
+  try {
+    const result = await pool.query(
+      'SELECT * FROM testimonios WHERE activo = true AND destacado = true ORDER BY orden ASC LIMIT 6'
+    );
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error obteniendo testimonios destacados:', error);
+    res.status(500).json({ error: 'Error obteniendo testimonios destacados' });
+  }
+});
+
+// Crear testimonio (admin)
+router.post('/testimonios', verifyToken, async (req, res) => {
+  const { 
+    nombre_cliente, 
+    empresa, 
+    cargo, 
+    testimonio, 
+    calificacion, 
+    foto_url,
+    proyecto_relacionado,
+    fecha_testimonio,
+    destacado, 
+    verificado,
+    orden, 
+    activo 
+  } = req.body;
+  
+  try {
+    const result = await pool.query(
+      `INSERT INTO testimonios 
+       (nombre_cliente, empresa, cargo, testimonio, calificacion, foto_url, proyecto_relacionado, fecha_testimonio, destacado, verificado, orden, activo) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) 
+       RETURNING *`,
+      [nombre_cliente, empresa, cargo, testimonio, calificacion, foto_url, proyecto_relacionado, fecha_testimonio, destacado, verificado, orden, activo]
+    );
+    
+    res.status(201).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error creando testimonio:', error);
+    res.status(500).json({ error: 'Error creando testimonio' });
+  }
+});
+
+// Actualizar testimonio (admin)
+router.put('/testimonios/:id', verifyToken, async (req, res) => {
+  const { id } = req.params;
+  const { 
+    nombre_cliente, 
+    empresa, 
+    cargo, 
+    testimonio, 
+    calificacion, 
+    foto_url,
+    proyecto_relacionado,
+    fecha_testimonio,
+    destacado, 
+    verificado,
+    orden, 
+    activo 
+  } = req.body;
+  
+  try {
+    const result = await pool.query(
+      `UPDATE testimonios 
+       SET nombre_cliente = $1, empresa = $2, cargo = $3, testimonio = $4, 
+           calificacion = $5, foto_url = $6, proyecto_relacionado = $7, 
+           fecha_testimonio = $8, destacado = $9, verificado = $10, 
+           orden = $11, activo = $12
+       WHERE id = $13 
+       RETURNING *`,
+      [nombre_cliente, empresa, cargo, testimonio, calificacion, foto_url, proyecto_relacionado, fecha_testimonio, destacado, verificado, orden, activo, id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Testimonio no encontrado' });
+    }
+
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error('Error actualizando testimonio:', error);
+    res.status(500).json({ error: 'Error actualizando testimonio' });
+  }
+});
+
+// Eliminar testimonio (admin)
+router.delete('/testimonios/:id', verifyToken, async (req, res) => {
+  const { id } = req.params;
+  
+  try {
+    const result = await pool.query(
+      'DELETE FROM testimonios WHERE id = $1 RETURNING *',
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Testimonio no encontrado' });
+    }
+
+    res.json({ message: 'Testimonio eliminado', testimonio: result.rows[0] });
+  } catch (error) {
+    console.error('Error eliminando testimonio:', error);
+    res.status(500).json({ error: 'Error eliminando testimonio' });
+  }
+});
+
+export default router;

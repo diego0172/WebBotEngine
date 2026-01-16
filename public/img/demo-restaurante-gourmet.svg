@@ -1,0 +1,15 @@
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradRestaurante" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#gradRestaurante)"/>
+  <text x="400" y="240" font-family="Arial, sans-serif" font-size="52" font-weight="bold" fill="white" text-anchor="middle">🍽️ Restaurante</text>
+  <text x="400" y="300" font-family="Arial, sans-serif" font-size="32" fill="rgba(255,255,255,0.9)" text-anchor="middle">Gourmet</text>
+  <text x="400" y="350" font-family="Arial, sans-serif" font-size="18" fill="rgba(255,255,255,0.8)" text-anchor="middle">Menú digital | Pedidos online | Reservaciones</text>
+  <circle cx="250" cy="450" r="40" fill="rgba(255,255,255,0.2)"/>
+  <circle cx="400" cy="450" r="40" fill="rgba(255,255,255,0.2)"/>
+  <circle cx="550" cy="450" r="40" fill="rgba(255,255,255,0.2)"/>
+</svg>

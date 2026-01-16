@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería de Proyectos Demo - BotEngine</title>
+    <meta name="description" content="Explora ejemplos de sitios web que creamos: peluquerías, restaurantes, tiendas y más. Conoce nuestras capacidades.">
+    
+    <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <style>
+        .demos-hero {
+            padding: 100px 20px 60px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            text-align: center;
+        }
+        
+        .demos-hero h1 {
+            font-size: 3rem;
+            margin: 0 0 16px 0;
+            background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .demos-hero p {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            max-width: 700px;
+            margin: 0 auto 40px;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin: 40px 0;
+        }
+        
+        .filter-btn {
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: 2px solid rgba(14, 165, 233, 0.3);
+            background: rgba(14, 165, 233, 0.1);
+            color: #0ea5e9;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background: rgba(14, 165, 233, 0.3);
+            border-color: #0ea5e9;
+        }
+        
+        .demos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 32px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        
+        .demo-card {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(14, 165, 233, 0.2);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .demo-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(14, 165, 233, 0.3);
+            border-color: #0ea5e9;
+        }
+        
+        .demo-card.destacado {
+            border-color: #f59e0b;
+            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.2);
+        }
+        
+        .demo-preview {
+            position: relative;
+            height: 250px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1e293b, #334155);
+        }
+        
+        .demo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        
+        .demo-card:hover .demo-preview img {
+            transform: scale(1.1);
+        }
+        
+        .demo-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            z-index: 10;
+        }
+        
+        .demo-badge.destacado {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+        
+        .demo-badge.categoria {
+            top: 12px;
+            left: 12px;
+            right: auto;
+            background: rgba(139, 92, 246, 0.9);
+            color: white;
+        }
+        
+        .demo-info {
+            padding: 24px;
+        }
+        
+        .demo-info h3 {
+            font-size: 1.4rem;
+            color: #f8fafc;
+            margin: 0 0 12px 0;
+        }
+        
+        .demo-info p {
+            color: #94a3b8;
+            line-height: 1.6;
+            margin: 0 0 16px 0;
+        }
+        
+        .demo-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .tech-tag {
+            padding: 4px 10px;
+            background: rgba(14, 165, 233, 0.1);
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: #0ea5e9;
+        }
+        
+        .demo-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+            color: white;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .demo-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(14, 165, 233, 0.4);
+        }
+        
+        .no-demos {
+            text-align: center;
+            padding: 80px 20px;
+            color: #64748b;
+        }
+        
+        .no-demos i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+        
+        @media (max-width: 768px) {
+            .demos-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .demos-grid {
+                grid-template-columns: 1fr;
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container nav">
+            <a href="index.html" class="brand">BotEngine</a>
+            <nav class="menu">
+                <a href="index.html">Inicio</a>
+                <a href="index.html#services">Servicios</a>
+                <a href="tienda.html">Tienda</a>
+                <a href="demos.html" style="color: #0ea5e9;">Demos</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="demos-hero">
+        <h1><i class="fas fa-flask"></i> Galería de Proyectos Demo</h1>
+        <p>Explora ejemplos de sitios web que podemos crear para tu negocio. Cada proyecto muestra diferentes funcionalidades y estilos.</p>
+        
+        <div class="filter-buttons" id="filterButtons">
+            <button class="filter-btn active" data-filter="todos">
+                <i class="fas fa-th"></i> Todos
+            </button>
+            <!-- Los filtros se cargarán dinámicamente -->
+        </div>
+    </section>
+
+    <!-- Grid de Demos -->
+    <section>
+        <div class="demos-grid" id="demosGrid">
+            <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i>
+                <p style="margin-top: 16px;">Cargando proyectos demo...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="background: rgba(15, 23, 42, 0.9); padding: 40px 20px; text-align: center; color: #94a3b8; margin-top: 60px;">
+        <p>&copy; 2026 BotEngine Corp. Todos los derechos reservados.</p>
+        <p style="margin-top: 12px;">
+            <a href="index.html" style="color: #0ea5e9; text-decoration: none;">Inicio</a> | 
+            <a href="admin-login.html" style="color: #0ea5e9; text-decoration: none; margin-left: 12px;">Admin</a>
+        </p>
+    </footer>
+
+    <script type="module">
+        import { commerceAPI } from './js/commerce-api.js';
+        
+        let todosLosDemos = [];
+        let filtroActual = 'todos';
+        
+        async function cargarDemos() {
+            try {
+                // TEMPORAL: Usar datos de ejemplo si falla la API
+                try {
+                    todosLosDemos = await commerceAPI.getDemos();
+                } catch (apiError) {
+                    console.warn('⚠️ No se pudo conectar a la API, usando datos de ejemplo:', apiError);
+                    todosLosDemos = [
+                        {
+                            id: 1,
+                            nombre: 'Peluquería Estilo Moderno',
+                            descripcion: 'Sistema completo de reservas en línea, galería de estilos y gestión de citas para salón de belleza',
+                            url: '#demo-peluqueria',
+                            imagen_url: 'img/demo-peluqueria.svg',
+                            categoria: 'Peluquería',
+                            tecnologias: 'HTML5, CSS3, JavaScript, Sistema de Reservas',
+                            destacado: true,
+                            activo: true
+                        },
+                        {
+                            id: 2,
+                            nombre: 'Restaurante Gourmet',
+                            descripcion: 'Menú digital interactivo, sistema de pedidos en línea y reservaciones de mesas',
+                            url: '#demo-restaurante',
+                            imagen_url: 'img/demo-restaurante-gourmet.svg',
+                            categoria: 'Restaurante',
+                            tecnologias: 'React, Node.js, Sistema de Pagos',
+                            destacado: true,
+                            activo: true
+                        },
+                        {
+                            id: 3,
+                            nombre: 'Gimnasio Fitness Pro',
+                            descripcion: 'Plataforma de membresías, clases virtuales y seguimiento de progreso',
+                            url: '#demo-gimnasio',
+                            imagen_url: 'img/demo-gimnasio.svg',
+                            categoria: 'Deportes',
+                            tecnologias: 'Vue.js, Firebase, Streaming',
+                            destacado: false,
+                            activo: true
+                        },
+                        {
+                            id: 4,
+                            nombre: 'Consultorio Dental',
+                            descripcion: 'Agenda de citas médicas, historial de pacientes y recordatorios automáticos',
+                            url: '#demo-dental',
+                            imagen_url: 'img/demo-dental.svg',
+                            categoria: 'Salud',
+                            tecnologias: 'Angular, PostgreSQL, WhatsApp API',
+                            destacado: false,
+                            activo: true
+                        }
+                    ];
+                }
+                const grid = document.getElementById('demosGrid');
+                
+                if (!todosLosDemos || todosLosDemos.length === 0) {
+                    grid.innerHTML = `
+                        <div class="no-demos" style="grid-column: 1/-1;">
+                            <i class="fas fa-flask"></i>
+                            <h3>Próximamente agregaremos proyectos demo</h3>
+                            <p>Estamos preparando ejemplos increíbles para mostrarte</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Crear filtros de categorías
+                crearFiltros(todosLosDemos);
+                
+                // Mostrar demos
+                mostrarDemos(todosLosDemos);
+                
+            } catch (error) {
+                console.error('Error cargando demos:', error);
+                const grid = document.getElementById('demosGrid');
+                grid.innerHTML = `
+                    <div class="no-demos" style="grid-column: 1/-1; color: #ef4444;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Error al cargar demos</h3>
+                        <p>Por favor, intenta más tarde</p>
+                    </div>
+                `;
+            }
+        }
+        
+        function crearFiltros(demos) {
+            const categorias = [...new Set(demos.map(d => d.categoria))].sort();
+            const filterButtons = document.getElementById('filterButtons');
+            
+            categorias.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = 'filter-btn';
+                btn.setAttribute('data-filter', cat);
+                btn.innerHTML = `<i class="fas fa-tag"></i> ${cat}`;
+                btn.addEventListener('click', () => filtrarDemos(cat));
+                filterButtons.appendChild(btn);
+            });
+        }
+        
+        function filtrarDemos(categoria) {
+            filtroActual = categoria;
+            
+            // Actualizar botones activos
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-filter="${categoria}"]`).classList.add('active');
+            
+            // Filtrar y mostrar
+            const demosFiltrados = categoria === 'todos' 
+                ? todosLosDemos 
+                : todosLosDemos.filter(d => d.categoria === categoria);
+            
+            mostrarDemos(demosFiltrados);
+        }
+        
+        function mostrarDemos(demos) {
+            const grid = document.getElementById('demosGrid');
+            grid.innerHTML = '';
+            
+            if (demos.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-demos" style="grid-column: 1/-1;">
+                        <i class="fas fa-search"></i>
+                        <h3>No hay demos en esta categoría</h3>
+                        <p>Prueba con otra categoría</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            demos.forEach(demo => {
+                const card = document.createElement('article');
+                card.className = `demo-card ${demo.destacado ? 'destacado' : ''}`;
+                
+                const techs = demo.tecnologias ? demo.tecnologias.split(',').map(t => t.trim()) : [];
+                const techHTML = techs.length > 0 ? `
+                    <div class="demo-tech">
+                        ${techs.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
+                    </div>
+                ` : '';
+                
+                card.innerHTML = `
+                    <div class="demo-preview">
+                        ${demo.destacado ? '<div class="demo-badge destacado"><i class="fas fa-star"></i> Destacado</div>' : ''}
+                        <div class="demo-badge categoria">${demo.categoria}</div>
+                        <img src="${demo.imagen_url}" alt="${demo.nombre}" onerror="this.src='img/robot.png'">
+                    </div>
+                    <div class="demo-info">
+                        <h3>${demo.nombre}</h3>
+                        <p>${demo.descripcion}</p>
+                        ${techHTML}
+                        <a href="${demo.url}" class="demo-link" ${demo.url.startsWith('http') ? 'target="_blank" rel="noopener noreferrer"' : ''}>
+                            <i class="fas fa-external-link-alt"></i> Ver Demo
+                        </a>
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+        
+        // Cargar demos al inicio
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', cargarDemos);
+        } else {
+            cargarDemos();
+        }
+    </script>
+</body>
+</html>
