@@ -1200,14 +1200,19 @@
         </div>
     </div>
     
-    <script type="module">
-      // LIMPIAR CACHE FORZADAMENTE
-      if ('caches' in window) {
-        caches.keys().then(names => {
-          names.forEach(name => caches.delete(name));
-        });
+    <script>
+      // AUTO-RELOAD si hay nueva versión
+      const VERSION = '9999';
+      const lastVersion = localStorage.getItem('appVersion');
+      if (lastVersion !== VERSION) {
+        localStorage.setItem('appVersion', VERSION);
+        if (lastVersion) {
+          location.reload(true); // Forzar recarga sin cache
+        }
       }
-      
+    </script>
+    
+    <script type="module">
       import { commerceAPI } from './js/commerce-api.js?v=9999';
         // Función para cambiar tabs
         function mostrarTab(tabName) {
