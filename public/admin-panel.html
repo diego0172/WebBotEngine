@@ -1201,7 +1201,14 @@
     </div>
     
     <script type="module">
-      import { commerceAPI } from './js/commerce-api.js?v=2026-01-15-4';
+      // LIMPIAR CACHE FORZADAMENTE
+      if ('caches' in window) {
+        caches.keys().then(names => {
+          names.forEach(name => caches.delete(name));
+        });
+      }
+      
+      import { commerceAPI } from './js/commerce-api.js?v=9999';
         // Función para cambiar tabs
         function mostrarTab(tabName) {
             // Ocultar todos los tabs
