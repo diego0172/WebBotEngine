@@ -124,17 +124,13 @@
   <div class="strip" aria-hidden="true"></div>
 
   <!-- Sección de Clientes -->
-  <section id="clientes" class="clientes-section">
+  <section id="clientes" class="clientes-section" style="display: none;">
     <div class="container">
       <h2 class="section-title reveal" data-from="top" style="--delay:200ms">Nuestros Clientes</h2>
       <p class="section-subtitle reveal" data-from="top" style="--delay:400ms">Sitios web que hemos creado para diferentes industrias</p>
       
       <div class="clientes-grid" id="clientesGrid">
         <!-- Los clientes se cargarán dinámicamente desde la base de datos -->
-        <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">
-          <i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i>
-          <p style="margin-top: 16px;">Cargando proyectos...</p>
-        </div>
       </div>
     </div>
   </section>
@@ -485,16 +481,16 @@
       try {
         const clientes = await commerceAPI.getClientes();
         const grid = document.getElementById('clientesGrid');
+        const seccionClientes = document.getElementById('clientes');
         
         if (!clientes || clientes.length === 0) {
-          grid.innerHTML = `
-            <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">
-              <i class="fas fa-info-circle" style="font-size: 2rem;"></i>
-              <p style="margin-top: 16px;">Próximamente agregaremos proyectos de nuestros clientes</p>
-            </div>
-          `;
+          // Ocultar completamente la sección si no hay clientes
+          seccionClientes.style.display = 'none';
           return;
         }
+        
+        // Mostrar la sección si hay clientes
+        seccionClientes.style.display = 'block';
         
         grid.innerHTML = '';
         
@@ -532,13 +528,11 @@
         }
       } catch (error) {
         console.error('Error cargando clientes:', error);
-        const grid = document.getElementById('clientesGrid');
-        grid.innerHTML = `
-          <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #ef4444;">
-            <i class="fas fa-exclamation-triangle" style="font-size: 2rem;"></i>
-            <p style="margin-top: 16px;">Error al cargar proyectos. Por favor, intenta más tarde.</p>
-          </div>
-        `;
+        // Ocultar la sección si hay error
+        const seccionClientes = document.getElementById('clientes');
+        if (seccionClientes) {
+          seccionClientes.style.display = 'none';
+        }
       }
     }
     
