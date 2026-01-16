@@ -64,6 +64,18 @@
 </head>
 <body>
 
+  <!-- AUTO-RELOAD si hay nueva versión -->
+  <script>
+    const VERSION = '9999';
+    const lastVersion = localStorage.getItem('appVersion');
+    if (lastVersion !== VERSION) {
+      localStorage.setItem('appVersion', VERSION);
+      if (lastVersion) {
+        location.reload(true); // Forzar recarga sin cache
+      }
+    }
+  </script>
+
   <!-- Header -->
   <header class="header">
     <div class="container nav">
