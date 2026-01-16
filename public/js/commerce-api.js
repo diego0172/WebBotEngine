@@ -1,4 +1,5 @@
 // Utilidades para sincronizar con API y localStorage como fallback
+// Última actualización: 2026-01-15 - Agregado sistema de testimonios
 
 const API_BASE = '/api/commerce';
 
