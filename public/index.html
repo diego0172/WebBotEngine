@@ -566,53 +566,56 @@
     });
   </script>
   
-  <!-- Script para cargar testimonios -->
-  <script type="module">
-    import { commerceAPI } from './js/commerce-api.js?v=9999';
-    
-    async function cargarTestimonios() {
+  <!-- Mostrar testimonios estáticos -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
       const grid = document.getElementById('testimoniosGrid');
-      const seccion = document.getElementById('testimonios');
       
-      try {
-        const testimonios = await commerceAPI.getTestimoniosDestacados();
-        
-        if (!testimonios || testimonios.length === 0) {
-          seccion.style.display = 'none';
-          return;
-        }
-        
-        grid.innerHTML = testimonios.slice(0, 3).map((t, i) => `
-          <article class="testimonio-card" style="animation-delay: ${(i+1)*0.1}s">
-            ${t.destacado ? '<div class="testimonio-destacado"><i class="fas fa-star"></i> Destacado</div>' : ''}
-            <div class="testimonio-header">
-              <img src="${t.foto_url || 'img/avatar-default.svg'}" alt="${t.nombre_cliente}" class="testimonio-foto" onerror="this.src='img/avatar-default.svg'">
-              <div class="testimonio-info">
-                <h4>
-                  ${t.nombre_cliente}
-                  ${t.verificado ? '<i class="fas fa-check-circle testimonio-verificado"></i>' : ''}
-                </h4>
-                ${t.empresa ? `<p class="testimonio-empresa"><i class="fas fa-building"></i> ${t.empresa}</p>` : ''}
-                ${t.cargo ? `<p class="testimonio-cargo">${t.cargo}</p>` : ''}
-              </div>
+      grid.innerHTML = `
+        <article class="testimonio-card" style="animation-delay: 0.1s">
+          <div class="testimonio-header">
+            <img src="img/robot.png" alt="Cliente satisfecho" class="testimonio-foto" onerror="this.src='img/robot.png'">
+            <div class="testimonio-info">
+              <h4>
+                Tropinside Acuario
+                <i class="fas fa-check-circle testimonio-verificado"></i>
+              </h4>
+              <p class="testimonio-empresa"><i class="fas fa-building"></i> E-commerce</p>
             </div>
-            <div class="testimonio-estrellas">${'★'.repeat(t.calificacion || 5)}${'☆'.repeat(5 - (t.calificacion || 5))}</div>
-            <p class="testimonio-texto">"${t.testimonio}"</p>
-            ${t.proyecto_relacionado ? `<div class="testimonio-proyecto"><i class="fas fa-project-diagram"></i><span>${t.proyecto_relacionado}</span></div>` : ''}
-          </article>
-        `).join('');
-        
-      } catch (error) {
-        console.error('Error:', error);
-        seccion.style.display = 'none';
-      }
-    }
-    
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', cargarTestimonios);
-    } else {
-      cargarTestimonios();
-    }
+          </div>
+          <div class="testimonio-estrellas">★★★★★</div>
+          <p class="testimonio-texto">"Sistema de inventario completo que nos permite gestionar 500+ productos de manera eficiente. Excelente trabajo."</p>
+        </article>
+        <article class="testimonio-card" style="animation-delay: 0.2s">
+          <div class="testimonio-header">
+            <img src="img/robot.png" alt="Cliente satisfecho" class="testimonio-foto" onerror="this.src='img/robot.png'">
+            <div class="testimonio-info">
+              <h4>
+                Regalando Sonrisas GT
+                <i class="fas fa-check-circle testimonio-verificado"></i>
+              </h4>
+              <p class="testimonio-empresa"><i class="fas fa-building"></i> ONG</p>
+            </div>
+          </div>
+          <div class="testimonio-estrellas">★★★★★</div>
+          <p class="testimonio-texto">"Plataforma que nos ayuda a coordinar voluntarios y eventos digitalmente. Muy funcional y fácil de usar."</p>
+        </article>
+        <article class="testimonio-card" style="animation-delay: 0.3s">
+          <div class="testimonio-header">
+            <img src="img/robot.png" alt="Cliente satisfecho" class="testimonio-foto" onerror="this.src='img/robot.png'">
+            <div class="testimonio-info">
+              <h4>
+                Eunice Chuy
+                <i class="fas fa-check-circle testimonio-verificado"></i>
+              </h4>
+              <p class="testimonio-empresa"><i class="fas fa-building"></i> Creadora de Contenido</p>
+            </div>
+          </div>
+          <div class="testimonio-estrellas">★★★★★</div>
+          <p class="testimonio-texto">"Portfolio profesional que destaca mi trabajo visual. Diseño minimalista y funcional, justo lo que necesitaba."</p>
+        </article>
+      `;
+    });
   </script>
   
   <!-- Service Worker for caching (optional) -->
