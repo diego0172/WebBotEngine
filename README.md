@@ -6,7 +6,7 @@ Plataforma de desarrollo de sistemas web para ordenar y automatizar procesos emp
 
 **No vendemos diseño. Desarrollamos sistemas que resuelven desorden operativo.**
 
-Especializado en:
+Especializados en:
 - 📅 Sistemas de agenda y control de citas
 - 👥 CRM básico para gestión de clientes
 - 📦 Control de pedidos con seguimiento
@@ -107,6 +107,33 @@ npm start
 
 Ver [DEPLOYMENT.md](DEPLOYMENT.md) para instrucciones detalladas.
 
+## 🏆 Casos de Éxito
+
+### Proyectos Destacados
+
+**[Tropinside Acuario](https://tropinsideacuario.com/)**  
+E-commerce completo para tienda especializada en acuarismo.
+- 500+ productos catalogados
+- Sistema de gestión de inventario
+- Panel administrativo completo
+- Calificaciones y reseñas
+
+**[Regalando Sonrisas GT](https://regalandosonrisasgt.com/)**  
+Plataforma web para organización social sin fines de lucro.
+- Calendario de eventos interactivo
+- Sistema de captación de voluntarios
+- Gestión de donaciones (monetaria, especie, tiempo)
+- Métricas de impacto social
+
+**[Eunice Chuy](https://euchuy.online/)**  
+Portfolio profesional para creadora de contenido digital.
+- Galería visual optimizada
+- Blog integrado
+- Integración con redes sociales
+- Formulario de contacto profesional
+
+Ver detalles completos en [CASOS-DE-EXITO.md](CASOS-DE-EXITO.md)
+
 ## 📋 Problemas que Resuelven Nuestros Sistemas
 
 ❌ Información de clientes en mensajes, libretas y archivos sueltos  
@@ -121,7 +148,7 @@ Ver [DEPLOYMENT.md](DEPLOYMENT.md) para instrucciones detalladas.
 
 - **Tagline:** "Sistemas web que ordenan la operación de tu empresa"
 - **Propuesta de valor:** No solo páginas web. Herramientas de trabajo.
-- **Diferenciación:** Desarrollo sistemas, no diseño
+- **Diferenciación:** Desarrollamos sistemas, no diseño
 
 Ver [CONTENIDO-REDES-SOCIALES.md](CONTENIDO-REDES-SOCIALES.md) para contenido de marketing.
 
@@ -135,9 +162,12 @@ Ver [CONTENIDO-REDES-SOCIALES.md](CONTENIDO-REDES-SOCIALES.md) para contenido de
 
 ## 📝 Documentación Adicional
 
+- [CASOS-DE-EXITO.md](CASOS-DE-EXITO.md) - Portfolio de proyectos reales
 - [INSTRUCCIONES-CLIENTES.md](INSTRUCCIONES-CLIENTES.md) - Guía para clientes
 - [GUIA-PRODUCTOS.md](GUIA-PRODUCTOS.md) - Catálogo de productos
 - [OPTIMIZATIONS.md](OPTIMIZATIONS.md) - Optimizaciones técnicas
+- [CONTENIDO-REDES-SOCIALES.md](CONTENIDO-REDES-SOCIALES.md) - Estrategia de marketing
+- [GUIA-COMUNICACION-CORPORATIVA.md](GUIA-COMUNICACION-CORPORATIVA.md) - Tono de voz y mensajes
 
 ## 🔐 Licencia
 

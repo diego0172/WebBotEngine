@@ -3,7 +3,7 @@
 ## BIO DE INSTAGRAM
 
 ```
-Desarrollo sistemas web para empresas
+Desarrollamos sistemas web para empresas
 Clientes | Citas | Pedidos | Inventario
 Tu operación en una plataforma, no en WhatsApp
 📍 Guatemala | Diagnóstico gratuito ↓
@@ -18,12 +18,12 @@ Tu operación en una plataforma, no en WhatsApp
 ### Post 1: Presentación del Servicio
 **Texto:**
 ```
-Desarrollo soluciones digitales para empresas.
+Desarrollamos soluciones digitales para empresas.
 Sistemas web para controlar clientes, citas, pedidos y procesos internos.
 
 No solo páginas web. Herramientas que ordenan tu operación.
 
-Escríbeme para un diagnóstico y cotización.
+Escríbenos para un diagnóstico y cotización.
 
 #SistemasWeb #DesarrolloWeb #Guatemala #Automatización #GestiónEmpresarial
 ```
@@ -39,7 +39,7 @@ Escríbeme para un diagnóstico y cotización.
 ❌ Reportes manuales cada semana
 ❌ Procesos que solo conoce una persona
 
-Desarrollo sistemas que centralizan datos, automatizan tareas repetitivas y generan trazabilidad.
+Desarrollamos sistemas que centralizan datos, automatizan tareas repetitivas y generan trazabilidad.
 
 Solicita un análisis gratuito 👇
 
@@ -49,24 +49,26 @@ Solicita un análisis gratuito 👇
 ### Post 3: Casos de Uso
 **Texto:**
 ```
-CASO: Clínica dental pequeña
+CASO REAL: Tropinside Acuario
 
-PROBLEMA: Citas agendadas por WhatsApp sin confirmación ni recordatorios
+PROBLEMA: Gestión de 500+ productos en papel y Excel, sin presencia digital
 
-SOLUCIÓN: Sistema de agenda con confirmación automática y recordatorios 24h antes
+SOLUCIÓN: E-commerce completo con gestión de inventario y panel administrativo
 
-RESULTADO: 40% menos ausentismo, agenda ordenada en panel web
+RESULTADO: Catálogo accesible 24/7, control de stock en tiempo real
 
-¿Tu negocio necesita un sistema así? Escríbeme.
+👉 Visita: tropinsideacuario.com
 
-#CasosDeÉxito #SistemasWeb #Automatización
+¿Tu tienda necesita un sistema así? Escríbenos.
+
+#CasosDeExito #SistemasWeb #Ecommerce #Guatemala
 ```
 
 ### Post 4: Diferenciación
 **Texto:**
 ```
-No vendo diseño.
-Desarrollo sistemas que resuelven desorden operativo.
+No vendemos diseño.
+Desarrollamos sistemas que resuelven desorden operativo.
 
 La diferencia:
 🎨 Diseño web = imagen bonita
@@ -96,6 +98,42 @@ Múltiples módulos + reportes + integraciones + automatización
 ¿Cuál necesita tu negocio? Agenda análisis gratuito.
 
 #PreciosTransparentes #DesarrolloWeb #Guatemala
+```
+
+### Post 6: Caso Regalando Sonrisas
+**Texto:**
+```
+CASO REAL: Regalando Sonrisas GT
+
+PROBLEMA: Coordinación de voluntarios por WhatsApp, eventos sin visibilidad
+
+SOLUCIÓN: Plataforma web con calendario de eventos y sistema de donaciones
+
+RESULTADO: Mayor captación de voluntarios, transparencia en impacto social
+
+👉 Visita: regalandosonrisasgt.com
+
+¿Tu ONG necesita digitalizar su operación? Hablemos.
+
+#ImpactoSocial #ONG #PlataformaDigital #Guatemala
+```
+
+### Post 7: Caso Eunice Chuy
+**Texto:**
+```
+CASO REAL: Eunice Chuy - Creadora de Contenido
+
+PROBLEMA: Portfolio disperso en redes, sin presencia web profesional
+
+SOLUCIÓN: Sitio portfolio minimalista con galería y blog integrado
+
+RESULTADO: Presencia web profesional, captación directa de clientes
+
+👉 Visita: euchuy.online
+
+¿Eres profesional independiente sin web? Contáctanos.
+
+#Portfolio #CreadorDeContenido #MarcaPersonal
 ```
 
 ---
@@ -151,14 +189,14 @@ Tu información en un solo lugar.
 ### Estado 2:
 ```
 ¿Ya no puedes seguir con WhatsApp, Excel y papel?
-Desarrollo sistemas operativos para tu negocio.
+Desarrollamos sistemas operativos para tu negocio.
 Diagnóstico gratuito 👇
 ```
 
 ### Estado 3:
 ```
-No vendo diseño.
-Desarrollo sistemas que resuelven desorden operativo.
+No vendemos diseño.
+Desarrollamos sistemas que resuelven desorden operativo.
 Desde Q2,500
 ```
 
@@ -169,9 +207,9 @@ Desde Q2,500
 ```
 ¡Hola! 👋
 
-Soy Diego de BotEngine.
+Gracias por contactar a BotEngine.
 
-Desarrollo *sistemas web* para empresas:
+Desarrollamos *sistemas web* para empresas:
 ✅ Gestión de clientes
 ✅ Agenda de citas
 ✅ Control de pedidos
@@ -195,7 +233,7 @@ Responde con el número de tu opción.
 ```
 Hola [Nombre],
 
-Desarrollo sistemas web que centralizan información y automatizan procesos para empresas como la tuya.
+Desarrollamos sistemas web que centralizan información y automatizan procesos para empresas como la tuya.
 
 ¿Estos problemas te suenan conocidos?
 ❌ Información de clientes dispersa en mensajes y libretas
@@ -203,7 +241,7 @@ Desarrollo sistemas web que centralizan información y automatizan procesos para
 ❌ Pedidos sin seguimiento
 ❌ Reportes armados manualmente
 
-Mis sistemas resuelven esto con plataformas centralizadas, trazabilidad y reportes descargables.
+Nuestros sistemas resuelven esto con plataformas centralizadas, trazabilidad y reportes descargables.
 
 PAQUETES DISPONIBLES:
 • Sistema Informativo - Q2,500
@@ -214,7 +252,7 @@ Agenda un análisis de 30 minutos sin costo:
 https://wa.me/50231239807
 
 Saludos,
-Diego
+Equipo BotEngine
 BotEngine Corp
 ```
 
@@ -223,19 +261,19 @@ BotEngine Corp
 ## LINKEDIN - SOBRE MÍ
 
 ```
-Desarrollador de sistemas web para empresas en Guatemala.
+Equipo de desarrollo de sistemas web para empresas en Guatemala.
 
-Especializado en soluciones que ordenan procesos operativos:
+Especializados en soluciones que ordenan procesos operativos:
 • Gestión de clientes y CRM básico
 • Sistemas de agenda y control de citas
 • Control de pedidos e inventario
 • Paneles administrativos con reportes
 
-No desarrollo solo páginas web informativas. 
-Creo herramientas de trabajo que resuelven desorden operativo real.
+No desarrollamos solo páginas web informativas. 
+Creamos herramientas de trabajo que resuelven desorden operativo real.
 
-Trabajé con empresas que gestionaban información en WhatsApp, Excel y papel, 
-y las ayudé a centralizar datos, reducir errores y tener trazabilidad.
+Trabajamos con empresas que gestionaban información en WhatsApp, Excel y papel, 
+y las ayudamos a centralizar datos, reducir errores y tener trazabilidad.
 
 Si tu empresa necesita un sistema, no solo diseño, hablemos.
 

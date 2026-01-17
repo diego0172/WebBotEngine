@@ -61,11 +61,13 @@
   - [ ] Actualizar estado de WhatsApp Business
 
 - [ ] **Crear casos de uso reales o ficticios**
-  - [ ] Caso 1: Clínica dental (agenda de citas)
-  - [ ] Caso 2: Tienda (control de pedidos)
-  - [ ] Caso 3: Gimnasio (gestión de clientes)
+  - [x] Caso 1: Tropinside Acuario (E-commerce)
+  - [x] Caso 2: Regalando Sonrisas GT (Organización social)
+  - [x] Caso 3: Eunice Chuy (Portfolio profesional)
+  - [ ] Agregar imágenes/screenshots de cada caso
+  - [ ] Solicitar testimonios escritos a cada cliente
   
-  Formato sugerido:
+  Formato usado:
   ```
   PROBLEMA: [Situación inicial]
   SOLUCIÓN: [Sistema implementado]
@@ -228,7 +230,7 @@
 
 **Fecha de publicación planeada:** _______________
 
-**Responsable:** Diego - BotEngine Corp
+**Responsable:** Equipo BotEngine Corp
 
 ---
 

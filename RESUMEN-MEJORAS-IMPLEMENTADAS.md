@@ -30,9 +30,9 @@ Impulsamos tu negocio con chatbots, sitios rápidos y presencia digital efectiva
 **Después:**
 ```
 Sistemas web que ordenan la operación de tu empresa
-Digitaliza la gestión de clientes, citas, pedidos e inventario en plataformas centralizadas y funcionales.
+Digitalizamos la gestión de clientes, citas, pedidos e inventario en plataformas centralizadas y funcionales que realmente se usan.
 
-No vendo diseño. Desarrollo sistemas que resuelven desorden operativo.
+No vendemos diseño. Desarrollamos sistemas que resuelven desorden operativo.
 ```
 
 **Mejora:** Mensaje más claro y orientado a problemas operativos concretos.
@@ -81,7 +81,7 @@ Identifica dolores específicos:
 ❌ Reportes que se arman manualmente cada semana  
 ❌ Procesos que solo conoce una persona  
 
-**Llamado a la acción:** "Mis sistemas centralizan datos, automatizan tareas repetitivas y generan trazabilidad."
+**Llamado a la acción:** "Nuestros sistemas centralizan datos, automatizan tareas repetitivas y generan trazabilidad completa."
 
 **Por qué funciona:** El cliente se identifica inmediatamente con su problema.
 
@@ -101,7 +101,7 @@ Identifica dolores específicos:
 3. Desarrollo y pruebas contigo
 4. Entrega funcionando y soporte inicial
 
-**Diferencia:** Enfatiza que trabajas sobre el proceso real, no con plantillas genéricas.
+**Diferencia:** Enfatiza que trabajamos sobre el proceso real, no con plantillas genéricas.
 
 ---
 
@@ -221,7 +221,7 @@ Ver archivo completo: [CONTENIDO-REDES-SOCIALES.md](CONTENIDO-REDES-SOCIALES.md)
 ## 💡 LECCIONES CLAVE
 
 ### Lo que funcionó:
-1. **Lenguaje directo:** "No vendo diseño" es memorable
+1. **Lenguaje directo:** "No vendemos diseño" es memorable
 2. **Problemas antes que soluciones:** La gente compra para resolver dolores
 3. **Ejemplos concretos:** "Agenda de citas" es mejor que "automatización"
 4. **Precios únicos:** Q4,500 es más profesional que "Q3,500 a Q5,000"
@@ -268,9 +268,9 @@ Una vez implementados los cambios, medir:
 
 ---
 
-## ✍️ AUTOR
+## ✍️ EQUIPO
 
-**Diego - BotEngine Corp**  
+**BotEngine Corp**  
 Enero 2026
 
 ---
