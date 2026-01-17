@@ -42,7 +42,7 @@ class AIBotEngine {
                 border: 3px solid rgba(255, 255, 255, 0.3) !important;
                 animation: bounce 2s infinite ease-in-out !important;
             ">
-                <span style="font-size: 28px; color: white;">🎅</span>
+                <span style="font-size: 28px; color: white;">🤖</span>
                 <div id="notification-badge" style="
                     position: absolute !important;
                     top: -5px !important;

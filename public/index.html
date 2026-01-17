@@ -26,6 +26,11 @@
   <meta name="twitter:description" content="Desarrollamos sistemas web para ordenar tu operación empresarial. Gestión de clientes, citas, pedidos e inventario.">
   <meta name="twitter:image" content="img/robot.png">
   
+  <!-- Prevenir caché del navegador -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  
   <!-- Favicon optimizado -->
   <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
   <link rel="icon" type="image/png" href="img/favicon.png">
@@ -36,8 +41,9 @@
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   
   <!-- Styles -->
-  <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/chatbot-mobile.css">
+  <link rel="stylesheet" href="css/styles.css?v=10005">
+  <link rel="stylesheet" href="css/chatbot-mobile.css?v=10005">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   
   <!-- Structured Data -->
@@ -66,12 +72,24 @@
 
   <!-- AUTO-RELOAD si hay nueva versión -->
   <script>
-    const VERSION = '9999';
+    const VERSION = '10005';
     const lastVersion = localStorage.getItem('appVersion');
+    
+    // Si la versión cambió, fuerza recarga completa sin caché
     if (lastVersion !== VERSION) {
+      console.log('Nueva versión detectada:', VERSION, '(anterior:', lastVersion, ')');
       localStorage.setItem('appVersion', VERSION);
+      
       if (lastVersion) {
-        location.reload(true); // Forzar recarga sin cache
+        // Limpiar todos los caches posibles
+        if ('caches' in window) {
+          caches.keys().then(names => {
+            names.forEach(name => caches.delete(name));
+          });
+        }
+        
+        // Forzar recarga completa sin caché
+        window.location.reload(true);
       }
     }
   </script>
@@ -152,10 +170,10 @@
   <section id="services" class="services" data-services>
     <div class="container">
       <h2 class="section-title" style="text-align: center; margin-bottom: 1rem;">Qué tipo de sistemas desarrollamos</h2>
-      <p style="text-align: center; max-width: 700px; margin: 0 auto 3rem; opacity: 0.85;">Soluciones digitales que implementamos para empresas como la tuya</p>
+      <p style="text-align: center; max-width: 700px; margin: 0 auto 3rem; opacity: 0.85;">Soluciones digitales que implementamos para empresas como la tuya. Haz clic para ver más detalles.</p>
     </div>
     <div class="container services-grid">
-      <article class="service">
+      <article class="service" data-service="agenda" style="cursor: pointer; transition: transform 0.3s ease;">
         <div class="service-icon-wrapper">
           <div class="service-icon-fallback">
             <i class="fas fa-calendar-check" aria-hidden="true" style="font-size: 3rem; color: #0f172a;"></i>
@@ -164,7 +182,7 @@
         <h3>📅 Agenda de citas</h3>
         <p>Sistema de agendamiento con confirmaciones automáticas, recordatorios y panel administrativo.</p>
       </article>
-      <article class="service">
+      <article class="service" data-service="crm" style="cursor: pointer; transition: transform 0.3s ease;">
         <div class="service-icon-wrapper">
           <div class="service-icon-fallback">
             <i class="fas fa-users" aria-hidden="true" style="font-size: 3rem; color: #0f172a;"></i>
@@ -173,7 +191,7 @@
         <h3>👥 CRM básico</h3>
         <p>Gestión de clientes con historial, seguimiento de interacciones y datos centralizados.</p>
       </article>
-      <article class="service">
+      <article class="service" data-service="pedidos" style="cursor: pointer; transition: transform 0.3s ease;">
         <div class="service-icon-wrapper">
           <div class="service-icon-fallback">
             <i class="fas fa-box" aria-hidden="true" style="font-size: 3rem; color: #0f172a;"></i>
@@ -182,7 +200,7 @@
         <h3>📦 Control de pedidos</h3>
         <p>Sistema para registrar, hacer seguimiento de estado y generar reportes de pedidos.</p>
       </article>
-      <article class="service">
+      <article class="service" data-service="paneles" style="cursor: pointer; transition: transform 0.3s ease;">
         <div class="service-icon-wrapper">
           <div class="service-icon-fallback">
             <i class="fas fa-chart-line" aria-hidden="true" style="font-size: 3rem; color: #0f172a;"></i>
@@ -191,7 +209,7 @@
         <h3>📊 Paneles administrativos</h3>
         <p>Dashboards con reportes descargables, estadísticas y control de usuarios.</p>
       </article>
-      <article class="service">
+      <article class="service" data-service="formularios" style="cursor: pointer; transition: transform 0.3s ease;">
         <div class="service-icon-wrapper">
           <div class="service-icon-fallback">
             <i class="fas fa-file-alt" aria-hidden="true" style="font-size: 3rem; color: #0f172a;"></i>
@@ -200,7 +218,7 @@
         <h3>📨 Formularios inteligentes</h3>
         <p>Captación de datos con validación, almacenamiento en base de datos y notificaciones.</p>
       </article>
-      <article class="service">
+      <article class="service" data-service="integraciones" style="cursor: pointer; transition: transform 0.3s ease;">
         <div class="service-icon-wrapper">
           <div class="service-icon-fallback">
             <i class="fas fa-link" aria-hidden="true" style="font-size: 3rem; color: #0f172a;"></i>
@@ -329,8 +347,8 @@
                   <li>Configuración básica de dominio y hosting si es necesario</li>
                   <li>Optimización SEO básica</li>
                 </ul>
-                <p style="margin-top: 1rem; padding: 1rem; background: #f1f5f9; border-radius: 6px; font-size: 0.9rem;">
-                  <strong>No incluye:</strong> Automatización interna ni ventas en línea. Es la base para crecer.
+                <p style="margin-top: 1rem; padding: 1.25rem; background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(220, 38, 38, 0.1)); border-radius: 10px; font-size: 1rem; color: #fecaca; border-left: 4px solid #ef4444; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);">
+                  <strong style="color: #fca5a5; font-weight: 700;">⚠️ No incluye:</strong> Automatización interna ni ventas en línea. Es la base para crecer.
                 </p>
               </div>
             </div>
@@ -366,8 +384,8 @@
                   <li>Notificaciones por correo o WhatsApp</li>
                   <li>Acceso con usuario y contraseña</li>
                 </ul>
-                <p style="margin-top: 1rem; padding: 1rem; background: #dbeafe; border-radius: 6px; font-size: 0.9rem;">
-                  <strong>Aquí trabajas con una herramienta interna,</strong> no solo con una web informativa.
+                <p style="margin-top: 1rem; padding: 1.25rem; background: linear-gradient(135deg, rgba(14, 165, 233, 0.15), rgba(2, 132, 199, 0.1)); border-radius: 10px; font-size: 1rem; color: #bae6fd; border-left: 4px solid #0ea5e9; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);">
+                  <strong style="color: #7dd3fc; font-weight: 700;">💡 Aquí trabajas con una herramienta interna,</strong> no solo con una web informativa.
                 </p>
               </div>
             </div>
@@ -404,8 +422,8 @@
                   <li>Flujos automatizados según reglas del negocio</li>
                   <li>Soporte inicial post entrega</li>
                 </ul>
-                <p style="margin-top: 1rem; padding: 1rem; background: #dcfce7; border-radius: 6px; font-size: 0.9rem;">
-                  <strong>Este paquete te posiciona con un sistema propio para crecer.</strong>
+                <p style="margin-top: 1rem; padding: 1.25rem; background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.1)); border-radius: 10px; font-size: 1rem; color: #a7f3d0; border-left: 4px solid #10b981; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);">
+                  <strong style="color: #6ee7b7; font-weight: 700;">🚀 Este paquete te posiciona con un sistema propio para crecer.</strong>
                 </p>
               </div>
             </div>
@@ -496,16 +514,16 @@
     }
   </script>
   
-  <script src="js/init.js"></script>
-  <script src="js/app.js" defer></script>
-  <script src="js/image-enhancer.js" defer></script>
-  <script src="js/image-status-checker.js" defer></script>
-  <script src="js/form-enhancements.js" defer></script>
-  <script src="js/form-improvements.js" defer></script>
-  <script src="js/image-handlers.js" defer></script>
-  <script src="js/chatbot-ai.js"></script>
-  <script src="js/demo-auto.js" defer></script>
-  <script src="js/chat-launcher.js" defer></script>
+  <script src="js/init.js?v=10005"></script>
+  <script src="js/app.js?v=10005" defer></script>
+  <script src="js/image-enhancer.js?v=10005" defer></script>
+  <script src="js/image-status-checker.js?v=10005" defer></script>
+  <script src="js/form-enhancements.js?v=10005" defer></script>
+  <script src="js/form-improvements.js?v=10005" defer></script>
+  <script src="js/image-handlers.js?v=10005" defer></script>
+  <script src="js/chatbot-ai.js?v=10005"></script>
+  <script src="js/demo-auto.js?v=10005" defer></script>
+  <script src="js/chat-launcher.js?v=10005" defer></script>
   
   <!-- Mostrar casos de éxito reales directamente -->
   <script>
