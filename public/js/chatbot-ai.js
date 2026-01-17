@@ -664,12 +664,14 @@ class AIBotEngine {
 
     showWelcomeMessage() {
         setTimeout(() => {
-            this.addMessage('bot', '¡Hola! 👋 Soy tu asistente de BotEngine. Estoy aquí para ayudarte a mejorar tu negocio con automatización.\n\n¿Me permites hacerte unas preguntas rápidas?');
+            this.addMessage('bot', '¡Hola! 👋 Soy tu asistente de **BotEngine**.\n\nDesarrollamos **sistemas web** que ordenan la operación de tu empresa:\n\n• Gestión de clientes\n• Agenda de citas\n• Control de pedidos\n• Paneles administrativos\n• Automatización de procesos\n\n¿En qué puedo ayudarte hoy? 🚀');
             
             setTimeout(() => {
                 this.showQuickButtons([
-                    { text: '✅ ¡Claro, adelante!', value: 'start' },
-                    { text: '📞 Prefiero hablar con un agente', value: 'agent' }
+                    { text: '💰 Ver precios y paquetes', value: 'precios' },
+                    { text: '🎯 Ver sistemas disponibles', value: 'servicios' },
+                    { text: '💬 Hablar con un agente', value: 'agent' },
+                    { text: '📞 Solicitar análisis gratuito', value: 'analisis' }
                 ]);
             }, 800);
         }, 1000);
@@ -698,8 +700,38 @@ class AIBotEngine {
             const msg = message.toLowerCase();
 
             // Manejar solicitud de agente en cualquier momento
-            if (msg.includes('agente') || msg.includes('humano') || msg.includes('persona') || msg.includes('vivo')) {
+            if (msg.includes('agente') || msg.includes('humano') || msg.includes('persona') || msg.includes('vivo') || msg === 'agent') {
                 this.contactAgent();
+                return;
+            }
+
+            // Manejar opciones principales del menú
+            if (msg === 'precios' || msg.includes('💰')) {
+                this.showPricing();
+                return;
+            }
+            
+            if (msg === 'servicios' || msg.includes('🎯') || msg.includes('sistemas')) {
+                this.addMessage('bot', '🚀 **Sistemas Web que Desarrollamos:**\n\n📅 **Agenda de Citas**\nConfirmaciones automáticas, recordatorios y panel admin\n\n👥 **CRM Básico**\nGestión completa de clientes con historial\n\n📦 **Control de Pedidos**\nSeguimiento de estados y reportes\n\n📊 **Paneles Administrativos**\nDashboards con métricas descargables\n\n📨 **Formularios Inteligentes**\nCaptación y validación automática\n\n🔗 **Integraciones**\nWhatsApp, email, hojas de cálculo\n\n¿Cuál necesitas? 💡');
+                setTimeout(() => {
+                    this.showQuickButtons([
+                        { text: '💰 Ver precios', value: 'precios' },
+                        { text: '💬 Hablar con agente', value: 'agent' },
+                        { text: '📞 Análisis gratuito', value: 'analisis' }
+                    ]);
+                }, 1000);
+                return;
+            }
+            
+            if (msg === 'analisis' || msg.includes('📞') || msg.includes('análisis')) {
+                this.addMessage('bot', '📊 **Análisis Gratuito de 30 Minutos**\n\nTe ayudamos a identificar:\n\n✅ Qué sistema necesitas\n✅ Cuánto tiempo ahorrarías\n✅ Cómo implementarlo en tu negocio\n\n¡Sin costo y sin compromiso!\n\n¿Cómo prefieres contactarnos?');
+                setTimeout(() => {
+                    this.showQuickButtons([
+                        { text: '💬 WhatsApp', value: 'whatsapp', url: 'https://wa.me/50231239807?text=Hola,%20solicito%20un%20análisis%20de%2030%20minutos%20sin%20costo' },
+                        { text: '📝 Llenar formulario', value: 'form', url: '#demo' },
+                        { text: '📧 Email', value: 'email', url: 'mailto:contacto@botenginecorp.com' }
+                    ]);
+                }, 1000);
                 return;
             }
 
@@ -867,29 +899,40 @@ Para impulsar tu negocio de ${this.userData.businessType} con ${this.userData.pr
     }
 
     showPricing() {
-        this.addMessage('bot', `💰 **Nuestros Precios**
+        this.addMessage('bot', `💰 **Nuestros Paquetes de Soluciones Digitales**
 
-**CHATBOTS:**
-• Básico: Q1,500 - Q2,500
-• Intermedio: Q3,500 - Q5,000
-• Avanzado: Q5,500 - Q7,000+
+**📋 Sistema Informativo (Q2,500)**
+• Sitio web profesional y funcional
+• Formularios inteligentes
+• Diseño adaptable (móvil y PC)
+• Optimización SEO básica
+• Ideal para presencia digital profesional
 
-**PÁGINAS WEB:**
-• Básica: Q1,500 - Q2,500
-• Intermedia: Q3,500 - Q5,000
-• Avanzada: Q6,000 - Q8,000+
+**⚙️ Sistema Operativo Básico (Q4,500)**
+• Panel administrativo completo
+• Gestión de clientes/solicitudes
+• Agenda de citas o formularios validados
+• Base de datos centralizada
+• Notificaciones automáticas
+• Ideal para ordenar tu operación diaria
 
-**MANTENIMIENTO:**
-• Mensual: Q200
+**🚀 Plataforma Integral (Q8,500)**
+• Sistema web a medida con múltiples módulos
+• Panel administrativo con roles avanzados
+• Gestión completa (clientes, pedidos, citas, inventario)
+• Reportes descargables (PDF/Excel)
+• Integraciones (WhatsApp, email, hojas de cálculo)
+• Flujos automatizados personalizados
+• Ideal para control total de tu negocio
 
-¿Te interesa alguno en particular? 🎯`);
+¿Cuál se ajusta más a tus necesidades? 🎯`);
         
         setTimeout(() => {
             this.showQuickButtons([
-                { text: '🤖 Chatbot', value: 'chatbot-info' },
-                { text: '🌐 Página Web', value: 'web-info' },
-                { text: '💬 Hablar con agente', value: 'agent' },
-                { text: '📞 Solicitar cotización', value: 'cotiza' }
+                { text: '📋 Sistema Informativo', value: 'info-sistema' },
+                { text: '⚙️ Sistema Operativo', value: 'operativo-sistema' },
+                { text: '🚀 Plataforma Integral', value: 'integral-sistema' },
+                { text: '💬 Hablar con agente', value: 'agent' }
             ]);
         }, 1000);
     }
@@ -911,12 +954,12 @@ Para impulsar tu negocio de ${this.userData.businessType} con ${this.userData.pr
         
         if (msg.includes('precio') || msg.includes('costo') || msg.includes('cuánto')) {
             this.showPricing();
-        } else if (msg.includes('servicio') || msg.includes('qué hacen') || msg.includes('ofrecen')) {
-            this.addMessage('bot', '🚀 **Nuestros Servicios:**\n\n• 🤖 Chatbots inteligentes\n• 🌐 Páginas web modernas\n• ⚙️ Automatización de procesos\n• 📱 Integración con redes sociales\n\n¿Cuál te interesa más?');
+        } else if (msg.includes('servicio') || msg.includes('qué hacen') || msg.includes('ofrecen') || msg.includes('sistemas')) {
+            this.addMessage('bot', '🚀 **Sistemas Web que Desarrollamos:**\n\n📅 **Agenda de Citas**\nSistema completo con confirmaciones automáticas y panel administrativo\n\n👥 **CRM Básico**\nGestión centralizada de clientes con historial completo\n\n📦 **Control de Pedidos**\nSeguimiento de estados y reportes automatizados\n\n📊 **Paneles Administrativos**\nDashboards con métricas y reportes descargables\n\n📨 **Formularios Inteligentes**\nCaptación y validación de datos automática\n\n🔗 **Integraciones**\nConexión con WhatsApp, email y otras herramientas\n\n¿Cuál necesitas para tu negocio? 💡');
         } else if (msg.includes('contacto') || msg.includes('teléfono') || msg.includes('email')) {
             this.showContactOptions();
         } else {
-            this.addMessage('bot', '🤖 Puedo ayudarte con:\n\n• Ver nuestros servicios\n• Conocer precios\n• Recibir recomendaciones\n• Contactar a un agente\n\n¿Qué te gustaría saber?');
+            this.addMessage('bot', '🤖 **¿En qué puedo ayudarte?**\n\n• 🎯 Ver nuestros sistemas y servicios\n• 💰 Conocer precios y paquetes\n• 📋 Recibir recomendaciones personalizadas\n• 💬 Contactar a un agente humano\n• ⚡ Solicitar análisis gratuito de 30 min\n\n¿Qué te interesa?');
         }
     }
 
