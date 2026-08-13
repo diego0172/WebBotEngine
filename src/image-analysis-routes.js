@@ -1,57 +1,26 @@
 import { Router } from "express";
-import multer from "multer";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
 import OpenAI from "openai";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const router = Router();
-
-// Configurar multer para guardar archivos temporalmente
-const uploadDir = path.join(__dirname, '..', 'uploads', 'temp');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + '-' + file.originalname);
-  }
-});
-
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
-  fileFilter: (req, file, cb) => {
-    if (!file.mimetype.startsWith('image/')) {
-      cb(new Error('Solo se permiten archivos de imagen'));
-      return;
-    }
-    cb(null, true);
-  }
-});
 
 /**
  * POST /api/analyze-product-image
  * Analiza una imagen de producto usando OpenAI Vision
+ * Recibe: { image: "data:image/jpeg;base64,...", mimeType: "image/jpeg" }
  */
-router.post('/api/analyze-product-image', upload.single('image'), async (req, res) => {
-  if (!req.file) {
+router.post('/analyze-product-image', async (req, res) => {
+  const { image, mimeType = 'image/jpeg' } = req.body;
+
+  if (!image) {
     return res.status(400).json({
       ok: false,
-      error: 'No se subió ninguna imagen'
+      error: 'No se proporcionó imagen'
     });
   }
 
   try {
-    // Leer imagen como base64
-    const imageBuffer = fs.readFileSync(req.file.path);
-    const base64Image = imageBuffer.toString('base64');
-    const mimeType = req.file.mimetype;
+    // La imagen ya viene en base64
+    const base64Image = image.replace(/^data:image\/\w+;base64,/, '');
 
     // Inicializar OpenAI
     const openai = new OpenAI({
@@ -110,9 +79,6 @@ Sé muy específico y detallado. Si es un código de barras, intenta leerlo.`
       };
     }
 
-    // Limpiar archivo temporal
-    fs.unlinkSync(req.file.path);
-
     res.json({
       ok: true,
       analysis: analysisResult,
@@ -121,11 +87,6 @@ Sé muy específico y detallado. Si es un código de barras, intenta leerlo.`
 
   } catch (error) {
     console.error('Error en análisis de imagen:', error);
-    
-    // Limpiar archivo en caso de error
-    if (req.file && fs.existsSync(req.file.path)) {
-      fs.unlinkSync(req.file.path);
-    }
 
     res.status(500).json({
       ok: false,

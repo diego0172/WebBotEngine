@@ -3,8 +3,413 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demo - Analizador de Imágenes de Productos | WebBotEngine</title>
+    <title>Analizador de Imágenes de Productos | WebBotEngine</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .upload-area {
+            border: 2px dashed #d1d5db;
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f9fafb;
+        }
+
+        .upload-area:hover {
+            border-color: #667eea;
+            background: #eff6ff;
+        }
+
+        .upload-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .upload-text {
+            color: #1f2937;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .upload-subtext {
+            color: #9ca3af;
+            font-size: 0.9em;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 8px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .results {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .result-item {
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .result-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .result-label {
+            color: #6b7280;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .result-value {
+            color: #1f2937;
+            font-size: 1em;
+            line-height: 1.5;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 0.85em;
+            font-weight: 500;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e5e7eb;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .confidence-high { color: #10b981; }
+        .confidence-medium { color: #f59e0b; }
+        .confidence-low { color: #ef4444; }
+
+        @media (max-width: 768px) {
+            .card {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📷 Analizador de Productos</h1>
+            <p>Carga una foto y descubre información del producto automáticamente</p>
+        </div>
+
+        <div class="card">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📸</div>
+                <div class="upload-text">Haz clic para cargar una foto</div>
+                <div class="upload-subtext">O arrastra una imagen aquí (JPG, PNG, GIF)</div>
+                <input type="file" id="imageInput" accept="image/*">
+                <button class="button" id="selectButton">Seleccionar Imagen</button>
+            </div>
+
+            <img id="preview" class="image-preview">
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Analizando imagen...</p>
+            </div>
+
+            <div class="error" id="error"></div>
+
+            <div class="results" id="results">
+                <div class="result-item">
+                    <div class="result-label">Producto</div>
+                    <div class="result-value" id="resultProducto">-</div>
+                </div>
+
+                <div class="result-item">
+                    <div class="result-label">Descripción</div>
+                    <div class="result-value" id="resultDescripcion">-</div>
+                </div>
+
+                <div class="result-item">
+                    <div class="result-label">Marcas</div>
+                    <div class="result-value" id="resultMarcas">-</div>
+                </div>
+
+                <div class="result-item">
+                    <div class="result-label">Precio</div>
+                    <div class="result-value" id="resultPrecio">-</div>
+                </div>
+
+                <div class="result-item">
+                    <div class="result-label">Código de Barras</div>
+                    <div class="result-value" id="resultCodigoBarras" style="font-family: monospace;">-</div>
+                </div>
+
+                <div class="result-item">
+                    <div class="result-label">Características</div>
+                    <div class="result-value" id="resultCaracteristicas">-</div>
+                </div>
+
+                <div class="result-item">
+                    <div class="result-label">Recomendaciones</div>
+                    <div class="result-value" id="resultRecomendaciones">-</div>
+                </div>
+
+                <div class="result-item">
+                    <div class="result-label">Confianza</div>
+                    <div class="result-value" id="resultConfianza">-</div>
+                </div>
+
+                <button class="button" id="resetButton">Analizar Otra Imagen</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const imageInput = document.getElementById('imageInput');
+        const selectButton = document.getElementById('selectButton');
+        const preview = document.getElementById('preview');
+        const loading = document.getElementById('loading');
+        const error = document.getElementById('error');
+        const results = document.getElementById('results');
+        const resetButton = document.getElementById('resetButton');
+
+        let isAnalyzing = false;
+
+        // Click en botón o área de carga
+        selectButton.addEventListener('click', () => imageInput.click());
+        uploadArea.addEventListener('click', (e) => {
+            if (e.target === uploadArea || e.target.parentElement === uploadArea) {
+                imageInput.click();
+            }
+        });
+
+        // Drag and drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#667eea';
+            uploadArea.style.background = '#eff6ff';
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.borderColor = '#d1d5db';
+            uploadArea.style.background = '#f9fafb';
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#d1d5db';
+            uploadArea.style.background = '#f9fafb';
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0 && files[0].type.startsWith('image/')) {
+                processImage(files[0]);
+            }
+        });
+
+        // Cambio de archivo
+        imageInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                processImage(e.target.files[0]);
+            }
+        });
+
+        function processImage(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const base64 = e.target.result;
+                preview.src = base64;
+                preview.style.display = 'block';
+                analyzeImage(base64);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function analyzeImage(base64Image) {
+            if (isAnalyzing) return;
+            isAnalyzing = true;
+
+            // Detectar MIME type
+            const mimeType = base64Image.split(';')[0].replace('data:', '') || 'image/jpeg';
+
+            loading.style.display = 'block';
+            error.style.display = 'none';
+            results.style.display = 'none';
+            resetButton.disabled = true;
+
+            try {
+                const response = await fetch('/api/analyze-product-image', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ image: base64Image, mimeType })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Error al analizar');
+                }
+
+                displayResults(data.analysis);
+
+            } catch (err) {
+                error.textContent = '❌ ' + (err.message || 'Error desconocido');
+                error.style.display = 'block';
+                console.error(err);
+            } finally {
+                loading.style.display = 'none';
+                isAnalyzing = false;
+                resetButton.disabled = false;
+            }
+        }
+
+        function displayResults(analysis) {
+            document.getElementById('resultProducto').textContent = 
+                analysis.producto_nombre || '-';
+            
+            document.getElementById('resultDescripcion').textContent = 
+                analysis.descripcion || '-';
+
+            const marcasHtml = Array.isArray(analysis.marcas_detectadas)
+                ? analysis.marcas_detectadas.map(m => `<span class="badge">${m}</span>`).join('')
+                : '-';
+            document.getElementById('resultMarcas').innerHTML = marcasHtml || '-';
+
+            document.getElementById('resultPrecio').textContent = 
+                analysis.precio_visible || '-';
+
+            document.getElementById('resultCodigoBarras').textContent = 
+                analysis.codigo_barras || '-';
+
+            const caracHtml = Array.isArray(analysis.caracteristicas)
+                ? analysis.caracteristicas.map(c => `• ${c}`).join('<br>')
+                : '-';
+            document.getElementById('resultCaracteristicas').innerHTML = caracHtml || '-';
+
+            document.getElementById('resultRecomendaciones').textContent = 
+                analysis.recomendaciones || '-';
+
+            const confianzaClass = `confidence-${(analysis.confianza || 'media').toLowerCase()}`;
+            document.getElementById('resultConfianza').innerHTML = 
+                `<strong class="${confianzaClass}">${(analysis.confianza || 'media').toUpperCase()}</strong>`;
+
+            results.style.display = 'block';
+        }
+
+        resetButton.addEventListener('click', () => {
+            imageInput.value = '';
+            preview.style.display = 'none';
+            results.style.display = 'none';
+            error.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
         * {
             margin: 0;
             padding: 0;
