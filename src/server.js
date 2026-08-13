@@ -8,6 +8,7 @@ import dotenv from "dotenv";
 import { initializeDatabase } from "./database.js";
 import commerceRoutes from "./commerce-routes.js";
 import authRoutes from "./auth-routes.js";
+import imageAnalysisRoutes from "./image-analysis-routes.js";
 
 // Cargar variables de entorno - Intentar .env.production primero
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -302,6 +303,9 @@ app.use(express.static(PUBLIC_DIR, {
 
 // ===== Rutas de Autenticación =====
 app.use('/api', authRoutes);
+
+// ===== Rutas de Análisis de Imágenes =====
+app.use('/api', imageAnalysisRoutes);
 
 // ===== Rutas de Comercio (API) =====
 app.use('/api/commerce', commerceRoutes);

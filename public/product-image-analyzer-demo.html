@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo - Analizador de Imágenes de Productos | WebBotEngine</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .demo-section {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            color: #1f2937;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: #667eea;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .feature-card h3 {
+            font-size: 1.2em;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        .demo-container {
+            background: #f9fafb;
+            border: 2px dashed #d1d5db;
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .upload-area {
+            cursor: pointer;
+            padding: 40px 20px;
+        }
+
+        .upload-area:hover {
+            background: #eff6ff;
+            border-color: #3b82f6;
+        }
+
+        .upload-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .upload-text {
+            color: #1f2937;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .upload-subtext {
+            color: #9ca3af;
+            font-size: 0.9em;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 16px 40px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-top: 20px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .code-example {
+            background: #1f2937;
+            color: #f3f4f6;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+            margin: 20px 0;
+        }
+
+        .step-list {
+            background: #f9fafb;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .step-list ol {
+            margin-left: 20px;
+            color: #1f2937;
+        }
+
+        .step-list li {
+            margin: 12px 0;
+            line-height: 1.6;
+        }
+
+        .highlight {
+            background: #fef3c7;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .response-example {
+            background: #f0fdf4;
+            border: 1px solid #86efac;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            color: #166534;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            overflow-x: auto;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .tab-button {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: #6b7280;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .comparison-table th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+
+        .comparison-table tr:hover {
+            background: #f9fafb;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 0.85em;
+            font-weight: 500;
+            margin: 4px 2px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .demo-section {
+                padding: 20px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📷 Analizador de Imágenes de Productos</h1>
+            <p>Demo: Sube una foto, nuestro OCR inteligente devuelve información del producto</p>
+        </div>
+
+        <!-- Sección: ¿Qué es? -->
+        <div class="demo-section">
+            <h2 class="section-title">🎯 ¿Qué es esta funcionalidad?</h2>
+            
+            <p style="color: #6b7280; line-height: 1.8; margin-bottom: 20px;">
+                Esta es una <span class="highlight">demostración de visión por computadora</span> que permite a tus clientes o usuarios:
+            </p>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>📸 Subir Foto</h3>
+                    <p>El usuario toma una foto de un producto con su cámara o selecciona una imagen.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🤖 IA Analiza</h3>
+                    <p>Nuestro backend usa OpenAI Vision API para interpretar la imagen.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>📊 Extrae Datos</h3>
+                    <p>OCR detecta: nombre producto, marca, precio, código barras, características.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>✅ Devuelve Info</h3>
+                    <p>Los datos se muestran en tiempo real para que el usuario los use.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🛒 Integración</h3>
+                    <p>Se puede integrar con carrito de compras o análisis de competencia.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>📱 Mobile Ready</h3>
+                    <p>Funciona perfectamente en celulares con cámara integrada.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección: Casos de Uso -->
+        <div class="demo-section">
+            <h2 class="section-title">💡 Casos de Uso</h2>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Caso de Uso</th>
+                        <th>Descripción</th>
+                        <th>Beneficio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>🏪 E-commerce</strong></td>
+                        <td>Buscar productos fotografiando empaques</td>
+                        <td>Experiencia de compra más rápida</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📦 Inventario</strong></td>
+                        <td>Registrar productos con OCR automático</td>
+                        <td>Ahorra tiempo en entrada de datos</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🔍 Competencia</strong></td>
+                        <td>Analizar precios de competidores</td>
+                        <td>Inteligencia de mercado en tiempo real</td>
+                    </tr>
+                    <tr>
+                        <td><strong>📋 Almacén</strong></td>
+                        <td>Verificar códigos de barras automáticamente</td>
+                        <td>Control de calidad integrado</td>
+                    </tr>
+                    <tr>
+                        <td><strong>🛍️ Tienda Física</strong></td>
+                        <td>Clientes analizan productos en-vivo</td>
+                        <td>Marketing interactivo y engagement</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Sección: Demo en Vivo -->
+        <div class="demo-section">
+            <h2 class="section-title">🚀 Prueba el Demo Completo</h2>
+            
+            <div class="demo-container">
+                <div class="upload-area" id="demo-area">
+                    <div class="upload-icon">📷</div>
+                    <div class="upload-text"><strong>¡Haz clic aquí</strong> o arrastra una foto</div>
+                    <div class="upload-subtext">Sube la foto de cualquier producto (empaque, botella, caja, etc.)</div>
+                    <button class="cta-button" style="margin: 20px 0; display: block;">
+                        Abrir Analizador
+                    </button>
+                    <div style="color: #9ca3af; font-size: 0.9em; margin-top: 15px;">
+                        💡 Nota: El análisis usa tu API de OpenAI configurada en el servidor
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección: Cómo funciona técnicamente -->
+        <div class="demo-section">
+            <h2 class="section-title">⚙️ Cómo Funciona (Técnico)</h2>
+
+            <div class="tabs">
+                <button class="tab-button active" onclick="switchTab(event, 'frontend')">Frontend</button>
+                <button class="tab-button" onclick="switchTab(event, 'backend')">Backend</button>
+                <button class="tab-button" onclick="switchTab(event, 'response')">Respuesta</button>
+            </div>
+
+            <!-- Tab: Frontend -->
+            <div id="frontend" class="tab-content active">
+                <h3 style="color: #1f2937; margin-bottom: 15px;">1️⃣ Frontend - Envío de Imagen</h3>
+                <p style="color: #6b7280; margin-bottom: 15px;">
+                    El usuario sube la imagen a través de la interfaz. Se envía como <span class="highlight">FormData</span> al servidor:
+                </p>
+                <div class="code-example">
+const formData = new FormData();
+formData.append('image', file);
+
+fetch('/api/analyze-product-image', {
+    method: 'POST',
+    body: formData
+})
+.then(res => res.json())
+.then(data => console.log(data.analysis));
+                </div>
+            </div>
+
+            <!-- Tab: Backend -->
+            <div id="backend" class="tab-content">
+                <h3 style="color: #1f2937; margin-bottom: 15px;">2️⃣ Backend - Análisis con OpenAI</h3>
+                <p style="color: #6b7280; margin-bottom: 15px;">
+                    El servidor recibe la imagen, la convierte a base64 y la envía a la <span class="highlight">OpenAI Vision API</span>:
+                </p>
+                <div class="code-example">
+const openai = new OpenAI();
+
+const response = await openai.chat.completions.create({
+    model: "gpt-4-vision",
+    messages: [{
+        role: "user",
+        content: [
+            {
+                type: "image_url",
+                image_url: {
+                    url: `data:image/jpeg;base64,${base64Image}`
+                }
+            },
+            {
+                type: "text",
+                text: "Analiza este producto y devuelve JSON con..."
+            }
+        ]
+    }]
+});
+                </div>
+
+                <h3 style="color: #1f2937; margin: 25px 0 15px 0;">Endpoint del servidor:</h3>
+                <div class="code-example">
+POST /api/analyze-product-image
+
+Content-Type: multipart/form-data
+- image: [archivo de imagen]
+
+// Archivo: src/image-analysis-routes.js
+                </div>
+            </div>
+
+            <!-- Tab: Response -->
+            <div id="response" class="tab-content">
+                <h3 style="color: #1f2937; margin-bottom: 15px;">3️⃣ Respuesta JSON</h3>
+                <p style="color: #6b7280; margin-bottom: 15px;">
+                    El servidor devuelve un JSON con toda la información extraída:
+                </p>
+                <div class="response-example">
+{
+  "ok": true,
+  "analysis": {
+    "producto_nombre": "Coca-Cola 2L",
+    "descripcion": "Bebida carbonatada de cola",
+    "marcas_detectadas": ["Coca-Cola", "The Coca-Cola Company"],
+    "precio_visible": "Q15.99",
+    "codigo_barras": "5449000050127",
+    "caracteristicas": [
+      "Volumen: 2 litros",
+      "Carbonatada",
+      "Refrigerar después de abrir",
+      "Hecho en Guatemala"
+    ],
+    "recomendaciones": "Producto muy conocido...",
+    "confianza": "alta"
+  }
+}
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección: Instalación -->
+        <div class="demo-section">
+            <h2 class="section-title">📥 Cómo Instalar en tu Proyecto</h2>
+
+            <div class="step-list">
+                <ol>
+                    <li>
+                        <strong>Instalar dependencia:</strong>
+                        <div class="code-example" style="margin-top: 10px;">npm install multer</div>
+                    </li>
+                    <li>
+                        <strong>Agregar archivo de rutas:</strong> Usa <span class="highlight">src/image-analysis-routes.js</span>
+                    </li>
+                    <li>
+                        <strong>Importar en server.js:</strong>
+                        <div class="code-example" style="margin-top: 10px;">import imageAnalysisRoutes from "./image-analysis-routes.js";
+app.use('/api', imageAnalysisRoutes);</div>
+                    </li>
+                    <li>
+                        <strong>Incluir script en HTML:</strong>
+                        <div class="code-example" style="margin-top: 10px;">&lt;script src="/js/product-image-analyzer.js"&gt;&lt;/script&gt;</div>
+                    </li>
+                    <li>
+                        <strong>Configurar OpenAI API:</strong>
+                        <p style="margin-top: 10px; color: #6b7280;">
+                            Asegúrate de tener <span class="highlight">OPENAI_API_KEY</span> en tu archivo .env
+                        </p>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Sección: Limitaciones y Mejoras -->
+        <div class="demo-section">
+            <h2 class="section-title">🔄 Limitaciones y Futuras Mejoras</h2>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
+                <div>
+                    <h3 style="color: #ef4444; margin-bottom: 12px;">⚠️ Limitaciones Actuales</h3>
+                    <ul style="color: #6b7280; line-height: 1.8;">
+                        <li>📷 Depende de la calidad de la foto</li>
+                        <li>💰 Costo por cada análisis con OpenAI API</li>
+                        <li>📊 No funciona con todos los tipos de productos</li>
+                        <li>🌐 Requiere conexión a internet</li>
+                        <li>⏱️ Requiere esperar respuesta de OpenAI</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 style="color: #10b981; margin-bottom: 12px;">✨ Mejoras Futuras</h3>
+                    <ul style="color: #6b7280; line-height: 1.8;">
+                        <li>🤖 Usar TensorFlow.js para análisis local</li>
+                        <li>💾 Caché de productos analizados</li>
+                        <li>📊 Comparación con BD de productos</li>
+                        <li>🎯 Modelos OCR especializados</li>
+                        <li>📈 Estadísticas y reportes</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección: Contacto -->
+        <div class="demo-section" style="text-align: center; background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); border: 2px solid #667eea;">
+            <h2 style="color: #667eea; margin-bottom: 20px;">¿Listo para implementar esto en tu negocio?</h2>
+            <p style="color: #6b7280; font-size: 1.1em; margin-bottom: 30px;">
+                Contacta con nosotros para integrar esta funcionalidad en tu plataforma
+            </p>
+            <div>
+                <a href="https://wa.me/50231239807?text=Hola%20Quiero%20implementar%20el%20analizador%20de%20imagenes%20en%20mi%20proyecto" 
+                   target="_blank" class="cta-button">
+                    💬 Hablar por WhatsApp
+                </a>
+                <a href="mailto:info@webbotenginecorp.com" class="cta-button" style="background: linear-gradient(135deg, #10b981, #059669); margin-left: 10px;">
+                    📧 Enviar Email
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Incluir el analizador de imágenes
+        if (!document.querySelector('script[src*="product-image-analyzer"]')) {
+            const script = document.createElement('script');
+            script.src = '/js/product-image-analyzer.js';
+            document.body.appendChild(script);
+        }
+
+        // Switch de tabs
+        function switchTab(event, tabName) {
+            event.preventDefault();
+            
+            // Ocultar todos los tabs
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Desactivar todos los botones
+            document.querySelectorAll('.tab-button').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Mostrar tab seleccionado
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Hacer clickeable el área de demo
+        document.getElementById('demo-area').addEventListener('click', () => {
+            if (window.productAnalyzer) {
+                document.getElementById('analyzer-button').click();
+            }
+        });
+    </script>
+</body>
+</html>
