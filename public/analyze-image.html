@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis de Imágenes de Productos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #1f2937;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 12px;
+            padding: 60px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f9fafb;
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover {
+            background: #eff6ff;
+            border-color: #3b82f6;
+        }
+
+        .upload-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .upload-text {
+            color: #1f2937;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .upload-subtext {
+            color: #9ca3af;
+            font-size: 0.9em;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        #preview {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 30px;
+            color: #667eea;
+        }
+
+        .spinner {
+            border: 4px solid #e5e7eb;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .results {
+            display: none;
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .result-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .result-label {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            color: #1f2937;
+            font-size: 1.1em;
+            line-height: 1.5;
+        }
+
+        .error {
+            display: none;
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .success {
+            display: none;
+            background: #dcfce7;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .button-group button {
+            flex: 1;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .upload-area {
+                padding: 40px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📷 Análisis de Productos</h1>
+        <p class="subtitle">Sube una foto y obten información automática</p>
+
+        <div class="error" id="error"></div>
+        <div class="success" id="success"></div>
+
+        <div class="upload-area" id="uploadArea">
+            <div class="upload-icon">📸</div>
+            <div class="upload-text">Haz clic o arrastra una foto</div>
+            <div class="upload-subtext">JPG, PNG o GIF - Máximo 10MB</div>
+            <input type="file" id="imageInput" accept="image/*">
+        </div>
+
+        <img id="preview" src="">
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Analizando imagen...</p>
+        </div>
+
+        <div class="results" id="results">
+            <div class="result-item">
+                <div class="result-label">Producto</div>
+                <div class="result-value" id="resultProducto">-</div>
+            </div>
+            <div class="result-item">
+                <div class="result-label">Descripción</div>
+                <div class="result-value" id="resultDescripcion">-</div>
+            </div>
+            <div class="result-item">
+                <div class="result-label">Marcas</div>
+                <div class="result-value" id="resultMarcas">-</div>
+            </div>
+            <div class="result-item">
+                <div class="result-label">Precio</div>
+                <div class="result-value" id="resultPrecio">-</div>
+            </div>
+            <div class="result-item">
+                <div class="result-label">Código de Barras</div>
+                <div class="result-value" id="resultCodigo">-</div>
+            </div>
+            <div class="result-item">
+                <div class="result-label">Características</div>
+                <div class="result-value" id="resultCaracteristicas">-</div>
+            </div>
+            <div class="result-item">
+                <div class="result-label">Recomendaciones</div>
+                <div class="result-value" id="resultRecomendaciones">-</div>
+            </div>
+            <div class="result-item">
+                <div class="result-label">Confianza</div>
+                <div class="result-value" id="resultConfianza">-</div>
+            </div>
+
+            <div class="button-group">
+                <button onclick="resetForm()">Nueva foto</button>
+                <button onclick="saveResult()">Guardar datos</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const imageInput = document.getElementById('imageInput');
+        const preview = document.getElementById('preview');
+        const loading = document.getElementById('loading');
+        const results = document.getElementById('results');
+        const errorDiv = document.getElementById('error');
+        const successDiv = document.getElementById('success');
+
+        // Click en área
+        uploadArea.addEventListener('click', () => imageInput.click());
+
+        // Drag and drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#3b82f6';
+            uploadArea.style.background = '#eff6ff';
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.borderColor = '#667eea';
+            uploadArea.style.background = '#f9fafb';
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#667eea';
+            uploadArea.style.background = '#f9fafb';
+            
+            if (e.dataTransfer.files.length > 0) {
+                handleFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        // Input change
+        imageInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        function handleFile(file) {
+            if (!file.type.startsWith('image/')) {
+                showError('Por favor selecciona una imagen válida');
+                return;
+            }
+
+            // Mostrar preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+
+            // Analizar
+            analyzeImage(file);
+        }
+
+        async function analyzeImage(file) {
+            loading.style.display = 'block';
+            results.style.display = 'none';
+            errorDiv.style.display = 'none';
+
+            const formData = new FormData();
+            formData.append('image', file);
+
+            try {
+                const response = await fetch('/api/analyze-product-image', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Error al analizar');
+                }
+
+                displayResults(data.analysis);
+                showSuccess('✅ Análisis completado');
+
+            } catch (error) {
+                showError('Error: ' + error.message);
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+
+        function displayResults(analysis) {
+            document.getElementById('resultProducto').textContent = 
+                analysis.producto_nombre || 'No detectado';
+            
+            document.getElementById('resultDescripcion').textContent = 
+                analysis.descripcion || 'No disponible';
+            
+            document.getElementById('resultMarcas').textContent = 
+                (analysis.marcas_detectadas?.join(', ') || 'No detectadas');
+            
+            document.getElementById('resultPrecio').textContent = 
+                analysis.precio_visible || 'No visible';
+            
+            document.getElementById('resultCodigo').textContent = 
+                analysis.codigo_barras || 'No detectado';
+            
+            document.getElementById('resultCaracteristicas').textContent = 
+                (analysis.caracteristicas?.join(', ') || 'No disponibles');
+            
+            document.getElementById('resultRecomendaciones').textContent = 
+                analysis.recomendaciones || 'No disponibles';
+            
+            document.getElementById('resultConfianza').textContent = 
+                (analysis.confianza || 'desconocida').toUpperCase();
+
+            results.style.display = 'block';
+        }
+
+        function resetForm() {
+            imageInput.value = '';
+            preview.style.display = 'none';
+            results.style.display = 'none';
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+        }
+
+        function saveResult() {
+            const resultData = {
+                producto: document.getElementById('resultProducto').textContent,
+                precio: document.getElementById('resultPrecio').textContent,
+                timestamp: new Date().toLocaleString()
+            };
+            
+            localStorage.setItem('last-analysis', JSON.stringify(resultData));
+            showSuccess('✅ Datos guardados en el navegador');
+        }
+
+        function showError(message) {
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        function showSuccess(message) {
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

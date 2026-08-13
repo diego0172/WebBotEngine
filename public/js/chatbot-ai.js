@@ -160,6 +160,26 @@ class AIBotEngine {
                         user-select: text !important;
                         box-shadow: 0 2px 12px rgba(14, 165, 233, 0.15), inset 0 1px 3px rgba(0, 0, 0, 0.2) !important;
                     ">
+                    <input id="image-input-chatbot" type="file" accept="image/*" style="display: none !important;">
+                    <button id="image-button" style="
+                        width: 56px !important;
+                        height: 56px !important;
+                        background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%) !important;
+                        border: none !important;
+                        border-radius: 50% !important;
+                        color: white !important;
+                        cursor: pointer !important;
+                        display: flex !important;
+                        align-items: center !important;
+                        justify-content: center !important;
+                        font-size: 24px !important;
+                        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                        flex-shrink: 0 !important;
+                        -webkit-tap-highlight-color: transparent !important;
+                        touch-action: manipulation !important;
+                        box-shadow: 0 4px 16px rgba(245, 158, 11, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+                        font-weight: bold !important;
+                    ">📷</button>
                     <button id="send-button" style="
                         width: 56px !important;
                         height: 56px !important;
@@ -400,10 +420,88 @@ class AIBotEngine {
             }
         });
 
+        // Manejo de imágenes
+        const imageBtn = document.getElementById('image-button');
+        const imageInput = document.getElementById('image-input-chatbot');
+        imageBtn.addEventListener('click', () => imageInput.click());
+        imageInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                this.handleImageUpload(e.target.files[0]);
+            }
+        });
+
         // Configurar manejo del teclado móvil
         this.setupMobileKeyboard(input, chatWindow);
 
         console.log('✅ Eventos configurados');
+    }
+
+    async handleImageUpload(file) {
+        if (!file.type.startsWith('image/')) {
+            this.addMessage('bot', '❌ Por favor selecciona una imagen válida');
+            return;
+        }
+
+        // Mostrar imagen en el chat
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+            const dataUrl = e.target.result;
+            this.addMessage('user', `📸 Foto de producto cargada`);
+
+            // Mostrar indicador de análisis
+            this.showTyping();
+
+            try {
+                const response = await fetch('/api/analyze-product-image', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        image: dataUrl,
+                        mimeType: file.type
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Error al analizar');
+                }
+
+                this.hideTyping();
+
+                // Mostrar resultados
+                const analysis = data.analysis;
+                let resultado = `✅ **Análisis del Producto:**\n\n`;
+                resultado += `📦 **Producto:** ${analysis.producto_nombre || 'No detectado'}\n`;
+                resultado += `📝 **Descripción:** ${analysis.descripcion || 'No disponible'}\n`;
+                if (analysis.marcas_detectadas?.length > 0) {
+                    resultado += `🏷️ **Marcas:** ${analysis.marcas_detectadas.join(', ')}\n`;
+                }
+                if (analysis.precio_visible) {
+                    resultado += `💰 **Precio:** ${analysis.precio_visible}\n`;
+                }
+                if (analysis.codigo_barras) {
+                    resultado += `📊 **Código de barras:** ${analysis.codigo_barras}\n`;
+                }
+                if (analysis.caracteristicas?.length > 0) {
+                    resultado += `✨ **Características:** ${analysis.caracteristicas.join(', ')}\n`;
+                }
+                if (analysis.recomendaciones) {
+                    resultado += `💡 **Recomendaciones:** ${analysis.recomendaciones}\n`;
+                }
+                resultado += `\n🎯 **Confianza:** ${(analysis.confianza || 'desconocida').toUpperCase()}`;
+
+                this.addMessage('bot', resultado);
+
+            } catch (error) {
+                this.hideTyping();
+                this.addMessage('bot', `❌ Error al analizar la imagen:\n${error.message}`);
+                console.error('Error:', error);
+            }
+        };
+        reader.readAsDataURL(file);
     }
 
     setupMobileKeyboard(input, chatWindow) {
